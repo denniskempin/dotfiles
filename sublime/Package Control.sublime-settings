@@ -6,9 +6,12 @@
 	"installed_packages":
 	[
 		"EditorConfig",
-		"Materialize",
+		"IcedCoffeeScript",
+		"Jade",
 		"Package Control",
+		"SideBarEnhancements",
+		"Stylus",
 		"SublimeGit",
-		"Theme - Spacegray"
+		"Theme - amCoder"
 	]
 }

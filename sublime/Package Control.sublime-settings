@@ -6,6 +6,9 @@
 	"installed_packages":
 	[
 		"EditorConfig",
-		"Package Control"
+		"Materialize",
+		"Package Control",
+		"SublimeGit",
+		"Theme - Spacegray"
 	]
 }

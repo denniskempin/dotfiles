@@ -10,7 +10,7 @@ link() {
 }
 
 su_link() {
-  exec sudo ln -sfh "~/dotfiles/$1" "$2"
+  exec sudo ln -sfh ~/"dotfiles/$1" "$2"
 }
 
 # OS Setup
@@ -20,8 +20,8 @@ case $OSTYPE
 esac
 
 
-# Install packages
-fish fish/packages
+# Install Fish
+fish fish/install
 
 # User symlinks
 link fish/config.fish ~/.config/fish/config.fish

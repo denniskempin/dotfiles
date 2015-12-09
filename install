@@ -19,12 +19,11 @@ case $OSTYPE
     SUBLIME_USER_DIR=~/"Library/Application Support/Sublime Text 3/Packages/User" ;;
 esac
 
-
-# Install Fish
-fish fish/install
-
 # User symlinks
-link fish/config.fish ~/.config/fish/config.fish
+link fish/before.init.fish ~/.config/omf/before.init.fish
+link fish/bundle ~/.config/omf/bundle
+link fish/init.fish ~/.config/omf/init.fish
+link fish/theme ~/.config/omf/theme
 link "sublime/Preferences.sublime-settings" "$SUBLIME_USER_DIR/Preferences.sublime-settings"
 link "sublime/Package Control.sublime-settings" "$SUBLIME_USER_DIR/Package Control.sublime-settings"
 

@@ -1,0 +1,10 @@
+{
+	"ignored_packages":
+	[
+		"Vintage"
+	],
+	"installed_packages":
+	[
+		"EditorConfig"
+	]
+}

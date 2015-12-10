@@ -1,7 +1,7 @@
 {
 	"bold_folder_labels": true,
 	"caret_style": "phase",
-	"color_scheme": "Packages/Theme - amCoder/amCoder (Bright).tmTheme",
+	"color_scheme": "Packages/Theme - Spacegray/base16-eighties.dark.tmTheme",
 	"detect_slow_plugins": true,
 	"enable_tab_scrolling": false,
 	"font_face": "Monaco",
@@ -42,6 +42,6 @@
 			"*.h"
 		]
 	],
-	"theme": "amCoder.sublime-theme",
+	"theme": "Spacegray Eighties.sublime-theme",
 	"use_simple_full_screen": true
 }

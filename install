@@ -16,14 +16,22 @@ su_link() {
 # OS Setup
 case $OSTYPE
   in darwin*)    
-    SUBLIME_USER_DIR=~/"Library/Application Support/Sublime Text 3/Packages/User" ;;
+    SUBLIME_DIR=~/"Library/Application Support/Sublime Text 3" ;;
 esac
+SUBLIME_USER_DIR="$SUBLIME_DIR/Packages/User"
 
-# User symlinks
-link "sublime/Preferences.sublime-settings" "$SUBLIME_USER_DIR/Preferences.sublime-settings"
-link "sublime/Package Control.sublime-settings" "$SUBLIME_USER_DIR/Package Control.sublime-settings"
+# ZSH Setup
 rm ~/.zshrc
 echo source ~/"dotfiles/zsh/zshrc" > ~/.zshrc
 
+
+# Sublime Setup
+if [-e $SUBLIME_USER_DIR]; then
+	link "sublime/Preferences.sublime-settings" "$SUBLIME_USER_DIR/Preferences.sublime-settings"
+	link "sublime/Package Control.sublime-settings" "$SUBLIME_USER_DIR/Package Control.sublime-settings"
+fi
+
 # System symlinks
-su_link paths /etc/paths.d/dotfiles
+if [-e /etc/paths.d]; then
+	su_link paths /etc/paths.d/dotfiles
+fi

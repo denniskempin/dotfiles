@@ -1,26 +1,30 @@
 {
 	"bootstrapped": true,
+	"channels":
+	[
+		"https://packagecontrol.io/channel_v3.json"
+	],
 	"in_process_packages":
 	[
 	],
 	"installed_packages":
 	[
+		"Align Arguments",
 		"ChannelRepositoryTools",
-		"Clang Format",
+		"DocBlockr",
 		"EditorConfig",
-		"EditorConfigSnippets",
-		"Fix Mac Path",
+		"Git Conflict Resolver",
 		"IcedCoffeeScript",
 		"Jade",
+		"Open Related",
 		"Package Control",
+		"rsub",
 		"SideBarEnhancements",
 		"Stylus",
-		"sublime-html2jade",
 		"SublimeGit",
 		"Theme - Spacegray"
 	],
 	"repositories":
 	[
-		"https://github.com/denniskempin/sublime-html2jade"
 	]
 }

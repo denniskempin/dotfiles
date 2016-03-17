@@ -6,7 +6,7 @@
 	},
 	"bold_folder_labels": true,
 	"caret_style": "phase",
-	"color_scheme": "Packages/Theme - Spacegray/base16-eighties.dark.tmTheme",
+	"color_scheme": "Packages/Color Scheme - Default/Monokai.tmTheme",
 	"detect_slow_plugins": true,
 	"enable_tab_scrolling": false,
 	"font_face": "Monaco",
@@ -16,6 +16,7 @@
 	[
 		"Vintage"
 	],
+	"indent_to_bracket": true,
 	"isort":
 	{
 		"from_first": "1",
@@ -45,6 +46,7 @@
 	[
 		[
 			"*.cc",
+			"*.cpp",
 			"*.h"
 		]
 	],

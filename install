@@ -20,13 +20,10 @@ case $OSTYPE
 esac
 
 # User symlinks
-link fish/before.init.fish ~/.config/omf/before.init.fish
-link fish/bundle ~/.config/omf/bundle
-link fish/init.fish ~/.config/omf/init.fish
-link fish/theme ~/.config/omf/theme
 link "sublime/Preferences.sublime-settings" "$SUBLIME_USER_DIR/Preferences.sublime-settings"
 link "sublime/Package Control.sublime-settings" "$SUBLIME_USER_DIR/Package Control.sublime-settings"
-
+rm ~/.zshrc
+echo source ~/"dotfiles/zsh/zshrc" > ~/.zshrc
 
 # System symlinks
 su_link paths /etc/paths.d/dotfiles

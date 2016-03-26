@@ -5,13 +5,22 @@
 	],
 	"installed_packages":
 	[
+		"ChannelRepositoryTools",
+		"Clang Format",
 		"EditorConfig",
+		"EditorConfigSnippets",
+		"Fix Mac Path",
 		"IcedCoffeeScript",
 		"Jade",
 		"Package Control",
 		"SideBarEnhancements",
 		"Stylus",
+		"sublime-html2jade",
 		"SublimeGit",
 		"Theme - Spacegray"
+	],
+	"repositories":
+	[
+		"https://github.com/denniskempin/sublime-html2jade"
 	]
 }

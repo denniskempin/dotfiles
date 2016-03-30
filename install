@@ -6,12 +6,13 @@ log_command() {
 }
 
 link() {
-  log_command ln -sfh ~/"dotfiles/$1" "$2"
+  log_command rm -f "$2"
+  log_command ln -sf ~/"dotfiles/$1" "$2"
 }
 
 su_link() {
   if [ ! -e "$2" ]; then
-  	log_command sudo ln -sfh ~/"dotfiles/$1" "$2"
+  	log_command sudo ln -sf ~/"dotfiles/$1" "$2"
   fi
 }
 

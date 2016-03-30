@@ -1,3 +1,4 @@
+# Plugins
 source ~/dotfiles/zsh/antigen/antigen.zsh
 
 antigen use oh-my-zsh
@@ -14,3 +15,12 @@ antigen bundle zsh-users/zsh-completions src
 antigen theme af-magic
 
 antigen apply
+
+# Custom PATH
+export PATH=$PATH:/workspace/local/depot_tools
+
+# CTRL-Left and Right
+bindkey "^[^[[C" forward-word
+bindkey "^[^[[D" backward-word
+
+source ~/dotfiles/zsh/commands.zsh

@@ -1,37 +1,37 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
-exec() {
+log_command() {
   echo "$@"
   "$@"
 }
 
 link() {
-  exec ln -sfh ~/"dotfiles/$1" "$2"
+  log_command ln -sfh ~/"dotfiles/$1" "$2"
 }
 
 su_link() {
-  exec sudo ln -sfh ~/"dotfiles/$1" "$2"
+  if [ ! -e "$2" ]; then
+  	log_command sudo ln -sfh ~/"dotfiles/$1" "$2"
+  fi
 }
 
 # OS Setup
 case $OSTYPE
-  in darwin*)    
+  in darwin*)
     SUBLIME_DIR=~/"Library/Application Support/Sublime Text 3" ;;
 esac
 SUBLIME_USER_DIR="$SUBLIME_DIR/Packages/User"
 
 # ZSH Setup
-rm ~/.zshrc
-echo source ~/"dotfiles/zsh/zshrc" > ~/.zshrc
-
+link zsh/zshrc ~/.zshrc
 
 # Sublime Setup
-if [-e $SUBLIME_USER_DIR]; then
-	link "sublime/Preferences.sublime-settings" "$SUBLIME_USER_DIR/Preferences.sublime-settings"
-	link "sublime/Package Control.sublime-settings" "$SUBLIME_USER_DIR/Package Control.sublime-settings"
+if [ -e "$SUBLIME_USER_DIR" ]; then
+  link "sublime/Preferences.sublime-settings" "$SUBLIME_USER_DIR/Preferences.sublime-settings"
+  link "sublime/Package Control.sublime-settings" "$SUBLIME_USER_DIR/Package Control.sublime-settings"
 fi
 
 # System symlinks
-if [-e /etc/paths.d]; then
-	su_link paths /etc/paths.d/dotfiles
+if [ -e /etc/paths.d ]; then
+  su_link paths /etc/paths.d/dotfiles
 fi

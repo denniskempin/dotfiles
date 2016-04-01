@@ -12,15 +12,22 @@ antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-history-substring-search
 antigen bundle zsh-users/zsh-completions src
 
-antigen theme af-magic
-
-antigen apply
-
-# Custom PATH
-export PATH=$PATH:/workspace/local/depot_tools
+# Load machine specific config
+if [ $(hostname -s) = "denniskempin-macbookpro2" ]; then
+	source ~/dotfiles/zsh/macbook.zsh
+fi
+if [ $(hostname -s) = "denniskempin-linux" ]; then
+	source ~/dotfiles/zsh/z620.zsh
+fi
+if [ $(hostname -s) = "andrew-desktop" ]; then
+	source ~/dotfiles/zsh/touchbot.zsh
+fi
 
 # CTRL-Left and Right
 bindkey "^[^[[C" forward-word
 bindkey "^[^[[D" backward-word
 
 source ~/dotfiles/zsh/commands.zsh
+
+antigen theme ~/dotfiles/zsh denniskempin
+antigen apply

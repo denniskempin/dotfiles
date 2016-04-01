@@ -34,5 +34,18 @@ get_manifest() {
 
 
 # Gerrit methods
-gerrit_resubmit() { for cl in $(gerrit mine --raw); do if [[ "$(gerrit inspect $cl)" == *V:\ 1* ]]; then gerrit ready $cl 1; fi done }
-gerrit_submit() { for cl in $(gerrit mine --raw); do if [[ "$(gerrit inspect $cl)" == *CR:\ 2* ]]; then gerrit ready $cl 1; gerrit verify $cl 1; fi done }
+gerrit_resubmit() {
+	for cl in $(gerrit mine --raw); do
+		if [[ "$(gerrit inspect $cl)" == *V:\ 1* ]]; then
+			gerrit ready $cl 1;
+		fi
+	done
+}
+
+gerrit_submit() {
+	for cl in $(gerrit mine --raw); do
+		if [[ "$(gerrit inspect $cl)" == *CR:\ 2* ]]; then
+			gerrit ready $cl 1; gerrit verify $cl 1;
+		fi
+	done
+}

@@ -22,14 +22,14 @@ gitlog() { gitlogall | head -n 40 }
 
 # Android workflow
 deploy_test() {
-  scp out/target/product/cheets_arm/data/nativetest/$1/$1 $2:/home/chronos/user/android-data/data
+  scp out/target/product/$TARGET_PRODUCT/data/nativetest/$1/$1 $2:/home/chronos/user/android-data/data
   ssh $2 "chmod +x /home/chronos/user/android-data/data/$1"
 }
 run_test() { ssh $2 "android-sh -c \"/data/$1\"" }
-bdr_test() { m $1 && deploy_test $1 $2 && exec_test $1 $2 }
+bdr_test() { m $1 && deploy_test $1 $2 && run_test $1 $2 }
 
 get_manifest() {
-  sso_client -location https://android-build.googleplex.com/builds/submitted/$1/cheets_arm-userdebug/latest/manifest_$1.xml > .repo/manifests/$1.xml
+  sso_client -location https://android-build.googleplex.com/builds/submitted/$1/$TARGET_PRODUCT-$TARGET_BUILD_VARIANT/latest/manifest_$1.xml > .repo/manifests/$1.xml
 }
 
 

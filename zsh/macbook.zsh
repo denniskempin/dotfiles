@@ -1,3 +1,3 @@
 SHELLNAME="MacBook"
 SHELLCOLOR="yellow"
-EDITOR="/bin/subl"
+export EDITOR='subl -w'

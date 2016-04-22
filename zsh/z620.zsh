@@ -1,3 +1,4 @@
 SHELLNAME="Z620"
 SHELLCOLOR="blue"
-EDITOR="/usr/local/bin/rsub"
+
+export EDITOR='/usr/local/bin/rsub -w'

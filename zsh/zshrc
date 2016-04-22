@@ -23,6 +23,8 @@ if [ $(hostname -s) = "andrew-desktop" ]; then
 	source ~/dotfiles/zsh/touchbot.zsh
 fi
 
+export VISUAL=$EDITOR
+
 # CTRL-Left and Right
 bindkey "^[^[[C" forward-word
 bindkey "^[^[[D" backward-word

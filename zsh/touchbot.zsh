@@ -1,3 +1,4 @@
 SHELLNAME="TouchBot"
 SHELLCOLOR="orange"
-EDITOR="/usr/local/bin/rsub"
+
+export EDITOR='/usr/local/bin/rsub -w'

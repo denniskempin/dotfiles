@@ -3,17 +3,15 @@
         # We're in a git repo.
         BASE=$(basename $(git rev-parse --show-toplevel))
         PATH_TO_CURRENT="${$(pwd -P)#$(git rev-parse --show-toplevel)}"
-        echo "%{$fg_bold[green]%}-/${BASE}$(git_prompt_info)%{$fg_bold[green]%}${PATH_TO_CURRENT}"
+        echo "%{$fg_bold[blue]%}-/${BASE}$(git_prompt_info)%{$fg_bold[blue]%}${PATH_TO_CURRENT}"
     else
         # Not in a git repo
-        echo "%{$fg_bold[green]%}$(print -P %3~)"
+        echo "%{$fg_bold[blue]%}$(print -P %~)"
     fi
 }
-local ret_status="%(?:%{$fg_bold[blue]%}$:%{$fg_bold[red]%}$%s)"
+PROMPT='%{$fg_bold[${SHELLCOLOR}]%}${SHELLNAME} $(directory_name) %{$fg[green]%}➜ %{$reset_color%}'
 
-PROMPT='%{$fg_bold[${SHELLCOLOR}]%}${SHELLNAME}%{$fg_bold[red]%}:$(directory_name)${ret_status} %{$reset_color%}'
-
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}(%{$fg[red]%}"
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}("
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[yellow]%}✗%{$fg[blue]%})%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[yellow]%}✗%{$fg[green]%})%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%})"

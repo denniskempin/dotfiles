@@ -49,3 +49,10 @@ gerrit_submit() {
 		fi
 	done
 }
+
+
+# Random helper to cause iterm to show a notification
+notify() {
+	($*);
+	echo 'iterm-notify';
+}

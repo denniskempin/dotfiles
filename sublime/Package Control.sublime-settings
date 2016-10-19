@@ -10,7 +10,9 @@
 	"installed_packages":
 	[
 		"Align Arguments",
+		"Case Conversion",
 		"ChannelRepositoryTools",
+		"Clang Format",
 		"DocBlockr",
 		"EditorConfig",
 		"Git Conflict Resolver",
@@ -22,6 +24,8 @@
 		"SideBarEnhancements",
 		"Stylus",
 		"SublimeGit",
+		"SublimeLinter",
+		"SublimeLinter-cpplint",
 		"Theme - Spacegray"
 	],
 	"repositories":

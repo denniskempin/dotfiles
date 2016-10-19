@@ -1,9 +1,10 @@
  directory_name() {
     if [[ -d $(git rev-parse --show-toplevel 2>/dev/null) ]]; then
         # We're in a git repo.
+        ANDROID_BRANCH=$(pwd | awk -F/ '/workspace\/android/ { print "[" $4 "] " }')
         BASE=$(basename $(git rev-parse --show-toplevel))
         PATH_TO_CURRENT="${$(pwd -P)#$(git rev-parse --show-toplevel)}"
-        echo "%{$fg_bold[blue]%}-/${BASE}$(git_prompt_info)%{$fg_bold[blue]%}${PATH_TO_CURRENT}"
+        echo "%{$fg_bold[yellow]%}${ANDROID_BRANCH}%{$fg_bold[blue]%}-/${BASE}$(git_prompt_info)%{$fg_bold[blue]%}${PATH_TO_CURRENT}"
     else
         # Not in a git repo
         echo "%{$fg_bold[blue]%}$(print -P %~)"

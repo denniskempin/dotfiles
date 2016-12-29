@@ -1,13 +1,8 @@
 # Chrome OS workflow methods
-if [ -e ~/deviceip ]; then
-	export DEVICE=$(cat ~/deviceip)
-fi
-setboard() { export B=--board="$*"; export BOARD="$*"; echo $B; }
-setdevice(){ export DEVICE="$*"; echo "$*" > ~/deviceip; }
-deploy() { emerge-$BOARD "$*" && cros deploy $DEVICE "$*"; }
+cros_bd() { emerge-$BOARD "$*" && cros deploy $DEVICE "$*"; }
 
-# Chrome debugging
-chrome_stackwalk() {
+# Chrome workflows
+cr_stackwalk() {
 	mkdir -p crash/symbols
 
 	select FILENAME in `ssh $1 'ls /var/spool/crash | grep dmp'`;
@@ -38,6 +33,10 @@ chrome_stackwalk() {
 		exit
 	done
 }
+cr_build_dir() { export CR_BUILD_DIR=$1; }
+cr_build() { ninja -j128 -C $CR_BUILD_DIR chrome chrome_sandbox nacl_helper; }
+cr_deploy() { deploy_chrome --build-dir=$CR_BUILD_DIR --to=$1 }
+cr_bd() { cr_build && cr_deploy $1 }
 
 # GIT history editing methods. Requires you to be on branch work.
 CL_IN_EDIT=NONE
@@ -53,11 +52,17 @@ gitlog() { gitlogall | head -n 40 }
 
 
 # Android workflow
-deploy_test() {
+arct_deploy() {
   rsync -v --chmod=755 out/target/product/$TARGET_PRODUCT/data/nativetest/$1/$1 $2:/home/root/\*/android-data/data
 }
-run_test() { ssh $2 "android-sh -c \"/data/$1\"" }
-bdr_test() { m $1 && deploy_test $1 $2 && run_test $1 $2 }
+arct_run() { ssh $2 "android-sh -c \"/data/$1\"" }
+arct_bdr() { m $1 && arct_deploy $1 $2 && arct_run $1 $2 }
+arc_root() {
+	echo /workspace/android/$(pwd | awk -F/ '/workspace\/android/ { print $4 }')
+}
+arc_build() { m -j32 }
+arc_deploy() { $(arc_root)/device/google/cheets2/scripts/push-to-device.sh $1 }
+arc_bd() { arc_build && arc_deploy }
 
 get_manifest() {
   sso_client -location https://android-build.googleplex.com/builds/submitted/$1/$TARGET_PRODUCT-$TARGET_BUILD_VARIANT/latest/manifest_$1.xml > .repo/manifests/$1.xml

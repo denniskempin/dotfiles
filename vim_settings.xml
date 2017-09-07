@@ -1,0 +1,62 @@
+<application>
+  <component name="VimSettings">
+    <state version="4" enabled="false" />
+    <globalmarks />
+    <filemarks>
+      <file name="$USER_HOME$/CLionProjects/untitled/Moo.cpp" timestamp="1504682888120">
+        <mark key="[" line="11" column="0" />
+        <mark key="]" line="11" column="0" />
+        <mark key="^" line="10" column="0" />
+        <mark key="." line="11" column="0" />
+      </file>
+      <file name="$USER_HOME$/CLionProjects/untitled/Moo.h" timestamp="1504682861987">
+        <mark key="'" line="6" column="13" />
+        <mark key="[" line="7" column="43" />
+        <mark key="]" line="7" column="44" />
+        <mark key="^" line="7" column="44" />
+        <mark key="." line="7" column="44" />
+      </file>
+    </filemarks>
+    <jumps>
+      <jump line="9" column="10" filename="$USER_HOME$/CLionProjects/untitled/Moo.h" />
+      <jump line="4" column="6" filename="$USER_HOME$/CLionProjects/untitled/Moo.h" />
+      <jump line="6" column="13" filename="$USER_HOME$/CLionProjects/untitled/Moo.h" />
+    </jumps>
+    <registers>
+      <register name="1" type="2">
+        <text encoding="base64">TW9vOjpNb28oKSB7fQo=</text>
+      </register>
+      <register name="&quot;" type="2">
+        <text encoding="base64">TW9vOjpNb28oKSB7fQo=</text>
+      </register>
+      <register name=":" type="4">
+        <text>help</text>
+      </register>
+      <register name="/" type="4">
+        <text>Moo</text>
+      </register>
+    </registers>
+    <search>
+      <last-search>Moo</last-search>
+      <last-offset />
+      <last-pattern>Moo</last-pattern>
+      <last-dir>1</last-dir>
+      <show-last>false</show-last>
+    </search>
+    <history>
+      <history-search>
+        <entry>Moo</entry>
+      </history-search>
+      <history-cmd>
+        <entry>w</entry>
+        <entry>q</entry>
+        <entry>help</entry>
+      </history-cmd>
+    </history>
+    <shortcut-conflicts>
+      <shortcut-conflict owner="vim">
+        <text>ctrl pressed Q</text>
+      </shortcut-conflict>
+    </shortcut-conflicts>
+  </component>
+</application>

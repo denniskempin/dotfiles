@@ -1,0 +1,44 @@
+# Plugins
+source ~/dotfiles/zsh/antigen/antigen.zsh
+
+antigen use oh-my-zsh
+
+antigen bundle thefuck
+antigen bundle z
+antigen bundle git
+
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zsh-users/zsh-history-substring-search
+antigen bundle zsh-users/zsh-completions src
+
+# Setup git prompt
+ZSH_THEME_GIT_PROMPT_CACHE=1
+GIT_PROMPT_EXECUTABLE="haskell"
+source ~/dotfiles/zsh/zsh-git-prompt/zshrc.sh
+export PATH=$PATH:~/dotfiles/zsh/zsh-git-prompt/src/.bin
+
+# Load machine specific config
+if [ $(hostname -s) = "denniskempin-macbookpro2" ]; then
+	source ~/dotfiles/zsh/macbook.zsh
+fi
+if [ $(hostname -s) = "denniskempin-linux" ]; then
+	source ~/dotfiles/zsh/z620.zsh
+fi
+if [ $(hostname -s) = "andrew-desktop" ]; then
+	source ~/dotfiles/zsh/touchbot.zsh
+fi
+
+export VISUAL=$EDITOR
+
+# CTRL-Left and Right
+bindkey "^[^[[C" forward-word
+bindkey "^[^[[D" backward-word
+
+# Disable completion of users which is painfully slow on corporate networks
+zstyle ':completion:*' users
+
+source ~/dotfiles/zsh/commands.zsh
+
+antigen theme ~/dotfiles/zsh denniskempin
+antigen apply

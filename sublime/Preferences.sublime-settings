@@ -1,0 +1,59 @@
+{
+	"align_arguments":
+	{
+		"line_length": 120,
+		"one_per_line": true
+	},
+	"bold_folder_labels": true,
+	"caret_style": "phase",
+	"color_scheme": "Packages/User/SublimeLinter/Monokai (SL).tmTheme",
+	"detect_slow_plugins": true,
+	"enable_tab_scrolling": false,
+	"font_face": "Monaco",
+	"font_size": 11,
+	"highlight_line": true,
+	"ignored_packages":
+	[
+		"Vintage"
+	],
+	"indent_to_bracket": true,
+	"isort":
+	{
+		"from_first": "1",
+		"known_first_party":
+		[
+			"optofidelity"
+		],
+		"known_standard_library":
+		[
+			"ctypes"
+		],
+		"known_third_party":
+		[
+			"numpy",
+			"unittest2",
+			"skimage",
+			"safetynet",
+			"jinja2",
+			"cv2",
+			"matplotlib",
+			"bottleneck",
+			"scipy"
+		]
+	},
+	"line_length": 120,
+	"open_related_patterns":
+	[
+		[
+			"*.cc",
+			"*.cpp",
+			"*.h"
+		]
+	],
+	"rulers":
+	[
+		80
+	],
+	"theme": "Spacegray Eighties.sublime-theme",
+	"use_simple_full_screen": true
+}

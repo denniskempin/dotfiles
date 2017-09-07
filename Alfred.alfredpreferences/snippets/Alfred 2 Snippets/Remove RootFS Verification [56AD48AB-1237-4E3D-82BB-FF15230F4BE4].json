@@ -1,0 +1,9 @@
+{
+  "alfredsnippet" : {
+    "snippet" : "sudo \/usr\/share\/vboot\/bin\/make_dev_ssd.sh --force --remove_rootfs_verification",
+    "dontautoexpand" : true,
+    "uid" : "56AD48AB-1237-4E3D-82BB-FF15230F4BE4",
+    "name" : "Remove RootFS Verification",
+    "keyword" : ""
+  }
+}

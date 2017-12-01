@@ -1,3 +1,11 @@
+google3_prompt_info() {
+  if [[ $PWD =~ '/google/src/cloud/[^/]+/(.+)/google3(.*)' ]]; then
+    print -r -- "%{$fg_bold[green]%}($match[1]) %{$fg_bold[blue]%}//${match[2]#/}"
+  else
+    echo "%{$fg_bold[blue]%}$(print -P %~)"
+  fi
+}
+
  directory_name() {
     if [[ -d $(git rev-parse --show-toplevel 2>/dev/null) ]]; then
         # We're in a git repo.
@@ -7,7 +15,7 @@
         echo "%{$fg_bold[yellow]%}${ANDROID_BRANCH}%{$fg_bold[blue]%}-/${BASE}$(git_super_status)%{$fg_bold[blue]%}${PATH_TO_CURRENT}"
     else
         # Not in a git repo
-        echo "%{$fg_bold[blue]%}$(print -P %~)"
+        google3_prompt_info
     fi
 }
 PROMPT='%{$fg_bold[${SHELLCOLOR}]%}${SHELLNAME} $(directory_name) %{$fg[green]%}➜ %{$reset_color%}'

@@ -22,7 +22,7 @@ export PATH=$PATH:~/dotfiles/zsh/zsh-git-prompt/src/.bin
 if [ $(hostname -s) = "denniskempin-macbookpro2" ]; then
 	source ~/dotfiles/zsh/macbook.zsh
 fi
-if [ $(hostname -s) = "denniskempin-linux" ]; then
+if [ $(hostname -s) = "planet-y" ]; then
 	source ~/dotfiles/zsh/z620.zsh
 fi
 if [ $(hostname -s) = "andrew-desktop" ]; then
@@ -42,3 +42,11 @@ source ~/dotfiles/zsh/commands.zsh
 
 antigen theme ~/dotfiles/zsh denniskempin
 antigen apply
+
+# Install fzf, not in antigen yet?
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export NVM_DIR="/usr/local/google/home/denniskempin/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+export PATH="$HOME/.yarn/bin:$PATH"

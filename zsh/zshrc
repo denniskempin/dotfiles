@@ -1,13 +1,13 @@
 # Load ZIM for a good basic setup
-export ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
-[[ -s ${ZIM_HOME}/init.zsh ]] && source ${ZIM_HOME}/init.zsh
+export ZIM_HOME=~/dotfiles/zsh/zimfw
+source ${ZIM_HOME}/init.zsh
 
 # Use antibody to load extra plugins
 source <(antibody init)
 antibody bundle changyuheng/fz
 antibody bundle rupa/z
 
-export EDITOR=code
+export EDITOR="code -w"
 export VISUAL=$EDITOR
 
 # CTRL-Left and Right

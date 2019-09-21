@@ -4,3 +4,6 @@
 [submodule "zsh/zsh-git-prompt"]
 	path = zsh/zsh-git-prompt
 	url = https://github.com/olivierverdier/zsh-git-prompt
+[submodule "zsh/zimfw"]
+	path = zsh/zimfw
+	url = https://github.com/zimfw/zimfw.git

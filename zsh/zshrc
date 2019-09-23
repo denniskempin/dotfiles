@@ -1,29 +1,39 @@
 source <(antibody init)
 
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zsh-users/zsh-completions src
+# Syntax highlighting to highlight typos in commands
+antibody bundle zsh-users/zsh-syntax-highlighting
 
-antibody bundle changyuheng/fz
-antibody bundle rupa/z
+# Shows last similar command while typing. Accept with right-arrow.
+antibody bundle zsh-users/zsh-autosuggestions
 
 export EDITOR="code -w"
 export VISUAL=$EDITOR
 
-# CTRL-Left and Right
+# CTRL-Left and Right jump word-by-word
 bindkey "^[^[[C" forward-word
 bindkey "^[^[[D" backward-word
 
+# Load fzf. Install with "apt install fzf". Fuzzy search anything.
+source /usr/share/doc/fzf/examples/key-bindings.zsh
+
+# Run "z name" to jump to the most frequently folder matching 'name'
+antibody bundle rupa/z
+
+# Combine Z with fzf. Run z to fuzzy search frequently used folders.
+unalias z 2> /dev/null
+z() {
+  [ $# -gt 0 ] && _z "$*" && return
+  cd "$(_z -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
+}
+
 # Disable completion of users which is painfully slow on corporate networks
 zstyle ':completion:*' users
-
-# Load fzf
-source ~/.fzf.zsh
 
 # Load machine specific config
 if [ $(hostname -s) = "migrator" ]; then
     source ~/dotfiles/zsh/migrator.zsh
 fi
+
 if [ $(hostname -s) = "planet-y" ]; then
     source ~/dotfiles/zsh/corp.zsh
 fi

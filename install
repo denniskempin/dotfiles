@@ -12,21 +12,17 @@ setup_fish() {
   ln -sf "$(pwd)/fish/fish_plugins" ~/.config/fish/fish_plugins
   ln -sf "$(pwd)/fish/starship.toml" ~/.config/starship.toml
 
+  # Using fish as a login shell can be problematic since it is not POSIX
+  # compliant. So instead we make bash call fish for interactive shells.
+  ln -sf "$(pwd)/fish/bashrc" ~/.bash_profile
+  ln -sf "$(pwd)/fish/bashrc" ~/.bashrc
+
   # Install fisher plugins
   fish -c "curl -sL https://git.io/fisher | source && fisher update"
 }
 
 ################################################################################
 # OSX specific
-
-make_fish_osx_default() {
-  # Add fish to list of allowed shells.
-  if ! grep -qxF "/usr/local/bin/fish" /etc/shells; then
-    echo "/usr/local/bin/fish" | sudo tee -a /etc/shells
-  fi
-  # Make fish the default shell.
-  sudo chpass -s /usr/local/bin/fish "$USER"
-}
 
 setup_vscode() {
   ln -sf "$(pwd)/vscode/keybindings.json" ~/Library/Application\ Support/Code/User/keybindings.json
@@ -40,6 +36,10 @@ setup_iterm2() {
 }
 
 install_osx_packages() {
+  if ! command -v brew; then
+    echo "Skipping homebrew packages"
+    return
+  fi
   osx_packages=(
     fish
     thefuck  # Corrects common command mistakes (e.g. prepending sudo)
@@ -61,7 +61,6 @@ setup_osx() {
   setup_vscode
   setup_iterm2
   setup_fish
-  make_fish_osx_default
 }
 
 ################################################################################

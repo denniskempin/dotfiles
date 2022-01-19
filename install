@@ -6,6 +6,9 @@ cd "$(dirname "$0")"
 # Common
 
 setup_fish() {
+  # Install starship prompt
+  sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+
   # Link config files
   mkdir -p ~/.config/fish/
   ln -sf "$(pwd)/fish/config.fish" ~/.config/fish/config.fish
@@ -40,16 +43,15 @@ install_osx_packages() {
     echo "Skipping homebrew packages"
     return
   fi
-  osx_packages=(
+  packages=(
     fish
     thefuck  # Corrects common command mistakes (e.g. prepending sudo)
     tldr     # tldr versions of man pages
-    starship # Rust based prompt for fish
     exa      # better ls
     fd       # better find
     bat      # better cat
   )
-  brew install "${osx_packages[@]}"
+  brew install "${packages[@]}"
 
   brew tap homebrew/cask-fonts
   brew install --cask \
@@ -66,7 +68,20 @@ setup_osx() {
 ################################################################################
 # Linux specific
 
+install_debian_packages() {
+  packages=(
+    fish
+    thefuck  # Corrects common command mistakes (e.g. prepending sudo)
+    tldr     # tldr versions of man pages
+    exa      # better ls
+    fd-find  # better find
+    bat      # better cat
+  )
+  sudo apt install --yes "${packages[@]}"
+}
+
 setup_linux() {
+  install_debian_packages
   setup_fish
 }
 

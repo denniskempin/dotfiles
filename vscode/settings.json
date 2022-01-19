@@ -1,9 +1,83 @@
 {
+  // Basic settings
+  "editor.fontLigatures": true,
+  "editor.rulers": [
+    80
+  ],
+  "editor.fontFamily": "Fira Code",
+  "editor.tabSize": 4,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs":"active",
   "files.autoSave": "afterDelay",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
   "workbench.colorTheme": "Snazzy Operator",
+  "keyboard.dispatch": "keyCode",
 
-  // Exclude rust target directories from watching.
+  // Vim mode config
+  "vim.highlightedyank.enable": true,
+  "vim.visualstar": true,
+  "vim.whichwrap": "h,l,\u003c,\u003e,[,]",
+  "vim.hlsearch": true,
+  "vim.cursorStylePerMode.normal": "block-outline",
+  "vim.camelCaseMotion.enable": true,
+  "vim.useSystemClipboard": true,
+  "vim.replaceWithRegister": true,
+
+  // Rust
   "files.watcherExclude": {
     "**/target/**": true
   },
+
+  // Bazel
+  "files.associations": {
+    "BUILD": "bazel",
+    "METADATA": "bazel",
+    "WORKSPACE": "bazel"
+  },
+
+  // Shell scripts
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[dockerfile]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+
+  // Python
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python"
+  },
+  "python.languageServer": "Pylance",
+  "python.analysis.typeCheckingMode": "strict",
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": [
+    "--line-length",
+    "80"
+  ],
+
+  // Gitlens
+  "gitlens.hovers.currentLine.over": "line",
+  "gitlens.codeLens.enabled": false,
+  "gitlens.currentLine.enabled": false,
+  "gitlens.hovers.enabled": false,
+  "gitlens.blame.toggleMode": "window",
+  "gitlens.changes.toggleMode": "window",
+  "gitlens.views.branches.avatars": false,
+  "gitlens.views.commits.avatars": false,
+  "gitlens.views.commits.pullRequests.showForBranches": false,
+  "gitlens.views.commits.pullRequests.enabled": false,
+  "gitlens.views.commits.showBranchComparison": false,
+  "gitlens.views.branches.showBranchComparison": false,
+  "gitlens.views.branches.pullRequests.showForBranches": false,
+  "gitlens.views.branches.pullRequests.enabled": false,
+  "gitlens.views.showRelativeDateMarkers": false,
+  "gitlens.views.fileHistory.avatars": false,
+
+  // JavaScript
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+
+  // Misc
 }

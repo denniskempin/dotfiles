@@ -1,0 +1,9 @@
+{
+  "files.autoSave": "afterDelay",
+  "workbench.colorTheme": "Snazzy Operator",
+
+  // Exclude rust target directories from watching.
+  "files.watcherExclude": {
+    "**/target/**": true
+  },
+}

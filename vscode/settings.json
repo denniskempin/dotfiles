@@ -4,7 +4,7 @@
   "editor.rulers": [
     80
   ],
-  "editor.fontFamily": "Fira Code",
+  "editor.fontFamily": "Hack Nerd Font Mono",
   "editor.tabSize": 4,
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs":"active",
@@ -77,7 +77,8 @@
   // JavaScript
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "tabnine.experimentalAutoImports": true
 
   // Misc
 }

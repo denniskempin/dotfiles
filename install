@@ -7,7 +7,7 @@ cd "$(dirname "$0")"
 
 setup_fish() {
   # Install starship prompt
-  sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+  sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --yes
 
   # Link config files
   mkdir -p ~/.config/fish/
@@ -50,6 +50,8 @@ install_osx_packages() {
     exa      # better ls
     fd       # better find
     bat      # better cat
+    grc      # generic colorizer for standard commands
+    zoxide   # better cd
   )
   brew install "${packages[@]}"
 
@@ -76,6 +78,8 @@ install_debian_packages() {
     exa      # better ls
     fd-find  # better find
     bat      # better cat
+    grc      # generic colorizer for standard commands
+    zoxide   # better cd
   )
   sudo apt install --yes "${packages[@]}"
 }

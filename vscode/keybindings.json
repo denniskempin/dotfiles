@@ -11,11 +11,11 @@
 
     // Use Code36 keyboard bindings for commands / quick open
     {
-        "key": "ctrl+cmd+space",
+        "key": "ctrl+shift+alt+cmd+s",
         "command": "workbench.action.showCommands"
     },
     {
-        "key": "shift+cmd+space",
+        "key": "ctrl+shift+alt+cmd+t",
         "command": "workbench.action.quickOpen"
     }
 ]

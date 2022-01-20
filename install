@@ -58,7 +58,7 @@ install_osx_packages() {
   brew tap homebrew/cask-fonts
   brew install --cask \
     font-fira-code
-}
+
 
 setup_osx() {
   install_osx_packages

@@ -5,10 +5,22 @@ cd "$(dirname "$0")"
 ################################################################################
 # Common
 
-setup_fish() {
-  # Install starship prompt
-  sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --yes
+install_cargo_packages() {
+  # Install rustup
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+  source $HOME/.cargo/env
 
+  packages=(
+    starship # great cross-shell prompt
+    zoxide   # better cd (with fuzzy matching and autojump)
+    exa      # better ls
+    fd-find  # better find
+    bat      # better cat
+  )
+  cargo install --locked "${packages[@]}"
+}
+
+setup_fish() {
   # Link config files
   mkdir -p ~/.config/fish/
   ln -sf "$(pwd)/fish/config.fish" ~/.config/fish/config.fish
@@ -45,13 +57,9 @@ install_osx_packages() {
   fi
   packages=(
     fish
-    thefuck  # Corrects common command mistakes (e.g. prepending sudo)
-    tldr     # tldr versins of man pages
-    exa      # better ls
-    fd       # better find
-    bat      # better cat
-    grc      # generic colorizer for standard commands
-    zoxide   # better cd
+    thefuck # Corrects common command mistakes (e.g. prepending sudo)
+    tldr    # tldr versins of man pages
+    grc     # generic colorizer for standard commands
   )
   brew install "${packages[@]}"
 
@@ -61,6 +69,7 @@ install_osx_packages() {
 }
 
 setup_osx() {
+  install_cargo_packages
   install_osx_packages
   setup_vscode
   setup_iterm2
@@ -73,18 +82,15 @@ setup_osx() {
 install_debian_packages() {
   packages=(
     fish
-    thefuck  # Corrects common command mistakes (e.g. prepending sudo)
-    tldr     # tldr versions of man pages
-    exa      # better ls
-    fd-find  # better find
-    bat      # better cat
-    grc      # generic colorizer for standard commands
-    zoxide   # better cd
+    thefuck # Corrects common command mistakes (e.g. prepending sudo)
+    tldr    # tldr versions of man pages
+    grc     # generic colorizer for standard commands
   )
   sudo apt install --yes "${packages[@]}"
 }
 
 setup_linux() {
+  install_cargo_packages
   install_debian_packages
   setup_fish
 }

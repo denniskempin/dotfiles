@@ -20,17 +20,6 @@ COMMON_PACKAGES=(
     bat      # better cat
 )
 
-install_cargo_packages() {
-  # Install rustup
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-  source $HOME/.cargo/env
-
-  packages=(
-
-  )
-  cargo install --locked "${packages[@]}"
-}
-
 setup_fish() {
   # Link config files
   mkdir -p ~/.config/fish/
@@ -84,7 +73,6 @@ install_osx_packages() {
 }
 
 setup_osx() {
-  install_cargo_packages
   install_osx_packages
   setup_vscode
   setup_iterm2
@@ -119,7 +107,6 @@ install_debian_packages() {
 }
 
 setup_linux() {
-  install_cargo_packages
   install_debian_packages
   setup_fish
 }

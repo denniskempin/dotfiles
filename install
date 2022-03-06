@@ -2,23 +2,26 @@
 set -ex
 cd "$(dirname "$0")"
 
+# Don't use sudo if run as root already. Some containers won't have it.
+if [ "$EUID" -ne 0 ]; then
+  sudo() {
+    "$@"
+  }
+fi
+
 ################################################################################
 # Common
 
-install_cargo_packages() {
-  # Install rustup
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-  source $HOME/.cargo/env
-
-  packages=(
-    starship # great cross-shell prompt
-    zoxide   # better cd (with fuzzy matching and autojump)
+# Packages with identical names on homebrew and linux
+COMMON_PACKAGES=(
+    fish
+    thefuck # Corrects common command mistakes (e.g. prepending sudo)
+    tldr    # tldr versins of man pages
     exa      # better ls
     fd-find  # better find
     bat      # better cat
-  )
-  cargo install --locked "${packages[@]}"
-}
+    zoxide   # better cd
+)
 
 setup_fish() {
   # Link config files
@@ -34,6 +37,9 @@ setup_fish() {
 
   # Install fisher plugins
   fish -c "curl -sL https://git.io/fisher | source && fisher update"
+
+  # Install starship prompt
+  sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
 }
 
 ################################################################################
@@ -56,9 +62,7 @@ install_osx_packages() {
     return
   fi
   packages=(
-    fish
-    thefuck # Corrects common command mistakes (e.g. prepending sudo)
-    tldr    # tldr versins of man pages
+    "${COMMON_PACKAGES[@]}"
     grc     # generic colorizer for standard commands
   )
   brew install "${packages[@]}"
@@ -69,7 +73,6 @@ install_osx_packages() {
 }
 
 setup_osx() {
-  install_cargo_packages
   install_osx_packages
   setup_vscode
   setup_iterm2
@@ -81,16 +84,16 @@ setup_osx() {
 
 install_debian_packages() {
   packages=(
-    fish
-    thefuck # Corrects common command mistakes (e.g. prepending sudo)
-    tldr    # tldr versions of man pages
-    grc     # generic colorizer for standard commands
+    "${COMMON_PACKAGES[@]}"
   )
   sudo apt install --yes "${packages[@]}"
+
+  # Install grc
+  wget http://kassiopeia.juls.savba.sk/~garabik/software/grc/grc_1.12-1_all.deb
+  dpkg -i grc_1.12-1_all.deb
 }
 
 setup_linux() {
-  install_cargo_packages
   install_debian_packages
   setup_fish
 }

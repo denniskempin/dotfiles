@@ -4,7 +4,8 @@
   "editor.rulers": [
     80
   ],
-  "editor.fontFamily": "Hack Nerd Font Mono",
+
+  "editor.fontFamily": "Fira Code",
   "editor.tabSize": 4,
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs":"active",
@@ -78,7 +79,13 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "tabnine.experimentalAutoImports": true
+
+  // Dev container
+  "dotfiles.repository": "https://github.com/denniskempin/dotfiles",
+  "dotfiles.targetPath": "~/dotfiles",
+  "dotfiles.installCommand": "~/dotfiles/install",
 
   // Misc
+  "customizeUI.titleBar": "inline",
+  "window.titleBarStyle": "native"
 }

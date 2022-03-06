@@ -10,7 +10,7 @@ if command -v exa &> /dev/null
 end
 
 # Use hyper+t and hyper+s for history and directory search
-fzf_configure_bindings --history=\e\ct --directory=\e\cs --git_status --git_log
+# fzf_configure_bindings --history=\e\ct --directory=\e\cs --git_status --git_log
 
 set PATH $PATH $HOME/.cargo/bin
 

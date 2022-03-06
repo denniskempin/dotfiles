@@ -32,11 +32,11 @@ setup_fish() {
   ln -sf "$(pwd)/fish/bashrc" ~/.bash_profile
   ln -sf "$(pwd)/fish/bashrc" ~/.bashrc
 
-  # Install fisher plugins
-  fish -c "curl -sL https://git.io/fisher | source && fisher update"
-
   # Install starship prompt
   sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
+
+  # Install fisher plugins
+  fish -c "curl -sL https://git.io/fisher | source && fisher update"
 }
 
 ################################################################################

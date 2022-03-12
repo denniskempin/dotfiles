@@ -7,6 +7,7 @@ RUN pacman -Sy --noconfirm \
     curl \
     wget \
     git \
+    inetutils \
     base-devel \
     python \
     python-pip

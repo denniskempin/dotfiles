@@ -2,22 +2,17 @@
 set -ex
 cd "$(dirname "$0")"
 
-# Don't use sudo if run as root already. Some containers won't have it.
-if [ "$EUID" -eq 0 ]; then
-  sudo() {
-    "$@"
-  }
-fi
-
 ################################################################################
 # Common
 
-# Packages with identical names on homebrew and debian/ubuntu
+# Packages with identical names on homebrew/arch/debian
 COMMON_PACKAGES=(
     fish
     thefuck # Corrects common command mistakes (e.g. prepending sudo)
     tldr    # tldr versins of man pages
     bat      # better cat
+    zoxide   # better cd (with fuzzy matching and autojump)
+    exa      # better ls
 )
 
 setup_fish() {
@@ -62,8 +57,8 @@ install_osx_packages() {
     "${COMMON_PACKAGES[@]}"
     grc     # generic colorizer for standard commands
     fd      # better find
-    zoxide   # better cd (with fuzzy matching and autojump)
-    exa      # better ls
+    less    # Newer version has --mouse support
+    git-delta # Better git diff
   )
   brew install "${packages[@]}"
 
@@ -82,32 +77,40 @@ setup_osx() {
 ################################################################################
 # Linux specific
 
+install_arch_packages() {
+  packages=(
+    "${COMMON_PACKAGES[@]}"
+    grc     # generic colorizer for standard commands
+    fd      # better find
+    git-delta # better git diff
+  )
+  pacman -Sy --noconfirm "${packages[@]}"
+}
+
 install_debian_packages() {
   packages=(
     "${COMMON_PACKAGES[@]}"
     fd-find  # better find
   )
-
-  # These may not be available on older distributions
-  optional_packages=(
-    zoxide   # better cd (with fuzzy matching and autojump)
-    exa      # better lsP
-  )
-
-  sudo apt update
   sudo apt install --yes "${packages[@]}"
-  sudo apt install --yes "${optional_packages[@]}" || true
 
   # Install grc
   (
     cd /tmp && \
     wget http://kassiopeia.juls.savba.sk/~garabik/software/grc/grc_1.12-1_all.deb && \
-    dpkg -i grc_1.12-1_all.deb
+    dpkg -i grc_1.12-1_all.deb && \
+    wget https://github.com/dandavison/delta/releases/download/0.12.1/git-delta_0.12.1_amd64.deb && \
+    dpkg -i git-delta_0.12.1_amd64.deb
   )
 }
 
 setup_linux() {
-  install_debian_packages
+  if command -v pacman > /dev/null; then
+    install_arch_packages
+  fi
+  if command -v apt-get > /dev/null; then
+    install_debian_packages
+  fi
   setup_fish
 }
 

@@ -80,12 +80,8 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
-  // Dev container
-  "dotfiles.repository": "https://github.com/denniskempin/dotfiles",
-  "dotfiles.targetPath": "~/dotfiles",
-  "dotfiles.installCommand": "~/dotfiles/install",
-
   // Misc
   "customizeUI.titleBar": "inline",
   "window.titleBarStyle": "native"
+
 }

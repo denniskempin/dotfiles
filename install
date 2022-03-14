@@ -15,6 +15,19 @@ COMMON_PACKAGES=(
   exa     # better ls
 )
 
+# Packages with identical names on homebrew/arch
+ARCH_BREW_PACKAGES=(
+    "${COMMON_PACKAGES[@]}"
+    grc       # generic colorizer for standard commands
+    fd        # better find
+    less      # Newer version has --mouse support
+    git-delta # Better git diff
+    sd        # Better sed
+    ripgrep   # Better grep
+    procs     # Better ps
+    bottom    # Better top
+)
+
 setup_fish() {
   # Link config files
   mkdir -p ~/.config/fish/
@@ -53,18 +66,7 @@ install_osx_packages() {
     echo "Skipping homebrew packages"
     return
   fi
-  packages=(
-    "${COMMON_PACKAGES[@]}"
-    grc       # generic colorizer for standard commands
-    fd        # better find
-    less      # Newer version has --mouse support
-    git-delta # Better git diff
-    sd        # Better sed
-    ripgrep   # Better grep
-    procs     # Better ps
-    bottom    # Better top
-  )
-  brew install "${packages[@]}"
+  brew install "${ARCH_BREW_PACKAGES[@]}"
 
   brew tap homebrew/cask-fonts
   brew install --cask \
@@ -82,21 +84,11 @@ setup_osx() {
 # Linux specific
 
 install_arch_packages() {
-  packages=(
-    "${COMMON_PACKAGES[@]}"
-    grc       # generic colorizer for standard commands
-    fd        # better find
-    git-delta # better git diff
-    sd        # Better sed
-    ripgrep   # Better grep
-    procs     # Better ps
-    bottom    # Better top
-  )
-  pacman -Sy --noconfirm "${packages[@]}"
+  pacman -Sy --noconfirm "${ARCH_BREW_PACKAGES[@]}"
 }
 
 install_deb() {
-  (cd /tmp && wget "$1" -o pkg.deb && dpkg -i pkg.deb)
+  (cd /tmp && rm -f pkg.deb && wget "$1" -o pkg.deb && dpkg -i pkg.deb)
 }
 
 install_debian_packages() {

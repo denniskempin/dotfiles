@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 cd "$(dirname "$0")"
 
 ################################################################################
@@ -37,8 +37,8 @@ setup_fish() {
 
   # Using fish as a login shell can be problematic since it is not POSIX
   # compliant. So instead we make bash call fish for interactive shells.
-  ln -sf "$(pwd)/fish/bashrc" ~/.bash_profile
   ln -sf "$(pwd)/fish/bashrc" ~/.bashrc
+  ln -sf "$(pwd)/fish/bashrc" ~/.zshrc
 
   # Install starship prompt
   sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
@@ -62,10 +62,6 @@ setup_iterm2() {
 }
 
 install_osx_packages() {
-  if ! command -v brew; then
-    echo "Skipping homebrew packages"
-    return
-  fi
   brew install "${ARCH_BREW_PACKAGES[@]}"
 
   brew tap homebrew/cask-fonts

@@ -17,5 +17,27 @@
     {
         "key": "ctrl+shift+alt+cmd+t",
         "command": "workbench.action.quickOpen"
-    }
+    },
+    {
+        "key": "shift+cmd+]",
+        "command": "-workbench.action.nextEditor"
+    },
+    {
+        "key": "shift+cmd+]",
+        "command": "-workbench.action.terminal.focusNext",
+        "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus"
+    },
+    {
+        "key": "shift+cmd+[",
+        "command": "-workbench.action.terminal.focusPrevious",
+        "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus"
+    },
+    {
+        "key": "shift+cmd+[",
+        "command": "workbench.action.focusLeftGroup"
+    },
+    {
+        "key": "shift+cmd+]",
+        "command": "workbench.action.focusRightGroup"
+    },
 ]

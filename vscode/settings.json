@@ -2,18 +2,22 @@
   // Basic settings
   "editor.fontLigatures": true,
   "editor.rulers": [
-    80
+    100
   ],
 
   "editor.fontFamily": "Fira Code",
   "editor.tabSize": 4,
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs":"active",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
   "files.autoSave": "afterDelay",
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
   "workbench.colorTheme": "Snazzy Operator",
   "keyboard.dispatch": "keyCode",
+  "terminal.integrated.defaultProfile.linux": "fish",
 
   // Vim mode config
   "vim.highlightedyank.enable": true,
@@ -22,13 +26,14 @@
   "vim.hlsearch": true,
   "vim.cursorStylePerMode.normal": "block-outline",
   "vim.camelCaseMotion.enable": true,
-  "vim.useSystemClipboard": true,
   "vim.replaceWithRegister": true,
 
   // Rust
   "files.watcherExclude": {
     "**/target/**": true
   },
+  "rust-analyzer.checkOnSave.command": "clippy",
+  "rust-analyzer.checkOnSave.enable": false,
 
   // Bazel
   "files.associations": {
@@ -54,7 +59,7 @@
   "python.formatting.provider": "black",
   "python.formatting.blackArgs": [
     "--line-length",
-    "80"
+    "100"
   ],
 
   // Gitlens
@@ -77,10 +82,10 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "tabnine.experimentalAutoImports": true,
 
   // Misc
   "customizeUI.titleBar": "inline",
   "gitlens.codeLens.enabled": false,
   "gitlens.currentLine.enabled": false
-
 }

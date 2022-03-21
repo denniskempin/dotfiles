@@ -23,5 +23,6 @@ export LESS="--mouse"
 # Use nvim as default editor
 export EDITOR="nvim"
 
+set PATH $PATH $HOME/go/bin
 set PATH $PATH $HOME/.cargo/bin
 set PATH $PATH $dotfiles_dir/containers

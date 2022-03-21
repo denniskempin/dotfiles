@@ -14,6 +14,7 @@ COMMON_PACKAGES=(
   bat     # better cat
   zoxide  # better cd (with fuzzy matching and autojump)
   exa     # better ls
+  nnn     # TUI file manager
 )
 
 # Packages with identical names on homebrew/arch
@@ -28,6 +29,8 @@ ARCH_BREW_PACKAGES=(
     procs     # Better ps
     bottom    # Better top
     fzf       # fuzzy finder
+    lazygit   # handy git TUI
+    lazydocker # handy docker TUI
 )
 
 setup_fish() {
@@ -117,6 +120,8 @@ install_debian_packages() {
   # No debian packages available
   cargo install sd
   cargo install procs
+  go install github.com/jesseduffield/lazygit@latest
+  go install github.com/jesseduffield/lazydocker@latest
 }
 
 setup_linux() {

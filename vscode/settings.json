@@ -80,7 +80,6 @@
 
   // Misc
   "customizeUI.titleBar": "inline",
-  "window.titleBarStyle": "native",
   "gitlens.codeLens.enabled": false,
   "gitlens.currentLine.enabled": false
 

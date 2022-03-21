@@ -10,7 +10,8 @@ RUN pacman -Sy --noconfirm \
     inetutils \
     base-devel \
     python \
-    python-pip
+    python-pip \
+    openssh
 
 COPY install fish/* /root/dotfiles/
 COPY fish/* /root/dotfiles/fish/

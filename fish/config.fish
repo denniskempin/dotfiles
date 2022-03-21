@@ -20,5 +20,8 @@ fzf_configure_bindings --history=\e\ct --directory=\e\cs --git_status --git_log
 # Enable mouse scrolling in less output
 export LESS="--mouse"
 
+# Use nvim as default editor
+export EDITOR="nvim"
+
 set PATH $PATH $HOME/.cargo/bin
 set PATH $PATH $dotfiles_dir/containers

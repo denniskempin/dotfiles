@@ -8,6 +8,7 @@ cd "$(dirname "$0")"
 # Packages with identical names on homebrew/arch/debian
 COMMON_PACKAGES=(
   fish
+  neovim
   thefuck # Corrects common command mistakes (e.g. prepending sudo)
   tldr    # tldr versins of man pages
   bat     # better cat
@@ -26,6 +27,7 @@ ARCH_BREW_PACKAGES=(
     ripgrep   # Better grep
     procs     # Better ps
     bottom    # Better top
+    fzf       # fuzzy finder
 )
 
 setup_fish() {
@@ -45,6 +47,17 @@ setup_fish() {
 
   # Install fisher plugins
   fish -c "curl -sL https://git.io/fisher | source && fisher update"
+}
+
+setup_misc() {
+  ln -sf "$(pwd)/gitconfig" ~/.gitconfig
+
+  rm -rf ~/.config/nvim
+  ln -sf "$(pwd)/nvim" ~/.config/nvim
+
+  curl -fLo ~/.local/share/nvim/site/autoload/plug.vim \
+    --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 }
 
 ################################################################################
@@ -74,6 +87,7 @@ setup_osx() {
   setup_vscode
   setup_iterm2
   setup_fish
+  setup_misc
 }
 
 ################################################################################
@@ -113,6 +127,7 @@ setup_linux() {
     install_debian_packages
   fi
   setup_fish
+  setup_misc
 }
 
 ################################################################################

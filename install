@@ -19,18 +19,18 @@ COMMON_PACKAGES=(
 
 # Packages with identical names on homebrew/arch
 ARCH_BREW_PACKAGES=(
-    "${COMMON_PACKAGES[@]}"
-    grc       # generic colorizer for standard commands
-    fd        # better find
-    less      # Newer version has --mouse support
-    git-delta # Better git diff
-    sd        # Better sed
-    ripgrep   # Better grep
-    procs     # Better ps
-    bottom    # Better top
-    fzf       # fuzzy finder
-    lazygit   # handy git TUI
-    lazydocker # handy docker TUI
+  "${COMMON_PACKAGES[@]}"
+  grc        # generic colorizer for standard commands
+  fd         # better find
+  less       # Newer version has --mouse support
+  git-delta  # Better git diff
+  sd         # Better sed
+  ripgrep    # Better grep
+  procs      # Better ps
+  bottom     # Better top
+  fzf        # fuzzy finder
+  lazygit    # handy git TUI
+  lazydocker # handy docker TUI
 )
 
 setup_fish() {
@@ -101,7 +101,7 @@ install_arch_packages() {
 }
 
 install_deb() {
-  (cd /tmp && rm -f pkg.deb && wget "$1" -o pkg.deb && dpkg -i pkg.deb)
+  (cd /tmp && rm -f pkg.deb && wget "$1" -O pkg.deb && sudo dpkg -i pkg.deb)
 }
 
 install_debian_packages() {

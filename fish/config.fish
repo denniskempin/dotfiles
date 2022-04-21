@@ -2,8 +2,11 @@ set dotfiles_dir (realpath (dirname (realpath (status --current-filename)))/..)
 
 fish_add_path -P ~/go/bin
 fish_add_path -P ~/.cargo/bin
+fish_add_path -P ~/.local/bin
 fish_add_path -P $dotfiles_dir/containers
-source ~/local/paths.fish
+
+# Allow additional local paths 
+[ -e ~/local/paths.fish ] && source ~/local/paths.fish
 
 starship init fish | source
 

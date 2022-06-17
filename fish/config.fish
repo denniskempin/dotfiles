@@ -20,6 +20,10 @@ if command -v exa &>/dev/null
     alias la="exa -la"
 end
 
+if command -v batcat &>/dev/null
+    alias bat="batcat"
+end
+
 # Use hyper+t and hyper+s for history and directory search
 fzf_configure_bindings --history=\e\ct --directory=\e\cs --git_status --git_log
 
@@ -32,6 +36,8 @@ export EDITOR="nvim"
 # extend 'git push origin' abbreviation for gerrit
 alias gpom="git push origin HEAD:refs/for/main"
 alias gpoc="git push origin HEAD:refs/for/chromeos"
+
+alias gcob="git checkout --track origin/main -b "
 
 # git 'uncommit' - along the lines of 'hg uncommit'
 alias guc="git reset HEAD~ && git commit --reuse-message=HEAD@{1} --allow-empty"

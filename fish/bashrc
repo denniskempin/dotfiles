@@ -1,4 +1,6 @@
-# start fish shell
+export PATH="/opt/homebrew/bin:$PATH"
+export PATH="/usr/local/Homebrew/bin:$PATH"
+
 WHICH_FISH="$(which fish)"
 if [[ "$-" =~ i && -x "${WHICH_FISH}" && "${SHELL}" != "${WHICH_FISH}" ]]; then
   # Safeguard to only activate fish for interactive shells and only if fish

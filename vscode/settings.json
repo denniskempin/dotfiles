@@ -4,11 +4,10 @@
   "editor.rulers": [
     100
   ],
-
   "editor.fontFamily": "Fira Code",
   "editor.tabSize": 4,
   "editor.bracketPairColorization.enabled": true,
-  "editor.guides.bracketPairs":"active",
+  "editor.guides.bracketPairs": "active",
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "editor.formatOnType": true,
@@ -18,7 +17,6 @@
   "workbench.colorTheme": "Snazzy Operator",
   "keyboard.dispatch": "keyCode",
   "terminal.integrated.defaultProfile.linux": "fish",
-
   // Vim mode config
   "vim.highlightedyank.enable": true,
   "vim.visualstar": true,
@@ -27,21 +25,51 @@
   "vim.cursorStylePerMode.normal": "block-outline",
   "vim.camelCaseMotion.enable": true,
   "vim.replaceWithRegister": true,
-
+  "vim.cursorStylePerMode.visual": "underline",
+  "vim.cursorStylePerMode.visualblock": "underline",
+  "vim.cursorStylePerMode.visualline": "underline",
+  "vim.easymotion": true,
+  "vim.smartRelativeLine": true,
+  "vim.mouseSelectionGoesIntoVisualMode": true,
+  // Enable (shift-)tab for indentation in visual mode
+  "vim.visualModeKeyBindingsNonRecursive": [
+    {
+      "before": [
+        "S-Tab"
+      ],
+      "after": [],
+      "commands": [
+        {
+          "command": "editor.action.outdentLines",
+          "args": []
+        }
+      ]
+    },
+    {
+      "before": [
+        "Tab"
+      ],
+      "after": [],
+      "commands": [
+        {
+          "command": "editor.action.indentLines",
+          "args": []
+        }
+      ]
+    }
+  ],
   // Rust
   "files.watcherExclude": {
     "**/target/**": true
   },
   "rust-analyzer.checkOnSave.command": "clippy",
   "rust-analyzer.checkOnSave.enable": false,
-
   // Bazel
   "files.associations": {
     "BUILD": "bazel",
     "METADATA": "bazel",
     "WORKSPACE": "bazel"
   },
-
   // Shell scripts
   "[shellscript]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
@@ -49,7 +77,6 @@
   "[dockerfile]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
   },
-
   // Python
   "[python]": {
     "editor.defaultFormatter": "ms-python.python"
@@ -61,7 +88,6 @@
     "--line-length",
     "100"
   ],
-
   // Gitlens
   "gitlens.hovers.currentLine.over": "line",
   "gitlens.hovers.enabled": false,
@@ -77,15 +103,29 @@
   "gitlens.views.branches.pullRequests.enabled": false,
   "gitlens.views.showRelativeDateMarkers": false,
   "gitlens.views.fileHistory.avatars": false,
-
   // JavaScript
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "vscode.json-language-features"
   },
   "tabnine.experimentalAutoImports": true,
-
   // Misc
-  "customizeUI.titleBar": "inline",
+  "prettier.printWidth": 100,
+  "prettier.proseWrap": "always",
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.minimap.enabled": false,
+  "gitlens.currentLine.enabled": false,
   "gitlens.codeLens.enabled": false,
-  "gitlens.currentLine.enabled": false
+  "python.linting.lintOnSave": false,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/*.pyc": true,
+    "**/__pycache__": true
+  }
 }

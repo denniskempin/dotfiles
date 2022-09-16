@@ -127,5 +127,6 @@
     "**/Thumbs.db": true,
     "**/*.pyc": true,
     "**/__pycache__": true
-  }
+  },
+  "dotfiles.repository": "https://github.com/denniskempin/dotfiles"
 }

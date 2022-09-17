@@ -23,11 +23,11 @@ setup_fish() {
   ln -sf "$(pwd)/fish/fish_plugins" ~/.config/fish/fish_plugins
   ln -sf "$(pwd)/fish/starship.toml" ~/.config/starship.toml
 
-  # Install starship prompt
-  sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
-
   # Install fisher plugins
   fish -c "curl -sL https://git.io/fisher | source && fisher update"
+
+  # Install starship prompt
+  sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
 }
 
 setup_nvim() {

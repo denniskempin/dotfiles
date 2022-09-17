@@ -128,5 +128,6 @@
     "**/*.pyc": true,
     "**/__pycache__": true
   },
-  "dotfiles.repository": "https://github.com/denniskempin/dotfiles"
+  "dotfiles.repository": "https://github.com/denniskempin/dotfiles",
+  "terminal.integrated.fontFamily": "monospace"
 }

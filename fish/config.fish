@@ -26,9 +26,6 @@ if command -v batcat &>/dev/null
     alias bat="batcat"
 end
 
-# Use hyper+t and hyper+s for history and directory search
-fzf_configure_bindings --history=\e\ct --directory=\e\cs --git_status --git_log
-
 # Enable mouse scrolling in less output
 export LESS="--mouse"
 

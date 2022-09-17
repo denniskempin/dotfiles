@@ -4,6 +4,9 @@ cd "$(dirname "$0")"
 
 PACKAGES=(
   fish
+  fisher
+  starship
+  ttf-nerd-fonts-symbols-1000-em
   neovim
   bat       # better cat
   zoxide    # better cd (with fuzzy matching and autojump)
@@ -17,20 +20,11 @@ PACKAGES=(
 )
 
 setup_fish() {
-  # Install fisher first
-  fish -c "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
-
   # Link config files
   mkdir -p ~/.config/fish/
   ln -sf "$(pwd)/fish/config.fish" ~/.config/fish/config.fish
   ln -sf "$(pwd)/fish/fish_plugins" ~/.config/fish/fish_plugins
   ln -sf "$(pwd)/fish/starship.toml" ~/.config/starship.toml
-
-  # Install fisher plugins
-  fish -c "fisher update"
-
-  # Install starship prompt
-  sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
 }
 
 setup_nvim() {
@@ -43,7 +37,7 @@ setup_nvim() {
 }
 
 install_packages() {
-  pacman -Sy --noconfirm "${PACKAGES[@]}"
+  pacman -S --noconfirm "${PACKAGES[@]}"
 }
 
 main() {

@@ -5,19 +5,14 @@ cd "$(dirname "$0")"
 PACKAGES=(
   fish
   neovim
-  thefuck   # Corrects common command mistakes (e.g. prepending sudo)
-  tldr      # tldr versins of man pages
   bat       # better cat
   zoxide    # better cd (with fuzzy matching and autojump)
   exa       # better ls
   grc       # generic colorizer for standard commands
   fd        # better find
-  less      # Newer version has --mouse support
   git-delta # Better git diff
   sd        # Better sed
   ripgrep   # Better grep
-  procs     # Better ps
-  bottom    # Better top
   fzf       # fuzzy finder
 )
 

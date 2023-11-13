@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+DUT_HOSTNAME=$(cat ~/.dut | jq -r .DUT.Hostname)
+ssh $DUT_HOSTNAME $@
+

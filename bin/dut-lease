@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -ex
+
+BOARD=$1
+
+if ! ssh planet-y gcertstatus; then
+    eche "Run gcert on planet-y first"
+    exit 1
+fi
+
+if ! ssh planet-y luci-auth token -scopes "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/devstorage.read_only"; then
+   ssh planet-y luci-auth login -scopes "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/devstorage.read_only"
+fi
+
+crosfleet dut lease -board $BOARD -minutes 240 -json > ~/.dut
+DUT_HOSTNAME=$(cat ~/.dut | jq -r .DUT.Hostname)
+echo "DUT_HOSTNAME=$DUT_HOSTNAME"
+
+ssh planet-y fflash $DUT_HOSTNAME --clobber-stateful=yes
+
+dut-login
+dut-vnc

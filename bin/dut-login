@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+dut /usr/local/autotest/bin/autologin.py

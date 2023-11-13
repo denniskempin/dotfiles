@@ -1,9 +1,8 @@
 {
-  //////////////////////////////////////////////////////////////////////////////////////////////////
-  // Basic settings
-  "workbench.colorTheme": "Snazzy Operator",
   "editor.fontLigatures": true,
-  "editor.rulers": [100],
+  "editor.rulers": [
+    100
+  ],
   "editor.fontFamily": "Fira Code",
   "editor.tabSize": 4,
   "editor.bracketPairColorization.enabled": true,
@@ -33,12 +32,7 @@
   // Visual Changes
   "workbench.colorCustomizations": {
     "editorInlayHint.foreground": "#666",
-    "editorInlayHint.background": "#00000000",
-    "statusBar.background": "#005f5f",
-    "statusBar.noFolderBackground": "#005f5f",
-    "statusBar.debuggingBackground": "#005f5f",
-    "statusBar.foreground": "#ffffff",
-    "statusBar.debuggingForeground": "#ffffff"
+    "editorInlayHint.background": "#00000000"
   },
   // Single editor per group, with no tabs.
   "workbench.editor.limit.enabled": true,
@@ -72,7 +66,9 @@
   // Enable (shift-)tab for indentation in visual mode
   "vim.visualModeKeyBindingsNonRecursive": [
     {
-      "before": ["S-Tab"],
+      "before": [
+        "S-Tab"
+      ],
       "after": [],
       "commands": [
         {
@@ -82,7 +78,9 @@
       ]
     },
     {
-      "before": ["Tab"],
+      "before": [
+        "Tab"
+      ],
       "after": [],
       "commands": [
         {
@@ -119,7 +117,7 @@
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // Python
   "[python]": {
-    "editor.defaultFormatter": "ms-python.python"
+    "editor.defaultFormatter": "ms-python.black-formatter"
   },
   "python.languageServer": "Pylance",
   "python.analysis.typeCheckingMode": "strict",
@@ -140,6 +138,9 @@
   "workbench.editorAssociations": {
     "*.sfc": "hexEditor.hexedit"
   },
-  "window.zoomLevel": -1,
-  "workbench.activityBar.location": "top"
+  "workbench.activityBar.location": "top",
+  "chromiumide.metrics.showMessage": false,
+  "chromiumide.metrics.collectMetrics": true,
+  "workbench.colorTheme": "Snazzy Operator",
+  "tabnine.experimentalAutoImports": true
 }

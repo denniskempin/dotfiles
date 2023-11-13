@@ -1,14 +1,13 @@
 ################################################################################
 ## base image
 
-FROM menci/archlinuxarm:base AS base
+FROM menci/archlinuxarm:base-devel AS base
 
 RUN pacman -Sy --noconfirm \
     curl \
     wget \
     git \
     inetutils \
-    base-devel \
     python \
     python-pip \
     openssh
@@ -16,7 +15,7 @@ RUN pacman -Sy --noconfirm \
 COPY install fish/* /root/dotfiles/
 COPY fish/* /root/dotfiles/fish/
 
-RUN /root/dotfiles/install
+#RUN /root/dotfiles/install
 
 WORKDIR /workspace
 
@@ -33,8 +32,13 @@ RUN pacman -Sy --noconfirm \
 
 RUN pip3 install west pyelftools
 
-ENV ZSDK_VERSION=0.12.4
-RUN wget -q "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v${ZSDK_VERSION}/zephyr-toolchain-arm-${ZSDK_VERSION}-aarch64-linux-setup.run" && \
-    sh "zephyr-toolchain-arm-${ZSDK_VERSION}-aarch64-linux-setup.run" --quiet -- -d ~/.local/zephyr-sdk-${ZSDK_VERSION} && \
-    rm "zephyr-toolchain-arm-${ZSDK_VERSION}-aarch64-linux-setup.run"
+ENV ZSDK_VERSION=0.15.2
+RUN mkdir -p ~/.local
+RUN cd ~/.local && \
+    wget -q "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v${ZSDK_VERSION}/zephyr-sdk-${ZSDK_VERSION}_linux-aarch64.tar.gz" && \
+    tar xvf "zephyr-sdk-${ZSDK_VERSION}_linux-aarch64.tar.gz" && \
+    cd zephyr-sdk-0.15.2 && \
+    ./setup.sh && \
+    rm "zephyr-sdk-${ZSDK_VERSION}_linux-aarch64.tar.gz" \
+
 

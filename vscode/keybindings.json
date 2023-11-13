@@ -8,30 +8,7 @@
         "key": "cmd+]",
         "command": "workbench.action.navigateForward"
     },
-
-    // Use Code36 keyboard bindings for commands / quick open
-    {
-        "key": "ctrl+shift+alt+cmd+s",
-        "command": "workbench.action.showCommands"
-    },
-    {
-        "key": "ctrl+shift+alt+cmd+t",
-        "command": "workbench.action.quickOpen"
-    },
-    {
-        "key": "shift+cmd+]",
-        "command": "-workbench.action.nextEditor"
-    },
-    {
-        "key": "shift+cmd+]",
-        "command": "-workbench.action.terminal.focusNext",
-        "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus"
-    },
-    {
-        "key": "shift+cmd+[",
-        "command": "-workbench.action.terminal.focusPrevious",
-        "when": "terminalFocus && terminalHasBeenCreated && !terminalEditorFocus || terminalFocus && terminalProcessSupported && !terminalEditorFocus"
-    },
+    // shift + cmd + [ and ] to switch editor groups
     {
         "key": "shift+cmd+[",
         "command": "workbench.action.focusLeftGroup"
@@ -39,5 +16,32 @@
     {
         "key": "shift+cmd+]",
         "command": "workbench.action.focusRightGroup"
+    },
+
+    // Hyper-layer bindings for workspace-level shortcuts
+    {
+        // hyper-s: Command Palette
+        "key": "ctrl+shift+alt+cmd+s",
+        "command": "workbench.action.showCommands"
+    },
+    {
+        // hyper-t: Quick Open File
+        "key": "ctrl+shift+alt+cmd+t",
+        "command": "workbench.action.quickOpen"
+    },
+    {
+        // hyper-n: (New) Split current editor to right
+        "key": "ctrl+shift+alt+cmd+n",
+        "command": "workbench.action.splitEditorToRightGroup"
+    },
+    {
+        // hyper-x: (eXecute) Toggle terminal
+        "key": "ctrl+shift+alt+cmd+x",
+        "command": "workbench.action.terminal.toggleTerminal"
+    },
+    {
+        // hyper-r: (Run) recent terminal command
+        "key": "ctrl+shift+alt+cmd+r",
+        "command": "workbench.action.terminal.runRecentCommand"
     },
 ]

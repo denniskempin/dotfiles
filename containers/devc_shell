@@ -6,4 +6,4 @@ if ! docker container inspect "$container" > /dev/null; then
   "$(dirname "$0")/devc_start" "$1"
 fi
 
-docker exec -it "$container" fish
+docker exec -it "$container" bash

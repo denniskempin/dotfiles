@@ -1,9 +1,9 @@
 {
+  //////////////////////////////////////////////////////////////////////////////////////////////////
   // Basic settings
+  "workbench.colorTheme": "Snazzy Operator",
   "editor.fontLigatures": true,
-  "editor.rulers": [
-    100
-  ],
+  "editor.rulers": [100],
   "editor.fontFamily": "Fira Code",
   "editor.tabSize": 4,
   "editor.bracketPairColorization.enabled": true,
@@ -11,12 +11,46 @@
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "editor.formatOnType": true,
+  "editor.minimap.enabled": false,
+  "keyboard.dispatch": "keyCode",
+  "terminal.integrated.defaultProfile.linux": "fish",
+  "terminal.integrated.scrollback": 10000,
+  "dotfiles.repository": "https://github.com/denniskempin/dotfiles",
   "files.autoSave": "afterDelay",
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
-  "workbench.colorTheme": "Snazzy Operator",
-  "keyboard.dispatch": "keyCode",
-  "terminal.integrated.defaultProfile.linux": "fish",
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/*.pyc": true,
+    "**/__pycache__": true
+  },
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  // Visual Changes
+  "workbench.colorCustomizations": {
+    "editorInlayHint.foreground": "#666",
+    "editorInlayHint.background": "#00000000",
+    "statusBar.background": "#005f5f",
+    "statusBar.noFolderBackground": "#005f5f",
+    "statusBar.debuggingBackground": "#005f5f",
+    "statusBar.foreground": "#ffffff",
+    "statusBar.debuggingForeground": "#ffffff"
+  },
+  // Single editor per group, with no tabs.
+  "workbench.editor.limit.enabled": true,
+  "workbench.editor.limit.perEditorGroup": true,
+  "workbench.editor.limit.value": 1,
+  "workbench.editor.showTabs": "single",
+  // Hide a bunch of noise
+  "window.commandCenter": false,
+  "workbench.layoutControl.enabled": false,
+  "breadcrumbs.enabled": false,
+  "editor.stickyScroll.enabled": true,
+  //////////////////////////////////////////////////////////////////////////////////////////////////
   // Vim mode config
   "vim.highlightedyank.enable": true,
   "vim.visualstar": true,
@@ -31,12 +65,14 @@
   "vim.easymotion": true,
   "vim.smartRelativeLine": true,
   "vim.mouseSelectionGoesIntoVisualMode": true,
+  "vim.sneak": true,
+  "vim.leader": " ",
+  "vim.statusBarColorControl": true,
+  "vim.useSystemClipboard": true,
   // Enable (shift-)tab for indentation in visual mode
   "vim.visualModeKeyBindingsNonRecursive": [
     {
-      "before": [
-        "S-Tab"
-      ],
+      "before": ["S-Tab"],
       "after": [],
       "commands": [
         {
@@ -46,9 +82,7 @@
       ]
     },
     {
-      "before": [
-        "Tab"
-      ],
+      "before": ["Tab"],
       "after": [],
       "commands": [
         {
@@ -58,76 +92,54 @@
       ]
     }
   ],
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  // Co-pilot
+  "editor.inlineSuggest.enabled": true,
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": true,
+    "markdown": true,
+    "scminput": false
+  },
+  //////////////////////////////////////////////////////////////////////////////////////////////////
   // Rust
   "files.watcherExclude": {
     "**/target/**": true
   },
-  "rust-analyzer.checkOnSave.command": "clippy",
-  "rust-analyzer.checkOnSave.enable": false,
+  //////////////////////////////////////////////////////////////////////////////////////////////////
   // Bazel
   "files.associations": {
     "BUILD": "bazel",
     "METADATA": "bazel",
     "WORKSPACE": "bazel"
   },
-  // Shell scripts
-  "[shellscript]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
-  "[dockerfile]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
+  "bazel.buildifierFixOnFormat": true,
+  "bazel.enableCodeLens": true,
+  "bazel.commandLine.queryExpression": "//sres_emulator/...:*",
+  //////////////////////////////////////////////////////////////////////////////////////////////////
   // Python
   "[python]": {
     "editor.defaultFormatter": "ms-python.python"
   },
   "python.languageServer": "Pylance",
   "python.analysis.typeCheckingMode": "strict",
-  "python.formatting.provider": "black",
-  "python.formatting.blackArgs": [
-    "--line-length",
-    "100"
-  ],
-  // Gitlens
-  "gitlens.hovers.currentLine.over": "line",
-  "gitlens.hovers.enabled": false,
-  "gitlens.blame.toggleMode": "window",
-  "gitlens.changes.toggleMode": "window",
-  "gitlens.views.branches.avatars": false,
-  "gitlens.views.commits.avatars": false,
-  "gitlens.views.commits.pullRequests.showForBranches": false,
-  "gitlens.views.commits.pullRequests.enabled": false,
-  "gitlens.views.commits.showBranchComparison": false,
-  "gitlens.views.branches.showBranchComparison": false,
-  "gitlens.views.branches.pullRequests.showForBranches": false,
-  "gitlens.views.branches.pullRequests.enabled": false,
-  "gitlens.views.showRelativeDateMarkers": false,
-  "gitlens.views.fileHistory.avatars": false,
+  //////////////////////////////////////////////////////////////////////////////////////////////////
   // JavaScript
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
-  "tabnine.experimentalAutoImports": true,
-  // Misc
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  // Prettier
   "prettier.printWidth": 100,
   "prettier.proseWrap": "always",
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "editor.minimap.enabled": false,
-  "gitlens.currentLine.enabled": false,
-  "gitlens.codeLens.enabled": false,
-  "python.linting.lintOnSave": false,
-  "files.exclude": {
-    "**/.git": true,
-    "**/.svn": true,
-    "**/.hg": true,
-    "**/CVS": true,
-    "**/.DS_Store": true,
-    "**/Thumbs.db": true,
-    "**/*.pyc": true,
-    "**/__pycache__": true
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  // Misc
+  "workbench.editorAssociations": {
+    "*.sfc": "hexEditor.hexedit"
   },
-  "dotfiles.repository": "https://github.com/denniskempin/dotfiles",
-  "terminal.integrated.fontFamily": "monospace"
+  "window.zoomLevel": -1,
+  "workbench.activityBar.location": "top"
 }

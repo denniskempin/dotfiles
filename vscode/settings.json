@@ -1,8 +1,6 @@
 {
   "editor.fontLigatures": true,
-  "editor.rulers": [
-    100
-  ],
+  "editor.rulers": [100],
   "editor.fontFamily": "Fira Code",
   "editor.tabSize": 4,
   "editor.bracketPairColorization.enabled": true,
@@ -11,7 +9,7 @@
   "editor.formatOnSave": true,
   "editor.formatOnType": true,
   "editor.minimap.enabled": false,
-  "keyboard.dispatch": "keyCode",
+  "keyboard.dispatch": "code",
   "terminal.integrated.defaultProfile.linux": "fish",
   "terminal.integrated.scrollback": 10000,
   "dotfiles.repository": "https://github.com/denniskempin/dotfiles",
@@ -32,7 +30,12 @@
   // Visual Changes
   "workbench.colorCustomizations": {
     "editorInlayHint.foreground": "#666",
-    "editorInlayHint.background": "#00000000"
+    "editorInlayHint.background": "#00000000",
+    "statusBar.background": "#005f5f",
+    "statusBar.noFolderBackground": "#005f5f",
+    "statusBar.debuggingBackground": "#005f5f",
+    "statusBar.foreground": "#ffffff",
+    "statusBar.debuggingForeground": "#ffffff"
   },
   // Single editor per group, with no tabs.
   "workbench.editor.limit.enabled": true,
@@ -66,9 +69,7 @@
   // Enable (shift-)tab for indentation in visual mode
   "vim.visualModeKeyBindingsNonRecursive": [
     {
-      "before": [
-        "S-Tab"
-      ],
+      "before": ["S-Tab"],
       "after": [],
       "commands": [
         {
@@ -78,9 +79,7 @@
       ]
     },
     {
-      "before": [
-        "Tab"
-      ],
+      "before": ["Tab"],
       "after": [],
       "commands": [
         {

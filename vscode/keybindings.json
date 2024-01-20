@@ -21,17 +21,17 @@
     // Hyper-layer bindings for workspace-level shortcuts
     {
         // hyper-s: Command Palette
-        "key": "ctrl+shift+alt+cmd+s",
+        "key": "ctrl+shift+alt+cmd+p",
         "command": "workbench.action.showCommands"
     },
     {
         // hyper-t: Quick Open File
-        "key": "ctrl+shift+alt+cmd+t",
+        "key": "ctrl+shift+alt+cmd+o",
         "command": "workbench.action.quickOpen"
     },
     {
         // hyper-n: (New) Split current editor to right
-        "key": "ctrl+shift+alt+cmd+n",
+        "key": "ctrl+shift+alt+cmd+\\",
         "command": "workbench.action.splitEditorToRightGroup"
     },
     {
@@ -43,5 +43,29 @@
         // hyper-r: (Run) recent terminal command
         "key": "ctrl+shift+alt+cmd+r",
         "command": "workbench.action.terminal.runRecentCommand"
+    },
+    {
+        "key": "cmd+p",
+        "command": "-workbench.action.quickOpen"
+    },
+    {
+        "key": "shift+cmd+p",
+        "command": "-workbench.action.showCommands"
+    },
+    {
+        "key": "shift+cmd+]",
+        "command": "workbench.action.showNextWindowTab"
+    },
+    {
+        "key": "shift+cmd+[",
+        "command": "workbench.action.showPreviousWindowTab"
+    },
+    {
+        "key": "ctrl+shift+alt+cmd+]",
+        "command": "workbench.action.focusNextGroup"
+    },
+    {
+        "key": "ctrl+shift+alt+cmd+[",
+        "command": "workbench.action.focusPreviousGroup"
     },
 ]

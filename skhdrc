@@ -1,0 +1,66 @@
+# Universal Shortcuts across multiple apps
+#
+# Remaps the universal shorcuts to app-specific shortcuts so they do not need to be manually set
+# up in each app.
+#
+# The universal shortcuts are:
+#
+#   hyper - o: Quick Open
+#   hyper - p: Command Palette
+#   cmd - []: Backward / Forward
+#   cmd + shift - []: Prev / Next Tab
+#   hyper - []: Prev / Next Panel
+#   hyper - \: New panel
+
+
+# Quick Open
+hyper - o [
+    "obsidian": skhd -k "cmd - o"
+    "arc": skhd -k "cmd - l"
+    * ~
+]
+
+# Command Palette
+hyper - p [
+    "obsidian": skhd -k "cmd - p"
+    "arc": skhd -k "cmd - l"; skhd -k "tab"
+    * ~
+]
+
+# Backward / Forward
+cmd - 0x21 [
+    "obsidian": skhd -k "alt + cmd - left"
+    "iterm2": skhd -k "alt - j"
+    * ~
+]
+cmd - 0x1E [
+    "obsidian": skhd -k "alt + cmd - right"
+    "iterm2": skhd -k "alt - k"
+    * ~
+]
+
+# Prev / next tab
+# cmd + shift - 0x21 [
+#     * ~
+# ]
+# cmd + shift - 0x1E [
+#     * ~
+# ]
+
+# Prev / Next panel
+hyper - 0x21 [
+    "iterm2": skhd -k "alt + cmd - left"
+    "arc": skhd -k "ctrl + shift - 0x21"
+    * ~
+]
+hyper - 0x1E [
+    "iterm2": skhd -k "alt + cmd - right"
+    "arc": skhd -k "ctrl + shift - 0x1E"
+    * ~
+]
+
+# New panel
+hyper - 0x2A [
+    "arc": skhd -k "ctrl + shift - 0x18"
+    * ~
+]

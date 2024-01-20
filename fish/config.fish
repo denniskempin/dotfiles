@@ -1,14 +1,8 @@
 set dotfiles_dir (realpath (dirname (realpath (status --current-filename)))/..)
-set PATH $PATH $HOME/.cargo/bin
-set PATH $PATH $dotfiles_dir/containers
 
 fish_add_path -P ~/go/bin
 fish_add_path -P ~/.cargo/bin
 fish_add_path -P ~/.local/bin
-fish_add_path -P $dotfiles_dir/containers
-
-# Allow additional local paths
-[ -e ~/local/paths.fish ] && source ~/local/paths.fish
 
 starship init fish | source
 
@@ -25,6 +19,13 @@ end
 if command -v batcat &>/dev/null
     alias bat="batcat"
 end
+
+# Universal key bindings (Same key bindings shared with other apps)
+fzf_configure_bindings --history=\e\cp --process=  # hyper-p: fuzzy search history
+bind \e\co 'zi' # hyper-o: fuzzy search recent directories
+bind \ej 'prevd; commandline -f repaint' # alt-j: usually cmd-[, remapped by skhd
+bind \ek 'nextd; commandline -f repaint' # alt-k: usually cmd-], remapped by skhd
+
 
 # Enable mouse scrolling in less output
 export LESS="--mouse"

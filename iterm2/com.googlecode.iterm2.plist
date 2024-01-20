@@ -1556,33 +1556,6 @@
 			<key>Text</key>
 			<string></string>
 		</dict>
-		<key>0x6b-0x100000-0x28</key>
-		<dict>
-			<key>Action</key>
-			<integer>12</integer>
-			<key>Label</key>
-			<string></string>
-			<key>Text</key>
-			<string>test</string>
-		</dict>
-		<key>0x7b-0x120000-0x21</key>
-		<dict>
-			<key>Action</key>
-			<integer>31</integer>
-			<key>Label</key>
-			<string></string>
-			<key>Text</key>
-			<string></string>
-		</dict>
-		<key>0x7d-0x120000-0x1e</key>
-		<dict>
-			<key>Action</key>
-			<integer>30</integer>
-			<key>Label</key>
-			<string></string>
-			<key>Text</key>
-			<string></string>
-		</dict>
 		<key>0x9-0x40000</key>
 		<dict>
 			<key>Action</key>
@@ -2359,7 +2332,7 @@
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>FiraCodeNerdFontComplete-Regular 11</string>
+			<string>Menlo-Regular 11</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<false/>
 			<key>Open Toolbelt</key>

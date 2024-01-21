@@ -1,6 +1,8 @@
 {
   "editor.fontLigatures": true,
-  "editor.rulers": [100],
+  "editor.rulers": [
+    100
+  ],
   "editor.fontFamily": "Fira Code",
   "editor.tabSize": 4,
   "editor.bracketPairColorization.enabled": true,
@@ -69,7 +71,9 @@
   // Enable (shift-)tab for indentation in visual mode
   "vim.visualModeKeyBindingsNonRecursive": [
     {
-      "before": ["S-Tab"],
+      "before": [
+        "S-Tab"
+      ],
       "after": [],
       "commands": [
         {
@@ -79,7 +83,9 @@
       ]
     },
     {
-      "before": ["Tab"],
+      "before": [
+        "Tab"
+      ],
       "after": [],
       "commands": [
         {
@@ -130,7 +136,7 @@
   "prettier.printWidth": 100,
   "prettier.proseWrap": "always",
   "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one"
   },
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // Misc
@@ -140,6 +146,9 @@
   "workbench.activityBar.location": "top",
   "chromiumide.metrics.showMessage": false,
   "chromiumide.metrics.collectMetrics": true,
-  "workbench.colorTheme": "Snazzy Operator",
-  "tabnine.experimentalAutoImports": true
+  "workbench.colorTheme": "Material Theme Ocean High Contrast",
+  "tabnine.experimentalAutoImports": true,
+  "settingsSync.ignoredExtensions": [
+    "github.copilot"
+  ]
 }

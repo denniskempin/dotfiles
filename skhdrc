@@ -5,7 +5,7 @@
 #
 # The universal shortcuts are:
 #
-#   hyper - o: Quick Open
+#   hyper - f: Quick Open
 #   hyper - p: Command Palette
 #   cmd - []: Backward / Forward
 #   cmd + shift - []: Prev / Next Tab
@@ -14,7 +14,7 @@
 
 
 # Quick Open
-hyper - o [
+hyper - f [
     "obsidian": skhd -k "cmd - o"
     "arc": skhd -k "cmd - l"
     * ~

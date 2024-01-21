@@ -22,7 +22,7 @@ end
 
 # Universal key bindings (Same key bindings shared with other apps)
 fzf_configure_bindings --history=\e\cp --process=  # hyper-p: fuzzy search history
-bind \e\co 'zi' # hyper-o: fuzzy search recent directories
+bind \e\cf 'zi' # hypert-f: fuzzy search recent directories
 bind \ej 'prevd; commandline -f repaint' # alt-j: usually cmd-[, remapped by skhd
 bind \ek 'nextd; commandline -f repaint' # alt-k: usually cmd-], remapped by skhd
 

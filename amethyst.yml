@@ -224,7 +224,7 @@ disable-padding-on-builtin-display: false
 smart-window-margins: true
 
 # Add 10px margin between windows
-window-margins: true
+window-margins: false
 window-margin-size: 5
 
 # The max number of windows that may be visible on a screen at one time before

@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 DUT_HOSTNAME=$(cat ~/.dut | jq -r .DUT.Hostname)
-ssh -L 6080:localhost:6080 $DUT_HOSTNAME "kmsvnc & novnc"
+ssh -L 9000:localhost:5900 "$DUT_HOSTNAME" "kmsvnc"
 

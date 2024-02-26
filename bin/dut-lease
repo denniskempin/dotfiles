@@ -1,23 +1,36 @@
 #!/usr/bin/env bash
+#
+# Usage: dut-lease $BOARD VERSION
+#
+# Stores dut information in ~/.dut to be used by other utils. e.g. dut-login, dut-vnc
+#
+# Examples:
+#   $ dut-lease volteer 122
+#   or
+#   $ dut-lease brya 105-14989.0.0
+#   then start vnc
+#   $ dut-vnc
 
 set -ex
 
 BOARD=$1
+VERSION=$2
 
 if ! ssh planet-y gcertstatus; then
     eche "Run gcert on planet-y first"
     exit 1
 fi
 
-if ! ssh planet-y luci-auth token -scopes "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/devstorage.read_only"; then
-   ssh planet-y luci-auth login -scopes "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/devstorage.read_only"
+if ! ssh planet-y 'luci-auth token -scopes "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/devstorage.read_only"'; then
+    ssh planet-y -t 'luci-auth login -scopes "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/devstorage.read_only"'
 fi
 
-crosfleet dut lease -board $BOARD -minutes 240 -json > ~/.dut
-DUT_HOSTNAME=$(cat ~/.dut | jq -r .DUT.Hostname)
+crosfleet dut lease -board "$BOARD" -minutes 240 -json >~/.dut
+DUT_HOSTNAME=$(jq -r .DUT.Hostname < ~/.dut)
 echo "DUT_HOSTNAME=$DUT_HOSTNAME"
 
-ssh planet-y fflash $DUT_HOSTNAME --clobber-stateful=yes
-
-dut-login
-dut-vnc
+RELEASE=""
+if [ -n "$VERSION" ]; then
+    RELEASE="--R=$VERSION"
+fi
+ssh planet-y fflash "$DUT_HOSTNAME" --clobber-stateful=yes "$RELEASE"

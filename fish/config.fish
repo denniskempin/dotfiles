@@ -31,7 +31,7 @@ bind \ek 'nextd; commandline -f repaint' # alt-k: usually cmd-], remapped by skh
 export LESS="--mouse"
 
 # Use nvim as default editor
-export EDITOR="nvim"
+export EDITOR="hx"
 
 # extend 'git push origin' abbreviation for gerrit
 alias gpom="git push origin HEAD:refs/for/main"

@@ -1,0 +1,9 @@
+theme = "dennis"
+
+[editor]
+line-number = "relative"
+mouse = false
+
+[editor.lsp]
+display-messages = true
+display-inlay-hints = true

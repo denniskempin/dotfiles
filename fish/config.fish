@@ -33,6 +33,9 @@ export LESS="--mouse"
 # Use nvim as default editor
 export EDITOR="hx"
 
+# Enable true color support
+export COLORTERM="truecolor"
+
 # extend 'git push origin' abbreviation for gerrit
 alias gpom="git push origin HEAD:refs/for/main"
 alias gpoc="git push origin HEAD:refs/for/chromeos"

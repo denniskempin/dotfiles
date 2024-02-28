@@ -1,11 +1,11 @@
 import = [
-  "~/.config/alacritty/citylights.toml"
+  "~/.config/alacritty/iterm.toml"
 ]
 
 [window]
 decorations = "None"
 padding = { x = 8, y = 8 }
-opacity = 0.05
+opacity = 0.9
 blur = true
 option_as_alt = "Both"
 

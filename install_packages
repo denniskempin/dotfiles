@@ -28,8 +28,10 @@ ARCH_BREW_PACKAGES=(
   procs      # Better ps
   bottom     # Better top
   fzf        # fuzzy finder
-  helix   # helix editor
+  helix      # helix editor
+  direnv     # Automatically load env variables in directories
 )
+
 
 ################################################################################
 # OSX specific

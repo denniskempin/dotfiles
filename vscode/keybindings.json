@@ -1,81 +1,117 @@
 [
-    // cmd + [ and ] navigates back and forth, like in safari/chrome.
-    {
-        "key": "cmd+[",
-        "command": "workbench.action.navigateBack"
-    },
-    {
-        "key": "cmd+]",
-        "command": "workbench.action.navigateForward"
-    },
-    // shift + cmd + [ and ] to switch editor groups
-    {
-        "key": "shift+cmd+[",
-        "command": "workbench.action.focusLeftGroup"
-    },
-    {
-        "key": "shift+cmd+]",
-        "command": "workbench.action.focusRightGroup"
-    },
+  // cmd + [ and ] navigates back and forth, like in safari/chrome.
+  {
+    "key": "cmd+[",
+    "command": "workbench.action.navigateBack"
+  },
+  {
+    "key": "cmd+]",
+    "command": "workbench.action.navigateForward"
+  },
+  // shift + cmd + [ and ] to switch editor groups
+  {
+    "key": "shift+cmd+[",
+    "command": "workbench.action.focusLeftGroup"
+  },
+  {
+    "key": "shift+cmd+]",
+    "command": "workbench.action.focusRightGroup"
+  },
 
-    // Hyper-layer bindings for workspace-level shortcuts
-    {
-        // hyper-p: Command Palette
-        "key": "ctrl+shift+alt+cmd+p",
-        "command": "workbench.action.showCommands"
-    },
-    {
-        // hyper-f: Quick Open File
-        "key": "ctrl+shift+alt+cmd+f",
-        "command": "workbench.action.quickOpen"
-    },
-    {
-        // hyper-g: Global symbol
-        "key": "ctrl+shift+alt+cmd+g",
-        "command": "workbench.action.showAllSymbols"
-    },
-    {
-        // hyper-s: Quick Open Symbol
-        "key": "ctrl+shift+alt+cmd+s",
-        "command": "workbench.action.gotoSymbol"
-    },
-    {
-        // hyper-n: (New) Split current editor to right
-        "key": "ctrl+shift+alt+cmd+\\",
-        "command": "workbench.action.splitEditorToRightGroup"
-    },
-    {
-        // hyper-x: (eXecute) Toggle terminal
-        "key": "ctrl+shift+alt+cmd+x",
-        "command": "workbench.action.terminal.toggleTerminal"
-    },
-    {
-        // hyper-r: (Run) recent terminal command
-        "key": "ctrl+shift+alt+cmd+r",
-        "command": "workbench.action.terminal.runRecentCommand"
-    },
-    {
-        "key": "cmd+p",
-        "command": "-workbench.action.quickOpen"
-    },
-    {
-        "key": "shift+cmd+p",
-        "command": "-workbench.action.showCommands"
-    },
-    {
-        "key": "shift+cmd+]",
-        "command": "workbench.action.showNextWindowTab"
-    },
-    {
-        "key": "shift+cmd+[",
-        "command": "workbench.action.showPreviousWindowTab"
-    },
-    {
-        "key": "ctrl+shift+alt+cmd+]",
-        "command": "workbench.action.focusNextGroup"
-    },
-    {
-        "key": "ctrl+shift+alt+cmd+[",
-        "command": "workbench.action.focusPreviousGroup"
-    }
+  // Hyper-layer bindings for workspace-level shortcuts
+  {
+    // hyper-p: Command Palette
+    "key": "ctrl+shift+alt+cmd+p",
+    "command": "workbench.action.showCommands"
+  },
+  {
+    // hyper-f: Quick Open File
+    "key": "ctrl+shift+alt+cmd+f",
+    "command": "workbench.action.quickOpen"
+  },
+  {
+    // hyper-g: Global symbol
+    "key": "ctrl+shift+alt+cmd+g",
+    "command": "workbench.action.showAllSymbols"
+  },
+  {
+    // hyper-s: Quick Open Symbol
+    "key": "ctrl+shift+alt+cmd+s",
+    "command": "workbench.action.gotoSymbol"
+  },
+  {
+    // hyper-n: (New) Split current editor to right
+    "key": "ctrl+shift+alt+cmd+\\",
+    "command": "workbench.action.splitEditorToRightGroup"
+  },
+  {
+    // hyper-x: (eXecute) Toggle terminal
+    "key": "ctrl+shift+alt+cmd+x",
+    "command": "workbench.action.terminal.toggleTerminal"
+  },
+  {
+    // hyper-r: (Run) recent terminal command
+    "key": "ctrl+shift+alt+cmd+r",
+    "command": "workbench.action.terminal.runRecentCommand"
+  },
+
+  // Modal search view
+  {
+    // escape: Close the panel
+    "key": "escape",
+    "command": "workbench.view.search",
+    "when": "searchViewletFocus"
+  },
+  {
+    // /: Search
+    "key": "/",
+    "command": "search.action.focusSearchFromResults",
+    "when": "searchViewletFocus"
+  },
+  {
+    // enter: Select problem and close panel
+    "key": "enter",
+    "command": "workbench.view.search",
+    "when": "searchViewletFocus && !inputBoxFocus"
+  },
+  {
+    // enter: Accept search filter
+    "key": "enter",
+    "command": "search.action.focusSearchList",
+    "when": "searchViewletFocus && inputBoxFocus"
+  },
+
+  // Modal problem view
+  {
+    // escape: Close the panel
+    "key": "escape",
+    "command": "workbench.actions.view.toggleProblems",
+    "when": "focusedView == 'workbench.panel.markers.view'"
+  },
+  {
+    // /: Search
+    "key": "/",
+    "command": "problems.action.focusFilter",
+    "when": "focusedView == 'workbench.panel.markers.view'"
+  },
+  {
+    // enter: Select problem and close panel
+    "key": "enter",
+    "command": "workbench.actions.view.toggleProblems",
+    "when": "problemFocus"
+  },
+  {
+    // enter: Accept search filter
+    "key": "enter",
+    "command": "problems.action.focusProblemsFromFilter",
+    "when": "problemsFilterFocus"
+  },
+
+  // Modal terminal view
+  {
+    // escape: Close the panel
+    "key": "escape",
+    "command": "workbench.action.terminal.toggleTerminal",
+    "when": "terminalFocus"
+  }
 ]

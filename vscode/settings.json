@@ -1,7 +1,6 @@
 {
-  "editor.fontLigatures": true,
   "editor.rulers": [100],
-  "editor.fontFamily": "Fira Code",
+  "editor.fontFamily": "Monaspace Neon",
   "editor.tabSize": 4,
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": "active",
@@ -60,7 +59,6 @@
   // Hide a bunch of noise
   "window.commandCenter": false,
   "workbench.layoutControl.enabled": false,
-  "breadcrumbs.enabled": false,
   "editor.stickyScroll.enabled": true,
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // Vim mode config
@@ -102,6 +100,59 @@
           "args": []
         }
       ]
+    }
+  ],
+  // Vim Space Mode
+  "vim.normalModeKeyBindings": [
+    // Space + d: diagnostics
+    {
+      "before": ["space", "d"],
+      "commands": ["workbench.actions.view.problems"]
+    },
+    // Space + a: code action
+    {
+      "before": ["space", "a"],
+      "commands": ["editor.action.quickFix"]
+    },
+    // Space + f: open file
+    {
+      "before": ["space", "a"],
+      "commands": ["editor.action.quickOpen"]
+    },
+    // Space + s: go to symbol in file
+    {
+      "before": ["space", "s"],
+      "commands": ["workbench.action.gotoSymbol"]
+    },
+    // Space + S: go to symbol in workspace
+    {
+      "before": ["space", "shift+s"],
+      "commands": ["workbench.action.showAllSymbols"]
+    },
+    // Space + o: show outline
+    {
+      "before": ["space", "o"],
+      "commands": ["breadcrumbs.focusAndSelect"]
+    },
+    // Space + t: show terminal
+    {
+      "before": ["space", "t"],
+      "commands": ["workbench.action.terminal.toggleTerminal"]
+    },
+    // Space + r: rename
+    {
+      "before": ["space", "r"],
+      "commands": ["editor.action.rename"]
+    },
+    // Space + enter: run recent task
+    {
+      "before": ["space", "x"],
+      "commands": ["workbench.action.terminal.focus", "workbench.action.tasks.runTask"]
+    },
+    // Space + /: global search
+    {
+      "before": ["space", "/"],
+      "commands": ["workbench.action.findInFiles"]
     }
   ],
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,6 +212,9 @@
   "[dockerfile]": {
     "editor.defaultFormatter": "ms-azuretools.vscode-docker"
   },
-  "window.customTitleBarVisibility": "never",
-  "chromiumide.hints.tooLargeWorkspace": false
+  "chromiumide.hints.tooLargeWorkspace": false,
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

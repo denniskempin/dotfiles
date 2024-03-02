@@ -4,12 +4,13 @@ import = [
 
 [window]
 decorations = "None"
-padding = { x = 8, y = 8 }
+padding = { x = 4, y = 4 }
 opacity = 0.9
 blur = true
 option_as_alt = "Both"
 
 [font]
-normal = { family = "FiraCode Nerd Font" }
+normal = { family = "Monaspace Neon" }
+italic = { family = "Monaspace Neon", style = "Italic" }
 size = 12
-builtin_box_drawing = false
+offset = { x = 0, y = 6 }

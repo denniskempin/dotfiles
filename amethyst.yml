@@ -13,7 +13,7 @@ layouts:
   # - 4column-right
   # - column
   # - row
-  - floating
+  # - floating
   # - widescreen-tall
   # - widescreen-tall-right
   # - bsp

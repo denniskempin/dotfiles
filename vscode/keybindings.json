@@ -109,9 +109,7 @@
 
   // Modal terminal view
   {
-    // escape: Close the panel
-    "key": "escape",
-    "command": "workbench.action.terminal.toggleTerminal",
-    "when": "terminalFocus"
+    "key": "ctrl+shift+alt+cmd+t",
+    "command": "workbench.action.terminal.toggleTerminal"
   }
 ]

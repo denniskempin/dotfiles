@@ -116,8 +116,13 @@
     },
     // Space + f: open file
     {
-      "before": ["space", "a"],
-      "commands": ["editor.action.quickOpen"]
+      "before": ["space", "f"],
+      "commands": ["workbench.action.quickOpen"]
+    },
+    // Space + space: command palette
+    {
+      "before": ["space", "space"],
+      "commands": ["workbench.action.showCommands"]
     },
     // Space + s: go to symbol in file
     {

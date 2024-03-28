@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+dut -- dbus-send --system \
+    --dest=org.chromium.SessionManager --print-reply --type=method_call \
+    /org/chromium/SessionManager \
+    org.chromium.SessionManagerInterface.RetrievePrimarySession |
+    awk 'NR==3' | cut -d "\"" -f2

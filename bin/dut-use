@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+DUT=$1
+BOARD=$(ssh $DUT cat /etc/lsb-release | grep CHROMEOS_RELEASE_BOARD | awk -F= '{ print $2 }')
+
+echo "Using $BOARD at $DUT"
+
+echo "
+export DUT=$DUT
+export BOARD=$BOARD
+export B=--board=$BOARD
+" >${DIRENV_FILE:=.envrc}
+
+# Allow direnv to be loaded after rewriting the file
+direnv allow

@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+dut -t -- vsh --vm_name=termina --owner_id=$(dut-user-hash) --user=root -- LXD_DIR=/mnt/stateful/lxd LXD_CONF=/mnt/stateful/lxd_conf

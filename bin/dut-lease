@@ -26,11 +26,10 @@ if ! ssh planet-y 'luci-auth token -scopes "https://www.googleapis.com/auth/user
 fi
 
 crosfleet dut lease -board "$BOARD" -minutes 240 -json >~/.dut
-DUT_HOSTNAME=$(jq -r .DUT.Hostname < ~/.dut)
-echo "DUT_HOSTNAME=$DUT_HOSTNAME"
+DUT_HOSTNAME=$(jq -r .DUT.Hostname <~/.dut)
 
-RELEASE=""
 if [ -n "$VERSION" ]; then
-    RELEASE="--R=$VERSION"
+    ssh planet-y fflash "$DUT_HOSTNAME" --clobber-stateful=yes "--R=$VERSION"
 fi
-ssh planet-y fflash "$DUT_HOSTNAME" --clobber-stateful=yes "$RELEASE"
+
+dut-use $DUT_HOSTNAME

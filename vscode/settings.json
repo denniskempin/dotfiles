@@ -8,7 +8,6 @@
   "editor.formatOnSave": true,
   "editor.formatOnType": true,
   "editor.minimap.enabled": false,
-  "keyboard.dispatch": "code",
   "terminal.integrated.defaultProfile.linux": "fish",
   "terminal.integrated.scrollback": 10000,
   "dotfiles.repository": "https://github.com/denniskempin/dotfiles",
@@ -29,27 +28,7 @@
   // Visual Changes
   "workbench.colorCustomizations": {
     "editorInlayHint.foreground": "#666",
-    "editorInlayHint.background": "#00000000",
-    "statusBar.background": "#005f5f",
-    "statusBar.noFolderBackground": "#005f5f",
-    "statusBar.debuggingBackground": "#005f5f",
-    "statusBar.foreground": "#ffffff",
-    "statusBar.debuggingForeground": "#ffffff",
-    "activityBar.activeBackground": "#65c89b",
-    "activityBar.background": "#65c89b",
-    "activityBar.foreground": "#15202b",
-    "activityBar.inactiveForeground": "#15202b99",
-    "activityBarBadge.background": "#945bc4",
-    "activityBarBadge.foreground": "#e7e7e7",
-    "commandCenter.border": "#15202b99",
-    "sash.hoverBorder": "#65c89b",
-    "statusBarItem.hoverBackground": "#359268",
-    "statusBarItem.remoteBackground": "#42b883",
-    "statusBarItem.remoteForeground": "#15202b",
-    "titleBar.activeBackground": "#42b883",
-    "titleBar.activeForeground": "#15202b",
-    "titleBar.inactiveBackground": "#42b88399",
-    "titleBar.inactiveForeground": "#15202b99"
+    "editorInlayHint.background": "#00000000"
   },
   // Single editor per group, with no tabs.
   "workbench.editor.limit.enabled": true,
@@ -72,12 +51,10 @@
   "vim.cursorStylePerMode.visual": "underline",
   "vim.cursorStylePerMode.visualblock": "underline",
   "vim.cursorStylePerMode.visualline": "underline",
-  "vim.easymotion": true,
   "vim.smartRelativeLine": true,
   "vim.mouseSelectionGoesIntoVisualMode": true,
   "vim.sneak": true,
-  "vim.leader": " ",
-  "vim.statusBarColorControl": true,
+  "vim.statusBarColorControl": false,
   "vim.useSystemClipboard": true,
   // Enable (shift-)tab for indentation in visual mode
   "vim.visualModeKeyBindingsNonRecursive": [
@@ -211,7 +188,7 @@
   "workbench.activityBar.location": "top",
   "chromiumide.metrics.showMessage": false,
   "chromiumide.metrics.collectMetrics": true,
-  "workbench.colorTheme": "Material Theme Ocean High Contrast",
+  "workbench.colorTheme": "Ayu Dark",
   "tabnine.experimentalAutoImports": true,
   "settingsSync.ignoredExtensions": ["github.copilot"],
   "[dockerfile]": {
@@ -221,5 +198,9 @@
   //////////////////////////////////////////////////////////////////////////////////////////////////
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "workbench.fontAliasing": "auto",
+  "go.toolsManagement.autoUpdate": true,
+  "editor.accessibilitySupport": "off",
+  "vim.easymotion": true
 }

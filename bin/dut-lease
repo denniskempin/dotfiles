@@ -17,7 +17,7 @@ BOARD=$1
 VERSION=$2
 
 if ! ssh planet-y gcertstatus; then
-    eche "Run gcert on planet-y first"
+    echo "Run gcert on planet-y first"
     exit 1
 fi
 

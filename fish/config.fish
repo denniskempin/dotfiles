@@ -30,8 +30,9 @@ bind \ek 'nextd; commandline -f repaint' # alt-k: usually cmd-], remapped by skh
 # Enable mouse scrolling in less output
 export LESS="--mouse"
 
-# Use nvim as default editor
-export EDITOR="hx"
+# Use hx as default editor if not already set
+[ -z "$EDITOR" ] && export EDITOR=hx
+[ -z "$GIT_EDITOR" ] && export GIT_EDITOR=hx
 
 # Enable true color support
 export COLORTERM="truecolor"

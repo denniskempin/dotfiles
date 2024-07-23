@@ -11,4 +11,8 @@ $line_break\
 $jobs\
 $time\
 $status\
+$hostname\
 $character"""
+
+[hostname]
+format = "$hostname "

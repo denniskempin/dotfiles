@@ -10,10 +10,10 @@ if command -v zoxide &>/dev/null
     zoxide init fish | source
 end
 
-if command -v exa &>/dev/null
-    alias ls="exa"
-    alias ll="exa -l"
-    alias la="exa -la"
+if command -v eza &>/dev/null
+    alias ls="eza"
+    alias ll="eza -l"
+    alias la="eza -la"
 end
 
 if command -v batcat &>/dev/null

@@ -13,25 +13,24 @@ COMMON_PACKAGES=(
   tldr    # tldr versins of man pages
   bat     # better cat
   zoxide  # better cd (with fuzzy matching and autojump)
-  exa     # better ls
+  eza     # better ls
 )
 
 # Packages with identical names on homebrew/arch
 ARCH_BREW_PACKAGES=(
   "${COMMON_PACKAGES[@]}"
-  grc        # generic colorizer for standard commands
-  fd         # better find
-  less       # Newer version has --mouse support
-  git-delta  # Better git diff
-  sd         # Better sed
-  ripgrep    # Better grep
-  procs      # Better ps
-  bottom     # Better top
-  fzf        # fuzzy finder
-  helix      # helix editor
-  direnv     # Automatically load env variables in directories
+  grc       # generic colorizer for standard commands
+  fd        # better find
+  less      # Newer version has --mouse support
+  git-delta # Better git diff
+  sd        # Better sed
+  ripgrep   # Better grep
+  procs     # Better ps
+  bottom    # Better top
+  fzf       # fuzzy finder
+  helix     # helix editor
+  direnv    # Automatically load env variables in directories
 )
-
 
 ################################################################################
 # OSX specific

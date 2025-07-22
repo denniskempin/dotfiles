@@ -1,5 +1,5 @@
 {
-  "editor.rulers": [100],
+  "editor.rulers": [80, 100],
   "editor.fontFamily": "Monaspace Neon",
   "editor.tabSize": 4,
   "editor.bracketPairColorization.enabled": true,
@@ -10,7 +10,6 @@
   "editor.minimap.enabled": false,
   "terminal.integrated.defaultProfile.linux": "fish",
   "terminal.integrated.scrollback": 10000,
-  "dotfiles.repository": "https://github.com/denniskempin/dotfiles",
   "files.autoSave": "afterDelay",
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
@@ -188,13 +187,14 @@
   "workbench.activityBar.location": "top",
   "chromiumide.metrics.showMessage": false,
   "chromiumide.metrics.collectMetrics": true,
-  "workbench.colorTheme": "Ayu Dark",
+  "workbench.colorTheme": "Ayu Dark Bordered",
   "tabnine.experimentalAutoImports": true,
   "settingsSync.ignoredExtensions": ["github.copilot"],
   "[dockerfile]": {
     "editor.defaultFormatter": "ms-azuretools.vscode-docker"
   },
   "chromiumide.hints.tooLargeWorkspace": false,
+  "dev.containers.dockerPath": "podman",
   //////////////////////////////////////////////////////////////////////////////////////////////////
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -202,5 +202,20 @@
   "workbench.fontAliasing": "auto",
   "go.toolsManagement.autoUpdate": true,
   "editor.accessibilitySupport": "off",
-  "vim.easymotion": true
+  "vim.easymotion": true,
+  "chromiumide.board": "brya",
+  "extensions.ignoreRecommendations": true,
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer"
+  },
+  "geminicodeassist.updateChannel": "dogfood",
+  "git.openRepositoryInParentFolders": "never",
+  "geminicodeassist.project": "aipp-internal-testing",
+  "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
+  "javascript.inlayHints.parameterNames.enabled": "literals",
+  "javascript.inlayHints.parameterTypes.enabled": true,
+  "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
+  "javascript.inlayHints.variableTypes.enabled": true,
+  "geminicodeassist.recitation.maxCitedLength": 0,
+  "git.blame.editorDecoration.enabled": true
 }

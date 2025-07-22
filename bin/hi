@@ -1,0 +1,8 @@
+#!/bin/bash
+
+HOSTS=(
+  ct
+  eda-cypress-emu1.mtv
+  edaemu31ccr1.pao
+)
+rw --no_prodssh -e true "${HOSTS[@]}"

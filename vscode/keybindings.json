@@ -111,5 +111,9 @@
   {
     "key": "ctrl+shift+alt+cmd+t",
     "command": "workbench.action.terminal.toggleTerminal"
+  },
+  {
+    "key": "cmd+i",
+    "command": "composerMode.agent"
   }
 ]

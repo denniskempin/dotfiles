@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-dut -L 9000:localhost:5900 "killall kmsvnc; kmsvnc"

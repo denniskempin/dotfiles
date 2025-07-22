@@ -15,4 +15,5 @@ $hostname\
 $character"""
 
 [hostname]
+ssh_only = false
 format = "$hostname "

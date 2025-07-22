@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-set -ex
-
-dut-lease "$@"
-dut-login
-dut-vnc

@@ -35,8 +35,8 @@
   "workbench.editor.limit.value": 1,
   "workbench.editor.showTabs": "single",
   // Hide a bunch of noise
-  "window.commandCenter": false,
-  "workbench.layoutControl.enabled": false,
+  "window.commandCenter": true,
+  "workbench.layoutControl.enabled": true,
   "editor.stickyScroll.enabled": true,
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // Vim mode config
@@ -139,16 +139,13 @@
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // Co-pilot
   "editor.inlineSuggest.enabled": true,
-  "github.copilot.enable": {
-    "*": true,
-    "plaintext": true,
-    "markdown": true,
-    "scminput": false
-  },
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // Rust
   "files.watcherExclude": {
     "**/target/**": true
+  },
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer"
   },
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // Bazel
@@ -172,6 +169,9 @@
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
+    "[jsonc]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // Prettier
   "prettier.printWidth": 100,
@@ -184,10 +184,8 @@
   "workbench.editorAssociations": {
     "*.sfc": "hexEditor.hexedit"
   },
-  "workbench.activityBar.location": "top",
   "chromiumide.metrics.showMessage": false,
   "chromiumide.metrics.collectMetrics": true,
-  "workbench.colorTheme": "Ayu Dark Bordered",
   "tabnine.experimentalAutoImports": true,
   "settingsSync.ignoredExtensions": ["github.copilot"],
   "[dockerfile]": {
@@ -195,27 +193,13 @@
   },
   "chromiumide.hints.tooLargeWorkspace": false,
   "dev.containers.dockerPath": "podman",
-  //////////////////////////////////////////////////////////////////////////////////////////////////
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
   "workbench.fontAliasing": "auto",
   "go.toolsManagement.autoUpdate": true,
   "editor.accessibilitySupport": "off",
   "vim.easymotion": true,
   "chromiumide.board": "brya",
   "extensions.ignoreRecommendations": true,
-  "[rust]": {
-    "editor.defaultFormatter": "rust-lang.rust-analyzer"
-  },
-  "geminicodeassist.updateChannel": "dogfood",
+
   "git.openRepositoryInParentFolders": "never",
-  "geminicodeassist.project": "aipp-internal-testing",
-  "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
-  "javascript.inlayHints.parameterNames.enabled": "literals",
-  "javascript.inlayHints.parameterTypes.enabled": true,
-  "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
-  "javascript.inlayHints.variableTypes.enabled": true,
-  "geminicodeassist.recitation.maxCitedLength": 0,
   "git.blame.editorDecoration.enabled": true
 }

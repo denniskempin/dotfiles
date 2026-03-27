@@ -187,7 +187,6 @@
   "workbench.activityBar.location": "top",
   "chromiumide.metrics.showMessage": false,
   "chromiumide.metrics.collectMetrics": true,
-  "workbench.colorTheme": "Ayu Dark Bordered",
   "tabnine.experimentalAutoImports": true,
   "settingsSync.ignoredExtensions": ["github.copilot"],
   "[dockerfile]": {

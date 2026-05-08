@@ -81,3 +81,15 @@ end
 alias gat="git_amend_to"
 
 direnv hook fish | source
+
+# Added by Windsurf
+fish_add_path /Users/denniskempin/.codeium/windsurf/bin
+
+string match -q "$TERM_PROGRAM" "vscode"
+and . (code --locate-shell-integration-path fish)
+ 
+
+# Added by LM Studio CLI (lms)
+set -gx PATH $PATH /Users/denniskempin/.lmstudio/bin
+# End of LM Studio CLI section
+

@@ -1,0 +1,72 @@
+{
+    "global": {
+        "show_in_menu_bar": false
+    },
+    "profiles": [
+        {
+            "name": "Default profile",
+            "selected": true,
+            "virtual_hid_keyboard": {
+                "country_code": 0,
+                "keyboard_type_v2": "ansi"
+            },
+            "complex_modifications": {
+                "rules": [
+                    {
+                        "description": "Caps Lock: tap Escape, hold F18",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "caps_lock",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to_if_alone": [
+                                    { "key_code": "escape", "halt": true }
+                                ],
+                                "to_if_held_down": [
+                                    { "key_code": "f18", "repeat": false, "halt": true }
+                                ],
+                                "parameters": {
+                                    "basic.to_if_alone_timeout_milliseconds": 250,
+                                    "basic.to_if_held_down_threshold_milliseconds": 250
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Fn (globe): tap the globe key, hold F19",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "conditions": [
+                                    {
+                                        "type": "variable_unless",
+                                        "name": "posting_globe",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "fn",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to_if_alone": [
+                                    { "set_variable": { "name": "posting_globe", "value": 1 } },
+                                    { "apple_vendor_top_case_key_code": "keyboard_fn", "halt": true },
+                                    { "set_variable": { "name": "posting_globe", "value": 0 } }
+                                ],
+                                "to_if_held_down": [
+                                    { "key_code": "f19", "repeat": false, "halt": true }
+                                ],
+                                "parameters": {
+                                    "basic.to_if_alone_timeout_milliseconds": 250,
+                                    "basic.to_if_held_down_threshold_milliseconds": 250
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

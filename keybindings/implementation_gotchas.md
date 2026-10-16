@@ -74,4 +74,4 @@ Contexts stores the switcher chord as an `NSKeyedArchiver` blob, `CTPreferenceSe
 
 ## Install
 
-`darwin/home.nix` links `~/.hammerspoon` and `~/.config/karabiner/karabiner.json` at the files in this directory. The previous link target, `darwin/config/karabiner.json`, maps Caps Lock to Hyper or Escape. A rebuild that still pointed there would put that profile back. That file is still in the repo and is not linked.
+`darwin/home.nix` links `~/.hammerspoon` and `~/.config/karabiner/karabiner.json` at the files in this directory. The previous link target, `darwin/config/karabiner.json`, maps Caps Lock to Hyper or Escape. A rebuild that still pointed there would put that profile back. That file has since been deleted from the repo.

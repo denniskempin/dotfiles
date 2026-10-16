@@ -1,0 +1,17 @@
+---
+description: Drift check required before any nix-darwin rebuild of this Mac
+alwaysApply: true
+---
+
+# Check the Mac against the flake before rebuilding
+
+Run this check before `darwin-rebuild` or any other apply of this flake, including a first install. Report findings and wait. Do not rebuild, install Nix, or change the system during the check.
+
+Read `darwin/homebrew.nix`, `darwin/home.nix`, `home/default.nix`, and `darwin/defaults.nix` first. Drift already named in those files is known. Separate known drift from anything new.
+
+1. **Apps.** Collect `CFBundleIdentifier` and short version from `*.app` under `/Applications` and `~/Applications`. Compare with `homebrew.casks` and `homebrew.masApps`. Flag casks with no app, apps with no declaration, and declared casks whose live version differs from `brew info --cask`.
+2. **Homebrew.** Diff `brew leaves`, `brew list --cask`, and `brew tap` against `brews`, `casks`, and `nix-homebrew.taps` in the flake. `cleanup = "check"` fails the rebuild on extras.
+3. **Session residue.** Compare login items (`osascript -e 'tell application "System Events" to get the path of every login item'`) and plists in `~/Library/LaunchAgents` and `/Library/LaunchAgents` with the comment in `darwin/defaults.nix`.
+4. **Config files.** List text configs in `~/.config` (skip `node_modules`, plugin checkouts, `fish/fish_variables`, `gh/hosts.yml`, `karabiner/automatic_backups`, `1Password`). A path that neither `home/default.nix` nor `darwin/home.nix` links, and that no "left as machine state" comment names, is new drift. Dirty git files that are already linked are spec edits to commit, not machine drift.
+
+For each new finding, ask whether to adopt it into the flake or remove it from the machine. Rebuild only after those choices are made.

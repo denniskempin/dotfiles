@@ -21,13 +21,13 @@
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
     "**/*.pyc": true,
-    "**/__pycache__": true
+    "**/__pycache__": true,
   },
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // Visual Changes
   "workbench.colorCustomizations": {
     "editorInlayHint.foreground": "#666",
-    "editorInlayHint.background": "#00000000"
+    "editorInlayHint.background": "#00000000",
   },
   // Single editor per group, with no tabs.
   "workbench.editor.limit.enabled": true,
@@ -63,9 +63,9 @@
       "commands": [
         {
           "command": "editor.action.outdentLines",
-          "args": []
-        }
-      ]
+          "args": [],
+        },
+      ],
     },
     {
       "before": ["Tab"],
@@ -73,68 +73,68 @@
       "commands": [
         {
           "command": "editor.action.indentLines",
-          "args": []
-        }
-      ]
-    }
+          "args": [],
+        },
+      ],
+    },
   ],
   // Vim Space Mode
   "vim.normalModeKeyBindings": [
     // Space + d: diagnostics
     {
       "before": ["space", "d"],
-      "commands": ["workbench.actions.view.problems"]
+      "commands": ["workbench.actions.view.problems"],
     },
     // Space + a: code action
     {
       "before": ["space", "a"],
-      "commands": ["editor.action.quickFix"]
+      "commands": ["editor.action.quickFix"],
     },
     // Space + f: open file
     {
       "before": ["space", "f"],
-      "commands": ["workbench.action.quickOpen"]
+      "commands": ["workbench.action.quickOpen"],
     },
     // Space + space: command palette
     {
       "before": ["space", "space"],
-      "commands": ["workbench.action.showCommands"]
+      "commands": ["workbench.action.showCommands"],
     },
     // Space + s: go to symbol in file
     {
       "before": ["space", "s"],
-      "commands": ["workbench.action.gotoSymbol"]
+      "commands": ["workbench.action.gotoSymbol"],
     },
     // Space + S: go to symbol in workspace
     {
       "before": ["space", "shift+s"],
-      "commands": ["workbench.action.showAllSymbols"]
+      "commands": ["workbench.action.showAllSymbols"],
     },
     // Space + o: show outline
     {
       "before": ["space", "o"],
-      "commands": ["breadcrumbs.focusAndSelect"]
+      "commands": ["breadcrumbs.focusAndSelect"],
     },
     // Space + t: show terminal
     {
       "before": ["space", "t"],
-      "commands": ["workbench.action.terminal.toggleTerminal"]
+      "commands": ["workbench.action.terminal.toggleTerminal"],
     },
     // Space + r: rename
     {
       "before": ["space", "r"],
-      "commands": ["editor.action.rename"]
+      "commands": ["editor.action.rename"],
     },
     // Space + enter: run recent task
     {
       "before": ["space", "x"],
-      "commands": ["workbench.action.terminal.focus", "workbench.action.tasks.runTask"]
+      "commands": ["workbench.action.terminal.focus", "workbench.action.tasks.runTask"],
     },
     // Space + /: global search
     {
       "before": ["space", "/"],
-      "commands": ["workbench.action.findInFiles"]
-    }
+      "commands": ["workbench.action.findInFiles"],
+    },
   ],
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // Co-pilot
@@ -143,19 +143,19 @@
     "*": true,
     "plaintext": true,
     "markdown": true,
-    "scminput": false
+    "scminput": false,
   },
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // Rust
   "files.watcherExclude": {
-    "**/target/**": true
+    "**/target/**": true,
   },
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // Bazel
   "files.associations": {
     "BUILD": "bazel",
     "METADATA": "bazel",
-    "WORKSPACE": "bazel"
+    "WORKSPACE": "bazel",
   },
   "bazel.buildifierFixOnFormat": true,
   "bazel.enableCodeLens": true,
@@ -163,26 +163,25 @@
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // Python
   "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter"
+    "editor.defaultFormatter": "ms-python.black-formatter",
   },
-  "python.languageServer": "Pylance",
   "python.analysis.typeCheckingMode": "strict",
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // JavaScript
   "[json]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
+    "editor.defaultFormatter": "vscode.json-language-features",
   },
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // Prettier
   "prettier.printWidth": 100,
   "prettier.proseWrap": "always",
   "[markdown]": {
-    "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one",
   },
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // Misc
   "workbench.editorAssociations": {
-    "*.sfc": "hexEditor.hexedit"
+    "*.sfc": "hexEditor.hexedit",
   },
   "workbench.activityBar.location": "top",
   "chromiumide.metrics.showMessage": false,
@@ -191,13 +190,12 @@
   "tabnine.experimentalAutoImports": true,
   "settingsSync.ignoredExtensions": ["github.copilot"],
   "[dockerfile]": {
-    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker",
   },
   "chromiumide.hints.tooLargeWorkspace": false,
-  "dev.containers.dockerPath": "podman",
   //////////////////////////////////////////////////////////////////////////////////////////////////
   "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "workbench.fontAliasing": "auto",
   "go.toolsManagement.autoUpdate": true,
@@ -206,7 +204,7 @@
   "chromiumide.board": "brya",
   "extensions.ignoreRecommendations": true,
   "[rust]": {
-    "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    "editor.defaultFormatter": "rust-lang.rust-analyzer",
   },
   "geminicodeassist.updateChannel": "dogfood",
   "git.openRepositoryInParentFolders": "never",
@@ -222,5 +220,11 @@
   "github.copilot.nextEditSuggestions.enabled": true,
   "chat.mcp.gallery.enabled": true,
   "claudeCode.preferredLocation": "panel",
-  "chat.viewSessions.orientation": "stacked"
+  "chat.viewSessions.orientation": "stacked",
+  "pi.cornerStyle": "rounded",
+  "pi.spacing": "compact",
+  "pi.alwaysShowBlockBorders": false,
+  "pi.transparentChatInputArea": true,
+  "pi.alignUserMessagesRight": true,
+  "pi.enableAnimations": true,
 }

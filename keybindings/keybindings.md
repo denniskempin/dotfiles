@@ -15,7 +15,7 @@ To use the same keys for the same actions, we need to define abstract nouns for 
 | -------- | ----------------------------------------------------------------- | ----------------------------- | --------------------------------------------------------- |
 | Tile     | The 2D unit you focus and move in a direction                     | Window                        | Pane: an editor group, a terminal split, a note tab group |
 | Slot     | An item in the ordered list you step through or jump to by number | Workspace                     | Tab                                                       |
-| History  | A stack you walk backward and forward                             | Recently focused applications | That app's own back and forward stack                     |
+| History  | A stack you walk backward and forward                             | —                             | That app's own back and forward stack                     |
 | Command  | A named action                                                    | The system command launcher   | The app's command palette                                 |
 | Document | A thing you open                                                  | The system window switcher    | Webpages, files, notes, terminal sessions                 |
 
@@ -45,7 +45,7 @@ There are two layer keys:
 | Zoom tile    | Enter                      | The window fills the workspace. Focusing another window there restores the others                                                                                                  | The pane fills the window                                                                                   |
 | Close tile   | `X`                        | Close the window                                                                                                                                                                   | Close the pane. In an editor, the tabs inside it close with it. In a terminal, the last pane closes the tab |
 | Split tile   | `\` then an arrow          | —                                                                                                                                                                                  | A new pane on that side. An editor has all four directions. A terminal and a notes app have down and right  |
-| Resize tile  | `S` then arrows, repeating | Left shrinks the width, right grows it. Down grows the height, up shrinks it                                                                                                       | The same, on the pane                                                                                       |
+| Resize tile  | `S` then an arrow          | Left shrinks the width, right grows it. Down grows the height, up shrinks it. One step per chord                                                                                   | The same, on the pane                                                                                       |
 | Layout tiles | `L` then `F`, `A`, or `=`  | `F` flips side-by-side and stacked, and leaves tiled-versus-accordion as it is. `A` flips tiled and accordion, and leaves the axis as it is. `=` makes every sibling the same size | `F` flips the axis. `=` makes sibling panes the same size                                                   |
 | Join tile            | `J` then an arrow | The window joins the neighbor in that direction                  |
 
@@ -55,9 +55,9 @@ There are two layer keys:
 
 | Verb + noun       | Key                                 | Operating system                                                                                                                                                                                            | App                                                    |
 | ----------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| Switch slot       | `;` previous, `'` next              | The previous or next workspace on this monitor that has windows, wrapping around. The workspace you are on stays in the sequence even when it is empty                                                      | The previous or next tab                               |
-| Jump to slot      | `1`–`8`, `9` last                   | Workspace 1 through 8, creating it if needed. `9` is the last workspace on this monitor that has windows                                                                                                    | Tab 1 through 8. `9` is the last tab                   |
-| Send tile to slot | Shift+`;`, Shift+`'`, Shift+`1`–`9` | Move the window to that workspace and follow it. The step follows the same sequence as Switch. The number creates the workspace if needed. Shift+`9` is the last workspace on this monitor that has windows | Move the tab one step, to that position, or to the end |
+| Switch slot       | `;` previous, `'` next              | The previous or next workspace on this monitor, wrapping around                                                                                                                                             | The previous or next tab                               |
+| Jump to slot      | `1`–`9`; in apps `9` is last        | Workspace 1 through 9, creating it if needed                                                                                                                                                                | Tab 1 through 8. `9` is the last tab                   |
+| Send tile to slot | Shift+`;`, Shift+`'`, Shift+`1`–`9` | Move the window to that workspace and follow it. The step follows the same sequence as Switch. The number creates the workspace if needed                                                                    | Move the tab one step, to that position, or to the end |
 
 
 #### Other
@@ -65,7 +65,7 @@ There are two layer keys:
 
 | Verb + noun   | Key                   | Operating system                                                                                                                           | App                                         |
 | ------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------- |
-| Walk history  | `[` back, `]` forward | Walk back and forward through the applications you have focused. Focusing something new discards whatever was forward of the current point | Back and forward in that app                |
+| Walk history  | `[` back, `]` forward | —                                                                                                                                          | Back and forward in that app                |
 | Run command   | `P`                   | Open the command launcher                                                                                                                  | Open the command palette                    |
 | Open document | `O`                   | Open the document switcher                                                                                                                 | Open the switcher for documents in this app |
 | Focus monitor        | Tab               | Focus the next monitor. With two monitors, that is the other one |
@@ -87,27 +87,31 @@ Karabiner translates two keys. Hammerspoon dispatches the grammar, draws the ove
 
 | From      | Held                       | Alone         | Timeout |
 | --------- | -------------------------- | ------------- | ------- |
-| Caps Lock | F18, via `to_if_held_down` | Escape        | 250 ms  |
-| Fn        | F19, via `to_if_held_down` | the globe key | 250 ms  |
+| Caps Lock | F18, via `to` | Escape        | 250 ms  |
+| Fn        | F19, via `to` | the globe key | 250 ms  |
 
 
-F18 and F19 are the interface between the two tools. A tap never emits them. The globe key is the native Fn tap, so macOS changes the input source. Karabiner consumes Fn while it is held, so Fn+arrow never becomes Home, End, or Page Up/Down.
+F18 and F19 are the interface between the two tools. Each goes down with the physical key and stays down until Caps Lock or Fn is released. A release within the timeout is a tap: Karabiner posts that key-up, then Escape or the globe key. The brief F18 or F19 press is a no-op. Leave key repeat enabled. With `repeat` set to `false`, Karabiner posts the key-up at the same time as the key-down, and the layer disarms before the next key. The globe key is the native Fn tap, so macOS changes the input source. Karabiner consumes Fn while it is held, so Fn+arrow never becomes Home, End, or Page Up/Down.
 
 ### Hammerspoon
+
+`hammerspoon/bindings.lua` holds the grammar as rows: key, Shift, verb or chord, and the overlay line. `hammerspoon/targets.lua` says what each verb does on the operating system and in each app. `init.lua` runs the tap and the layer state, and needs no edit to change a binding.
 
 One event tap watches key down and key up.
 
 - F18 down arms the operating-system layer. F19 down arms the App layer. Key repeat is ignored, and both keys are swallowed. Key up disarms a layer that is not locked.
 - Space, while a layer is armed and no chord is pending, locks that layer. The layer key can come up and the layer stays armed. Escape, with no chord pending, clears the lock.
 - While a layer is armed, every other key is swallowed. A listed key runs its verb. Shift is read off the event flags. Command combinations are swallowed with the rest.
-- F19+Delete is posted as forward delete. F19+F1 through F12 are posted as the flipped F-row action: the media key when the F row is set to function keys, and the function key when it is set to media keys.
+- F19+Delete is posted as forward delete. F19+F1 through F12 are unbound, so the Fn-flipped F row is not available.
 - A layer that is held or locked shows its overlay after 250 ms. The overlay hides once a binding is selected, and on key up when the layer is not locked. While the layer stays locked, the 250 ms timer starts again after the binding. The overlay is an `hs.canvas` on the focused screen, non-activating. Nothing goes to Notification Center.
-- `\`, `S`, and `L` on the App layer, and `S`, `L`, and `J` on the operating-system layer, start a chord. The layer overlay hides and a follow-up overlay lists the keys that chord accepts. Split and join accept an arrow. Resize accepts arrows, repeating, and the overlay stays up while it does. Layout accepts `F` and `=` on the App layer, and `F`, `A`, and `=` on the operating-system layer.
-- While a chord is waiting, the tap keeps swallowing keys after the layer key comes up. A lock stays in force. The pending verb wins over the layer, so an arrow with Caps Lock still down is the argument. F18 and F19 are not arguments. One argument clears the verb. Resize restarts a one-second timer instead. Escape, any unlisted key, and the timer clear the chord and leave a lock in place.
+- `\`, `S`, and `L` on the App layer, and `S`, `L`, and `J` on the operating-system layer, start a chord. The layer overlay hides and a follow-up overlay lists the keys that chord accepts. Split, join, and resize accept an arrow. Layout accepts `F` and `=` on the App layer, and `F`, `A`, and `=` on the operating-system layer.
+- While a chord is waiting, the tap keeps swallowing keys after the layer key comes up. A lock stays in force. The pending verb wins over the layer, so an arrow with Caps Lock still down is the argument. F18 and F19 are not arguments. One argument clears the verb. Escape and any unlisted key clear the chord and leave a lock in place. Key repeat is swallowed, including inside a chord.
+
+AeroSpace commands run through `hs.task` on a queue, one at a time in key order, so the tap never waits on AeroSpace.
 
 Posted shortcuts re-enter the tap. Hammerspoon marks its own events and ignores them on the way back. A two-stroke shortcut is two marked keystrokes.
 
-With Hammerspoon not running, or in a password field, a Caps Lock tap still sends Escape, a Fn tap still changes the input source, and typed characters are unchanged. The lock, Fn+Delete, and the F-row flip stop, because those need the tap.
+With Hammerspoon not running, or in a password field, a Caps Lock tap still sends Escape, a Fn tap still changes the input source, and typed characters are unchanged. The lock and Fn+Delete stop, because those need the tap.
 
 ### Operating system
 
@@ -119,17 +123,19 @@ Each operating-system key runs `aerospace`.
 | Focus tile           | `focus --boundaries all-monitors-outer-frame --boundaries-action wrap-around-all-monitors <dir>` |
 | Move tile            | `move --boundaries all-monitors-outer-frame --boundaries-action create-implicit-container <dir>` |
 | Zoom tile            | `fullscreen`                                                                                     |
-| Jump to slot         | `workspace 1` … `workspace 8`                                                                    |
+| Switch slot          | `workspace --no-stdin --wrap-around prev` / `next`                                               |
+| Jump to slot         | `workspace 1` … `workspace 9`                                                                    |
+| Send tile to slot    | `move-node-to-workspace --no-stdin --focus-follows-window --wrap-around prev` / `next`, or `N`   |
 | Focus monitor        | `focus-monitor --wrap-around next`                                                               |
 | Send slot to monitor | `move-workspace-to-monitor --wrap-around next`                                                   |
 | Close tile           | `close`                                                                                          |
 | Join tile            | `join-with <dir>`                                                                                |
-| Resize tile          | `resize width -50` / `+50` on left / right, `resize height +50` / `-50` on down / up             |
+| Resize tile          | `resize width -100` / `+100` on left / right, `resize height +100` / `-100` on down / up         |
 | Layout flip          | `layout horizontal vertical`                                                                     |
 | Layout accordion     | `layout tiles accordion`                                                                         |
 | Layout equalize      | `balance-sizes`                                                                                  |
-| Run command          | Raycast                                                                                          |
-| Open document        | Contexts                                                                                         |
+| Run command          | `open -g -b com.raycast.macos`, which shows Raycast's search bar                                 |
+| Open document        | Hyper+`O`, Contexts' hotkey, sent through System Events                                          |
 
 
 `layout horizontal vertical` picks the first argument that is not the current layout, so the axis flips and tiled-versus-accordion stays. `layout tiles accordion` toggles the other way and keeps the axis. `balance-sizes` equalizes every window in the current workspace, including windows nested by Join.
@@ -140,16 +146,7 @@ When the direction has no neighbor inside the workspace, `create-implicit-contai
 
 `fullscreen` fills the workspace. Focusing another tiling window there exits fullscreen and restores the others.
 
-Switch and Send-by-step step through the non-empty workspaces on this monitor, and keep the focused workspace in that list when it is empty:
-
-```sh
-{ aerospace list-workspaces --monitor focused --empty no; aerospace list-workspaces --focused; } \
-  | sort -uV | aerospace workspace --stdin --wrap-around next
-```
-
-The same list feeds `move-node-to-workspace --stdin --wrap-around --focus-follows-window`. Jump `9` and Send Shift+`9` take `tail -1` of the non-empty workspaces on the focused monitor. Send by number is `move-node-to-workspace --focus-follows-window N`.
-
-Walk history is a helper. AeroSpace's `on-focus-changed` callback appends the focused application to a stack and drops anything after the cursor. `[` and `]` move the cursor and focus that application, with a flag set so their own focus change is not recorded. `focus-back-and-forth` remembers one window, which is a different noun, and is not used.
+Switch and Send-by-step step through `list-workspaces --monitor focused`. AeroSpace drops a workspace once it is empty and not visible, except for workspaces named in `aerospace.toml`, which stay in the list even when empty. With the empty `[mode.main.binding]` table, the sequence is the workspaces that have windows plus the one you are on.
 
 Cross-monitor Focus and Move require "Displays have separate Spaces" off.
 
@@ -157,15 +154,15 @@ Cross-monitor Focus and Move require "Displays have separate Spaces" off.
 
 Hammerspoon names the frontmost app and delivers that app's own shortcut, or selects a menu item when the action has no shortcut. The apps keep the bindings they already have. The translation lives in Hammerspoon.
 
-An app with no row below receives Hyper, Command+Option+Control, plus the key as typed, Shift preserved.
+An app with no row below ignores the App layer.
 
-Walk history in iTerm is text. Hammerspoon sends `ESC[91;7u` and `ESC[93;7u`. Fish runs `prevd` / `nextd`, and Helix runs `jump_backward` / `jump_forward`.
+Walk history in iTerm posts Option+J and Option+K, which fish binds to `prevd` and `nextd`. iTerm's Option keys send Esc+, so fish sees `\ej` and `\ek`.
 
 ## Per-app delivery
 
 A cell is the shortcut Hammerspoon posts. A `menu` cell is the item it selects. A dash means the app has neither.
 
-Where the delivered action cannot do what the specification says, the cell says so.
+Where the delivered action cannot do what the specification says, the cell says so. Cursor uses the VS Code column.
 
 | Verb + noun               | Chrome                                                | VS Code                                                                                                                                                  | iTerm2                                                                                                                                                                                          | Obsidian                                                                                          |
 | ------------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
@@ -176,7 +173,7 @@ Where the delivered action cannot do what the specification says, the cell says 
 | Jump to slot              | `Command+1`–`9`. `Command+9` is the last tab          | `Control+1`–`8`. Jump `9` posts `Command+9`, the last tab                                                                                                | `Command+1`–`8`. `Command+9` selects the ninth tab                                                                                                                                              | `Command+1`–`8`. `Command+9` is the last tab                                                      |
 | Send tile to slot, step   | `Control+Shift+PageUp`, `Control+Shift+PageDown`      | `Command+K` then `Command+Shift+←` / `→`                                                                                                                 | `Command+Shift+←` / `Command+Shift+→`                                                                                                                                                           | —                                                                                                 |
 | Send tile to slot, number | —                                                     | Unbound. Each position needs its own argument                                                                                                            | —                                                                                                                                                                                               | —                                                                                                 |
-| Walk history              | `Command+[` , `Command+]`                             | `Control+-` , `Control+Shift+-`                                                                                                                          | send `ESC[91;7u` / `ESC[93;7u`                                                                                                                                                                  | `Command+Option+←` , `Command+Option+→`                                                           |
+| Walk history              | `Command+[` , `Command+]`                             | `Control+-` , `Control+Shift+-`                                                                                                                          | `Option+J` / `Option+K`, fish's `prevd` / `nextd`                                                                                                                                               | `Command+Option+←` , `Command+Option+→`                                                           |
 | Close tile                | —                                                     | `Command+W` closes the active editor. Closing the group is unbound                                                                                      | `Command+W`. The last pane closes the tab                                                                                                                                                       | `Command+W` closes the active tab. Closing the group is unbound                                  |
 | Run command               | `Command+Shift+/` (Help menu search)                  | `Command+Shift+P`                                                                                                                                        | `Command+Shift+/` (Help menu search)                                                                                                                                                            | `Command+P`                                                                                       |
 | Open document             | `Command+Shift+A` (Search tabs)                       | `Command+P`                                                                                                                                              | menu Open Quickly                                                                                                                                                                               | `Command+O`                                                                                       |
@@ -190,6 +187,5 @@ Where the delivered action cannot do what the specification says, the cell says 
 
 - **Displays have separate Spaces.** Off. System Settings > Desktop & Dock. Cross-monitor Focus and Move depend on it.
 - **Globe key.** System Settings > Keyboard > "Press 🌐 key to": Change Input Source. Karabiner posts the globe key on a Fn tap, and this is the language change.
-- **Invert colors.** Off, in Keyboard Shortcuts > Accessibility. An app with no row receives Hyper+`8` for Jump to slot 8, and that is the Invert Colors shortcut.
 - **VoiceOver.** Not a concern. Control+Option is not used.
 

@@ -1,14 +1,14 @@
 # Testing keybinding changes
 
-`keybindings.md` is the spec and `implementation_gotchas.md` records how the live system actually behaves. Read both before changing `hammerspoon/`.
+`docs/keybindings.md` is the spec and `docs/keybindings-gotchas.md` records how the live system actually behaves. Read both before changing this directory.
 
-Every change gets the offline suite. Changes that depend on macOS, an app, or AeroSpace also get a live check. `~/.hammerspoon` links to `keybindings/hammerspoon`, so a Hammerspoon reload picks up edits. No `darwin-rebuild` is needed, and the drift check in `.cursor/rules` does not apply to a reload.
+Every change gets the offline suite. Changes that depend on macOS, an app, or AeroSpace also get a live check. `~/.hammerspoon` links to `configs/hammerspoon`, so a Hammerspoon reload picks up edits. No `darwin-rebuild` is needed, and the drift check in `.cursor/rules` does not apply to a reload.
 
 ## Offline suite
 
 ```sh
-lua keybindings/test/run.lua            # scenarios, then the snapshot
-lua keybindings/test/run.lua --update   # rewrite snapshot.txt
+lua configs/hammerspoon/test/run.lua            # scenarios, then the snapshot
+lua configs/hammerspoon/test/run.lua --update   # rewrite snapshot.txt
 ```
 
 It runs in under a second with Homebrew's `lua` (5.4, like Hammerspoon), and needs no permissions.
@@ -56,7 +56,7 @@ The suite cannot tell whether a key triggers a global hotkey, whether an app hon
 ```sh
 q() { /opt/homebrew/bin/hs -c "$1" 2>&1 | grep -v "Loading extension"; }
 q 'hs.timer.doAfter(0.1, hs.reload) return "reloading"'; sleep 2.5
-q 'return dofile(hs.configdir .. "/../test/live.lua")'
+q 'return dofile(hs.configdir .. "/test/live.lua")'
 q 'return Live.check()'   # config loaded, tap enabled, keybindings warnings since the reload
 ```
 

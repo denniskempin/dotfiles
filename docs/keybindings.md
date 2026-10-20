@@ -95,7 +95,7 @@ F18 and F19 are the interface between the two tools. Each goes down with the phy
 
 ### Hammerspoon
 
-`hammerspoon/bindings.lua` holds the grammar as rows: key, Shift, verb or chord, and the overlay line. `hammerspoon/targets.lua` says what each verb does on the operating system and in each app. `init.lua` runs the tap and the layer state, and needs no edit to change a binding.
+`configs/hammerspoon/bindings.lua` holds the grammar as rows: key, Shift, verb or chord, and the overlay line. `configs/hammerspoon/targets.lua` says what each verb does on the operating system and in each app. `init.lua` runs the tap and the layer state, and needs no edit to change a binding.
 
 One event tap watches key down and key up.
 

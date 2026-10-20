@@ -28,10 +28,6 @@
       url = "github:nikitabobko/homebrew-tap";
       flake = false;
     };
-    skhd-tap = {
-      url = "github:asmvik/homebrew-formulae";
-      flake = false;
-    };
     onepassword-tap = {
       url = "github:1password/homebrew-tap";
       flake = false;
@@ -47,14 +43,14 @@
       ...
     }:
     let
-      # A Mac is darwin/hosts/<hostname>.nix plus one line below.
+      # A Mac is nix/hosts/<hostname>.nix plus one line below.
       mkDarwin =
         hostname:
         nix-darwin.lib.darwinSystem {
           specialArgs = { inherit inputs; };
           modules = [
-            ./darwin
-            ./darwin/hosts/${hostname}.nix
+            ./nix/darwin
+            ./nix/hosts/${hostname}.nix
             home-manager.darwinModules.home-manager
             nix-homebrew.darwinModules.nix-homebrew
           ];
@@ -73,8 +69,8 @@
             config.allowUnfree = true;
           };
           modules = [
-            ./home
-            ./linux/home.nix
+            ./nix/home
+            ./nix/home/linux.nix
             { home = { inherit username homeDirectory; }; }
           ];
         };

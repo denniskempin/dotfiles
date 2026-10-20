@@ -12,7 +12,7 @@
       cleanup = "check";
     };
 
-    # Shared CLI tools come from nixpkgs in home/default.nix. These stay here:
+    # Shared CLI tools come from nixpkgs in nix/home/default.nix. These stay here:
     # fish is the login shell, and nixpkgs dropped thefuck in May 2025.
     brews = [
       "fish"

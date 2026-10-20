@@ -1,7 +1,7 @@
--- Offline tests for keybindings/hammerspoon. From the repo root:
+-- Offline tests for configs/hammerspoon. From the repo root:
 --
---   lua keybindings/test/run.lua            scenarios, then the snapshot
---   lua keybindings/test/run.lua --update   rewrite snapshot.txt
+--   lua configs/hammerspoon/test/run.lua            scenarios, then the snapshot
+--   lua configs/hammerspoon/test/run.lua --update   rewrite snapshot.txt
 --
 -- A test fails on a failed check, a warning the config logged and the test
 -- did not take, or a posted key the config's own tap swallowed.

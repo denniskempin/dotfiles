@@ -1,4 +1,4 @@
--- Hammerspoon side of keybindings/keybindings.md.
+-- Hammerspoon side of docs/keybindings.md.
 --
 -- Karabiner turns Caps Lock into F18 while held and Escape when tapped, and
 -- Fn into F19 while held and the globe key when tapped. This file watches

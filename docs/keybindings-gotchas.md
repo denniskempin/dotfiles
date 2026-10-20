@@ -1,6 +1,6 @@
 # Implementation gotchas
 
-Notes from building `karabiner.json` and `hammerspoon/` against `keybindings.md`. Each item is something that failed or could not be done the obvious way.
+Notes from building `configs/karabiner/karabiner.json` and `configs/hammerspoon/` against `keybindings.md`. Each item is something that failed or could not be done the obvious way.
 
 ## Karabiner
 
@@ -18,7 +18,7 @@ The hold is a `to` event, which Karabiner 16.3 posts on the physical key-down an
 
 ### The running grabber ignores edits to the symlink target
 
-`~/.config/karabiner/karabiner.json` points at `keybindings/karabiner.json`. `karabiner_core_service` watches the path under `~/.config/karabiner/`. Writing the target file produced no `Load` line in `/var/log/karabiner/core_service.log`, so the process kept the previous rules and the 250 ms hold remained.
+`~/.config/karabiner/karabiner.json` points at `configs/karabiner/karabiner.json`. `karabiner_core_service` watches the path under `~/.config/karabiner/`. Writing the target file produced no `Load` line in `/var/log/karabiner/core_service.log`, so the process kept the previous rules and the 250 ms hold remained.
 
 A directory change next to the symlink makes it reload. Rewriting the symlink with `ln -sfn` and touching that directory logged `core_configuration is updated`. Check that log after a Karabiner edit before deciding the new rules are wrong.
 
@@ -68,10 +68,10 @@ Run command opens Raycast with `open -g -b com.raycast.macos`. With Raycast alre
 
 Contexts has no URL scheme or AppleScript dictionary, so Open document still goes through its Hyper+`O` hotkey (Command-Option-Control). The keystroke comes from System Events through `osascript`, run with `hs.task`, and that does trigger the hotkey. The first run asks for permission for Hammerspoon to control System Events. System Events keys reach the tap like typed keys, and the armed layer would swallow them. `actions.isExpected` lets through the expected key code with Command, Option, and Control set, until its key-up or for 2 seconds. A typed `O` has none of those flags, so it still reaches the layer. Contexts must be running. It is a login item, and with no copy running the key does nothing.
 
-Raycast stores that chord as the defaults string `raycastGlobalHotkey`. Key code 35 is `P`. The previous value was `Shift-Control-Option-Command-49`, Hyper-Shift-Space. The Application Support directory is encrypted SQLite (clipboard, AI, activity) plus window frames and install ids in the preferences plist. None of that is linked. The hotkey string is the piece in `darwin/home.nix`.
+Raycast stores that chord as the defaults string `raycastGlobalHotkey`. Key code 35 is `P`. The previous value was `Shift-Control-Option-Command-49`, Hyper-Shift-Space. The Application Support directory is encrypted SQLite (clipboard, AI, activity) plus window frames and install ids in the preferences plist. None of that is linked, and no Nix module sets the hotkey string either. It is machine state.
 
 Contexts stores the switcher chord as an `NSKeyedArchiver` blob, `CTPreferenceSearchShortcutModal`, inside `com.contextsformac.Contexts`. Key code 31 is `O`. Modifier flags `1835008` are Command, Option, and Control. The previous flags were `1966080`, which adds Shift. The same plist holds usage counters, a Sparkle schedule, and App Center install ids, and Contexts rewrites it while running. The license file and Realm database sit beside it. That domain stays on the machine. A running copy of either app keeps the old hotkey in memory and writes it back on quit, so the preference is written while the app is not running.
 
 ## Install
 
-`darwin/home.nix` links `~/.hammerspoon` and `~/.config/karabiner/karabiner.json` at the files in this directory. The previous link target, `darwin/config/karabiner.json`, maps Caps Lock to Hyper or Escape. A rebuild that still pointed there would put that profile back. That file has since been deleted from the repo.
+`nix/home/links.nix` links `~/.hammerspoon` to `configs/hammerspoon` and `~/.config/karabiner/karabiner.json` to `configs/karabiner/karabiner.json`. An older copy of `karabiner.json` that mapped Caps Lock to Hyper or Escape has been deleted, so a rebuild cannot bring that profile back.

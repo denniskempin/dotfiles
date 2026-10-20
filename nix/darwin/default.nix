@@ -45,13 +45,11 @@
       "homebrew/homebrew-cask" = inputs.homebrew-cask;
       "homebrew/homebrew-services" = inputs.homebrew-services;
       "nikitabobko/homebrew-tap" = inputs.aerospace-tap;
-      "asmvik/homebrew-formulae" = inputs.skhd-tap;
       "1password/homebrew-tap" = inputs.onepassword-tap;
     };
     # brew currently refuses these taps until they are trusted.
     trust.taps = [
       "nikitabobko/tap"
-      "asmvik/formulae"
       "1password/tap"
     ];
   };
@@ -64,7 +62,7 @@
     backupFileExtension = "backup";
     users.denniskempin.imports = [
       ../home
-      ./home.nix
+      ../home/darwin.nix
     ];
   };
 }

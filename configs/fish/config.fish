@@ -1,4 +1,4 @@
-set dotfiles_dir (realpath (dirname (realpath (status --current-filename)))/..)
+set dotfiles_dir (realpath (dirname (realpath (status --current-filename)))/../..)
 
 # Nix profiles go ahead of Homebrew and distro packages. Homebrew fish does not
 # read the /etc/fish config nix-darwin writes, so nothing else adds these.
@@ -27,8 +27,8 @@ end
 # Universal key bindings (Same key bindings shared with other apps)
 fzf_configure_bindings --history=\e\cp --process=  # hyper-p: fuzzy search history
 bind \e\cf 'zi' # hypert-f: fuzzy search recent directories
-bind \ej 'prevd; commandline -f repaint' # alt-j: usually cmd-[, remapped by skhd
-bind \ek 'nextd; commandline -f repaint' # alt-k: usually cmd-], remapped by skhd
+bind \ej 'prevd; commandline -f repaint' # alt-j: Hammerspoon sends it for Back in iTerm
+bind \ek 'nextd; commandline -f repaint' # alt-k: Hammerspoon sends it for Forward in iTerm
 
 
 # Enable mouse scrolling in less output

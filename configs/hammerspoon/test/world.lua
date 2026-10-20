@@ -1,4 +1,4 @@
--- Runs keybindings/hammerspoon in plain Lua against a fake `hs`.
+-- Runs configs/hammerspoon in plain Lua against a fake `hs`.
 --
 -- A world loads the config fresh, takes key events, and records what the
 -- config does to the outside world as effect strings:
@@ -11,7 +11,7 @@
 --
 -- Time moves only on advance and settle.
 --
--- The fake does what the live system was seen to do (implementation_gotchas.md):
+-- The fake does what the live system was seen to do (docs/keybindings-gotchas.md):
 -- posted events come back through the config's own tap, and System Events
 -- keystrokes reach the tap like typed keys. A posted key or System Events
 -- keystroke that the tap swallows is recorded in `problems`. Menu items match
@@ -24,7 +24,7 @@
 -- The config reads the global `hs`, so only the newest world is live.
 
 local TEST_DIR = debug.getinfo(1, "S").source:match("^@(.*)/[^/]*$") or "."
-local HS_DIR = TEST_DIR .. "/../hammerspoon"
+local HS_DIR = TEST_DIR .. "/.."
 
 local CODES = dofile(TEST_DIR .. "/keycodes.lua")
 local KEYMAP = {}
@@ -306,7 +306,7 @@ end
 local function strict(name, t)
   return setmetatable(t, {
     __index = function(_, k)
-      error("the fake has no " .. name .. "." .. tostring(k) .. "; add it to keybindings/test/world.lua", 2)
+      error("the fake has no " .. name .. "." .. tostring(k) .. "; add it to configs/hammerspoon/test/world.lua", 2)
     end,
   })
 end

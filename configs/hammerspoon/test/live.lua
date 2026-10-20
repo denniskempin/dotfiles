@@ -1,7 +1,7 @@
 -- Helpers for checking the config inside the running Hammerspoon. See
--- keybindings/AGENTS.md. Load with:
+-- configs/hammerspoon/AGENTS.md. Load with:
 --
---   hs -c 'dofile(hs.configdir .. "/../test/live.lua")'
+--   hs -c 'dofile(hs.configdir .. "/test/live.lua")'
 --
 -- Everything that posts events runs on a timer, so `hs -c` has returned
 -- before the config's tap sees the keys.

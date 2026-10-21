@@ -5,6 +5,7 @@ $git_branch\
 $git_commit\
 $git_state\
 $git_status\
+$nix_shell\
 $cmd_duration\
 $custom\
 $line_break\
@@ -17,3 +18,8 @@ $character"""
 [hostname]
 ssh_only = false
 format = "$hostname "
+
+# `nix shell` does not set IN_NIX_SHELL, so also show when PATH has a /nix/store
+# entry. Nix profiles are on PATH as symlinks, so they do not trigger it.
+[nix_shell]
+heuristic = true

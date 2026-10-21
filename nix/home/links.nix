@@ -14,7 +14,7 @@ let
   link = rel: config.lib.file.mkOutOfStoreSymlink "${configs}/${rel}";
 
   # Where Electron apps like Cursor and VS Code keep per-user settings.
-  appConfig = if pkgs.stdenv.isDarwin then "Library/Application Support" else ".config";
+  appConfig = if pkgs.stdenv.hostPlatform.isDarwin then "Library/Application Support" else ".config";
 in
 {
   home.file = {
@@ -22,7 +22,7 @@ in
     ".zshrc".source = link "bash/bashrc";
     "${appConfig}/Cursor/User/settings.json".source = link "cursor/settings.json";
   }
-  // lib.optionalAttrs pkgs.stdenv.isDarwin {
+  // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
     ".hammerspoon".source = link "hammerspoon";
     "${appConfig}/Code/User/settings.json".source = link "vscode/settings.json";
     "${appConfig}/Code/User/keybindings.json".source = link "vscode/keybindings.json";
@@ -31,6 +31,7 @@ in
   # Apps that write state next to their config (fish, gh, Karabiner) get
   # file links; the rest get the whole directory.
   xdg.configFile = {
+    "fish/conf.d/00-paths.fish".source = link "fish/conf.d/00-paths.fish";
     "fish/config.fish".source = link "fish/config.fish";
     "fish/fish_plugins".source = link "fish/fish_plugins";
     "gh/config.yml".source = link "gh/config.yml";
@@ -39,8 +40,19 @@ in
     "nvim".source = link "nvim";
     "starship.toml".source = link "starship/starship.toml";
   }
-  // lib.optionalAttrs pkgs.stdenv.isDarwin {
+  // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
     "aerospace".source = link "aerospace";
     "karabiner/karabiner.json".source = link "karabiner/karabiner.json";
   };
+
+  # A missing checkout would leave every link above dangling without an error.
+  home.activation.checkDotfiles = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
+    if [ ! -d ${lib.escapeShellArg configs} ]; then
+      echo "Missing ${configs}; clone the dotfiles repo there first." >&2
+      exit 1
+    fi
+  '';
+
+  # Left as machine state in ~/.config: raycast, iterm2/AppSupport, and the
+  # unlinked configs git/ignore and thefuck.
 }

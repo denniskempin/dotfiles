@@ -1,9 +1,6 @@
 set dotfiles_dir (realpath (dirname (realpath (status --current-filename)))/../..)
 
-# Nix profiles go ahead of Homebrew and distro packages. Homebrew fish does not
-# read the /etc/fish config nix-darwin writes, so nothing else adds these.
-fish_add_path -P -m ~/.nix-profile/bin /etc/profiles/per-user/$USER/bin /run/current-system/sw/bin /nix/var/nix/profiles/default/bin
-
+# Nix and Homebrew paths are set earlier, in conf.d/00-paths.fish.
 fish_add_path -P ~/go/bin
 fish_add_path -P ~/.cargo/bin
 fish_add_path -P ~/.local/bin

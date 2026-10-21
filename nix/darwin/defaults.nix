@@ -23,9 +23,8 @@
   };
 
   # Login items have no nix-darwin option. Recorded so a later reconcile can
-  # see them. Present and wanted: Contexts, TopNotch, Raycast, Gemini, Todoist.
-  # Present and stale (app path missing): Notion, Warp, Notion Calendar.
+  # see them: Contexts, Hammerspoon, TopNotch, Raycast, Gemini, Todoist.
   #
-  # ~/Library/LaunchAgents/homebrew.mxcl.borders.plist points at a borders
-  # binary that is not installed. It is not redeclared here.
+  # ~/Library/LaunchAgents/com.google.GoogleUpdater.wake.plist belongs to
+  # Chrome, which rewrites it on update.
 }

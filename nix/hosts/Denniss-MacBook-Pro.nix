@@ -8,6 +8,4 @@
   networking.computerName = "Dennis’s MacBook Pro";
   networking.hostName = "Denniss-MacBook-Pro";
   networking.localHostName = "Denniss-MacBook-Pro";
-
-  users.users.denniskempin.uid = 501;
 }

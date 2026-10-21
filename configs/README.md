@@ -12,7 +12,7 @@ linked, not the directory.
 | `aerospace/` | `~/.config/aerospace` | macOS |
 | `bash/bashrc` | `~/.bashrc` and `~/.zshrc`. Starts fish for interactive shells | all |
 | `cursor/settings.json` | `~/Library/Application Support/Cursor/User/settings.json` on macOS, `~/.config/Cursor/User/settings.json` on Linux | all |
-| `fish/config.fish`, `fish/fish_plugins` | `~/.config/fish/`, files only. Run `fisher update` afterwards | all |
+| `fish/config.fish`, `fish/fish_plugins`, `fish/conf.d/00-paths.fish` | `~/.config/fish/`, files only, same relative paths. Run `fisher update` afterwards | all |
 | `gh/config.yml` | `~/.config/gh/config.yml`, file only. `hosts.yml` stays local | all |
 | `git/config` | `~/.config/git/config`. Remove any `~/.gitconfig` | all |
 | `hammerspoon/` | `~/.hammerspoon`. See `hammerspoon/AGENTS.md` for tests | macOS |

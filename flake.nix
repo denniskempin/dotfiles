@@ -20,16 +20,8 @@
       url = "github:homebrew/homebrew-cask";
       flake = false;
     };
-    homebrew-services = {
-      url = "github:Homebrew/homebrew-services";
-      flake = false;
-    };
     aerospace-tap = {
       url = "github:nikitabobko/homebrew-tap";
-      flake = false;
-    };
-    onepassword-tap = {
-      url = "github:1password/homebrew-tap";
       flake = false;
     };
   };
@@ -57,6 +49,9 @@
         };
 
       # Non-NixOS Linux. Apply with `home-manager switch --flake ~/dotfiles#<name>`.
+      # Standalone home-manager does not write nix.conf, so the first switch is
+      #   nix --extra-experimental-features 'nix-command flakes' \
+      #     run home-manager -- switch --flake ~/dotfiles#<name>
       mkHome =
         {
           system,
@@ -81,9 +76,16 @@
       };
 
       # home-manager looks up "$USER@$(hostname)" first, then "$USER", so the
-      # plain entry covers any x86_64 machine with a /home/denniskempin home.
+      # plain entry covers any x86_64 machine with this home directory.
       homeConfigurations = {
-        "denniskempin" = mkHome { system = "x86_64-linux"; };
+        "denniskempin" = mkHome {
+          system = "x86_64-linux";
+          homeDirectory = "/usr/local/google/home/denniskempin";
+        };
       };
+
+      formatter = nixpkgs.lib.genAttrs [ "aarch64-darwin" "x86_64-linux" ] (
+        system: nixpkgs.legacyPackages.${system}.nixfmt-tree
+      );
     };
 }

@@ -13,10 +13,12 @@
     eza
     fd
     fzf
+    gh
     grc
     helix
     jq
     less
+    neovim
     procs
     ripgrep
     rsync

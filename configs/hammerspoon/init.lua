@@ -1,7 +1,7 @@
 -- Hammerspoon side of docs/keybindings.md.
 --
--- Karabiner turns Caps Lock into F18 while held and Escape when tapped, and
--- Fn into F19 while held and the globe key when tapped. This file watches
+-- Karabiner turns Right Option into F19 while held (operating-system layer)
+-- and Right Command into F18 while held (app layer). This file watches
 -- those two keys and runs the layer grammar: AeroSpace for the operating
 -- system, and each app's own shortcut or menu item for the app layer.
 --
@@ -304,7 +304,7 @@ local function handle(event)
 
   if code == F18 or code == F19 then
     if isRepeat then return true end
-    local which = code == F18 and "os" or "app"
+    local which = code == F18 and "app" or "os"
     if isDown then arm(which) else release(which) end
     swallowed[code] = nil
     return true

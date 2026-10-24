@@ -9,7 +9,7 @@ local world = require("world")
 local UNLISTED = "com.example.Unlisted"
 
 local NOT_PROBED = {
-  f18 = true, f19 = true, fn = true, capslock = true,
+  f17 = true, f18 = true, f19 = true, fn = true, capslock = true,
   cmd = true, alt = true, ctrl = true, shift = true,
   rightcmd = true, rightalt = true, rightctrl = true, rightshift = true,
 }
@@ -38,7 +38,7 @@ table.sort(KEYS, function(a, b)
   return ka < kb
 end)
 
-local HOLD = { os = "f18", app = "f19" }
+local HOLD = { os = "f19", app = "f18" }
 
 local function probe(layer, front, starter, key, shift, problems)
   local w = world.new({ front = front })
@@ -105,12 +105,12 @@ local function generate()
   local problems = {}
   local BOTH, PLAIN = { false, true }, { false }
 
-  section(lines, "System layer, Caps Lock held", "os", UNLISTED, nil, BOTH, problems)
+  section(lines, "System layer, Right Option held", "os", UNLISTED, nil, BOTH, problems)
   for _, s in ipairs(chordStarters(bindings, "os")) do
     section(lines, ("System layer, %s then the key (%s)"):format(s.key, s.title), "os", UNLISTED, s.key, PLAIN, problems)
   end
   for _, app in ipairs(apps) do
-    section(lines, "App layer, Fn held, in " .. app, "app", app, nil, BOTH, problems)
+    section(lines, "App layer, Right Command held, in " .. app, "app", app, nil, BOTH, problems)
     for _, s in ipairs(chordStarters(bindings, "app")) do
       section(lines, ("App layer, %s then the key (%s), in %s"):format(s.key, s.title, app), "app", app, s.key, PLAIN, problems)
     end

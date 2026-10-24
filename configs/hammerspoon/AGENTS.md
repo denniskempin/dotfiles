@@ -23,9 +23,9 @@ A world (`test/world.lua`) loads the config fresh against a fake `hs`. Scenarios
 
 ```lua
 local w = world(t, { front = fixture.APP })  -- also latency, hang, deliverHotkeys, menus
-w:down("f18")                       -- Caps Lock held
+w:down("f19")                       -- Right Option held (OS layer)
 w:press("left", { shift = true })   -- returns whether down and up reached apps
-w:up("f18")
+w:up("f19")
 t.expect(w, { "aerospace carry left" })  -- runs every timer first; t.expectNow does not
 ```
 
@@ -62,14 +62,14 @@ q 'return Live.check()'   # config loaded, tap enabled, keybindings warnings sin
 
 ### Triggering a binding
 
-`Live.press(layer, key, mods)` posts an F18 or F19 hold around the key, with `layer` "os", "app", or nil. The events are unmarked, so the config's tap handles them exactly like typed keys:
+`Live.press(layer, key, mods)` posts an F19 or F18 hold around the key, with `layer` "os", "app", or nil. The events are unmarked, so the config's tap handles them exactly like typed keys:
 
 ```sh
-q 'return Live.press("os", "p")'; sleep 1          # Caps Lock+P
-q 'return Live.press("app", "]", { "shift" })'     # Fn+Shift+]
+q 'return Live.press("os", "p")'; sleep 1          # Right Option+P
+q 'return Live.press("app", "]", { "shift" })'     # Right Command+Shift+]
 ```
 
-Karabiner is not involved. Tapping Caps Lock for Escape, tapping Fn for the globe key, and holding a real key need a person (see below).
+Karabiner is not involved. Holding a real Right Command or Right Option needs a person (see below).
 
 This is the user's desktop, and the user may be working on it:
 
@@ -99,7 +99,7 @@ aerospace list-workspaces --focused
 
 ### Things that mislead
 
-- Karabiner-EventViewer reads the keyboard before Hammerspoon. It shows `F18`+`P` and never shows what Hammerspoon swallows or posts. It is only useful for checking Karabiner itself.
+- Karabiner-EventViewer reads the keyboard before Hammerspoon. It shows `F19`+`P` for the operating-system layer and never shows what Hammerspoon swallows or posts. It is only useful for checking Karabiner itself.
 - Keys posted from Hammerspoon reach windows but never trigger a global hotkey, including an `hs.hotkey` in Hammerspoon. System Events keystrokes do.
 - `hs.eventtap.event.newKeyEventSequence` keeps only the first modifier.
 - `osascript` keystrokes run from the agent's shell fail with "not allowed to send keystrokes", because Accessibility belongs to Hammerspoon. Run them from Hammerspoon with `hs.task`.
@@ -107,10 +107,9 @@ aerospace list-workspaces --focused
 
 ### Asking the user
 
-When a change touches Karabiner, the Caps Lock or Fn handling, or anything the table above cannot check, ask the user to press the keys and report. Keep the list short and specific, for example:
+When a change touches Karabiner, Right Command, or Right Option, or anything the table above cannot check, ask the user to press the keys and report. Keep the list short and specific, for example:
 
-1. Tap Caps Lock: Escape. Hold it for a moment: the System overlay.
-2. Tap Fn: the globe key. Hold it: the App overlay.
-3. Caps Lock+Space, then an arrow, then Escape: locked focus, then unlocked.
-4. Caps Lock+P: Raycast's bar, and Escape puts focus back. Caps Lock+O: the Contexts switcher.
-5. The changed binding, in each app it affects.
+1. Hold Right Command: the App overlay. Hold Right Option: the System overlay.
+2. Right Option+Space, then an arrow, then Escape: locked focus, then unlocked.
+3. Right Option+P: Raycast's bar, and Escape puts focus back.
+4. Tap Fn: the input source changes. The changed binding, in each app it affects.

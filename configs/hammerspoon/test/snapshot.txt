@@ -2,7 +2,7 @@
 # it did: posted keys, processes started, menu items tried, and the overlay
 # left showing. Keys that did nothing are left out.
 
-# System layer, Caps Lock held
+# System layer, Right Option held
 left           aerospace focus --boundaries all-monitors-outer-frame --boundaries-action wrap-around-all-monitors left
 shift+left     aerospace move --boundaries all-monitors-outer-frame --boundaries-action create-implicit-container left
 down           aerospace focus --boundaries all-monitors-outer-frame --boundaries-action wrap-around-all-monitors down
@@ -62,7 +62,7 @@ down           aerospace resize height +100
 up             aerospace resize height -100
 right          aerospace resize width +100
 
-# App layer, Fn held, in com.google.Chrome
+# App layer, Right Command held, in com.google.Chrome
 l              overlay "Layout"
 o              press cmd+shift+a
 p              press cmd+shift+/
@@ -95,7 +95,7 @@ space          overlay "App  ·  locked"
 # App layer, s then the key (Resize), in com.google.Chrome
 (nothing)
 
-# App layer, Fn held, in com.googlecode.iterm2
+# App layer, Right Command held, in com.googlecode.iterm2
 left           menu Window > Select Split Pane > Select Pane Left ; menu Window > Split Pane > Select Split Pane > Select Pane Left ; menu Select Pane Left
 down           menu Window > Select Split Pane > Select Pane Below ; menu Window > Split Pane > Select Split Pane > Select Pane Below ; menu Select Pane Below
 up             menu Window > Select Split Pane > Select Pane Above ; menu Window > Split Pane > Select Split Pane > Select Pane Above ; menu Select Pane Above
@@ -139,7 +139,7 @@ down           menu Window > Resize Split Pane > Move Divider Down ; menu Window
 up             menu Window > Resize Split Pane > Move Divider Up ; menu Window > Split Pane > Resize Split Pane > Move Divider Up ; menu Move Divider Up
 right          menu Window > Resize Split Pane > Move Divider Right ; menu Window > Split Pane > Resize Split Pane > Move Divider Right ; menu Move Divider Right
 
-# App layer, Fn held, in com.microsoft.VSCode
+# App layer, Right Command held, in com.microsoft.VSCode
 left           press cmd+k ; press cmd+left
 down           press cmd+k ; press cmd+down
 up             press cmd+k ; press cmd+up
@@ -182,7 +182,7 @@ f              press cmd+alt+0
 # App layer, s then the key (Resize), in com.microsoft.VSCode
 (nothing)
 
-# App layer, Fn held, in com.todesktop.230313mzl4w4u92
+# App layer, Right Command held, in com.todesktop.230313mzl4w4u92
 left           press cmd+k ; press cmd+left
 down           press cmd+k ; press cmd+down
 up             press cmd+k ; press cmd+up
@@ -225,7 +225,7 @@ f              press cmd+alt+0
 # App layer, s then the key (Resize), in com.todesktop.230313mzl4w4u92
 (nothing)
 
-# App layer, Fn held, in md.obsidian
+# App layer, Right Command held, in md.obsidian
 l              overlay "Layout"
 o              press cmd+o
 p              press cmd+p
@@ -258,7 +258,7 @@ right          menu Split right ; menu Split right
 # App layer, s then the key (Resize), in md.obsidian
 (nothing)
 
-# App layer, Fn held, in com.example.Unlisted
+# App layer, Right Command held, in com.example.Unlisted
 l              overlay "Layout"
 s              overlay "Resize"
 \              overlay "Split"

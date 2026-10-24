@@ -6,15 +6,15 @@ Notes from building `configs/karabiner/karabiner.json` and `configs/hammerspoon/
 
 ### `repeat: false` releases the layer key immediately
 
-`to_if_held_down` with `"repeat": false` posts the key-down and the key-up together. Holding Caps Lock or Fn flashed F18 or F19 and the layer disarmed before the next key. `halt` on that event does not help: `halt` applies to `to_after_key_up`.
+`to_if_held_down` with `"repeat": false` posts the key-down and the key-up together. That is the wrong shape for a layer: holding Right Command or Right Option would flash F18 or F19 and the layer would disarm before the next key. `halt` on that event does not help: `halt` applies to `to_after_key_up`.
 
-Leave `repeat` unset so it stays at its default, enabled. The held key then stays down until the physical key is released.
+Leave `repeat` unset on F18 and F19 so it stays at its default, enabled. The held key then stays down until the physical key is released.
 
 ### `to_if_held_down` waits out the tap timeout
 
-That event is posted only after `basic.to_if_held_down_threshold_milliseconds`. The layer could not arm until 250 ms had passed.
+That event is posted only after `basic.to_if_held_down_threshold_milliseconds`. A layer could not arm until 250 ms had passed, so Right Command and Right Option use `to` instead.
 
-The hold is a `to` event, which Karabiner 16.3 posts on the physical key-down and releases on the physical key-up. The tap is `to_if_alone`, posted on key-up when no other key was pressed and the hold was shorter than `basic.to_if_alone_timeout_milliseconds`. On a tap the order is F18 or F19 down, then that key-up, then Escape or the globe key. The brief F18 or F19 press is a no-op: Hammerspoon arms the layer and disarms it before Escape arrives, and the overlay timer is the same 250 ms, so a tap does not draw the overlay.
+The layer hold is a `to` event, which Karabiner 16.3 posts on the physical key-down and releases on the physical key-up. A tap of either modifier is that key-down and key-up with no other key. The brief F18 or F19 press is a no-op: Hammerspoon arms the layer and disarms it, and the overlay timer is the same 250 ms, so a tap does not draw the overlay.
 
 ### The running grabber ignores edits to the symlink target
 
@@ -22,11 +22,9 @@ The hold is a `to` event, which Karabiner 16.3 posts on the physical key-down an
 
 A directory change next to the symlink makes it reload. Rewriting the symlink with `ln -sfn` and touching that directory logged `core_configuration is updated`. Check that log after a Karabiner edit before deciding the new rules are wrong.
 
-### A posted globe key is another Fn press
+### Fn is not remapped
 
-The native tap is `apple_vendor_top_case_key_code: keyboard_fn` (Event Viewer label "fn (globe)"). The rule's `from` is `key_code: fn`, so the posted globe key matches the same manipulator and would recurse.
-
-`to_if_alone` sets the variable `posting_globe` to 1, posts the globe key, then sets it back to 0. The manipulator runs only under `variable_unless posting_globe == 1`.
+A tap of Fn changes the input source, and Fn+arrow is Home, End, Page Up, and Page Down. An earlier rule posted the globe key on a tap and had to guard against recursion: the posted globe key is another Fn press (`apple_vendor_top_case_key_code: keyboard_fn`), so it matched the same manipulator.
 
 ## Hammerspoon
 
@@ -62,7 +60,7 @@ A session event tap receives nothing while secure input is on, which is the stat
 
 ### Raycast and Contexts
 
-Keys that Hammerspoon posts reach the focused window but never trigger a global hotkey. Flags on the letter, a full modifier-down, letter, modifier-up sequence, and `hs.eventtap.keyStroke` all fail, even against an `hs.hotkey` bound in Hammerspoon itself. `hs.eventtap.event.newKeyEventSequence` is also broken: it keeps only the first modifier and sets no flags. Karabiner-EventViewer reads the keyboard before Hammerspoon, so it shows `F18`+`P` and never the posted keys.
+Keys that Hammerspoon posts reach the focused window but never trigger a global hotkey. Flags on the letter, a full modifier-down, letter, modifier-up sequence, and `hs.eventtap.keyStroke` all fail, even against an `hs.hotkey` bound in Hammerspoon itself. `hs.eventtap.event.newKeyEventSequence` is also broken: it keeps only the first modifier and sets no flags. Karabiner-EventViewer reads the keyboard before Hammerspoon, so it shows `F19`+`P` for the operating-system layer and never the posted keys.
 
 Run command opens Raycast with `open -g -b com.raycast.macos`. With Raycast already running, that shows the search bar, and the bar takes keys. Without `-g`, Raycast also becomes the active app and stays active with no window after Escape closes the bar, so typed keys go nowhere.
 

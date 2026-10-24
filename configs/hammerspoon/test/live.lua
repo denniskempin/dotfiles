@@ -8,7 +8,7 @@
 
 Live = Live or {}
 
-local LAYER_KEY = { os = "f18", app = "f19" }
+local LAYER_KEY = { os = "f19", app = "f18" }
 
 local function defer(fn) hs.timer.doAfter(0, fn) end
 

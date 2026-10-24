@@ -1,8 +1,9 @@
 -- The layer grammar: which key runs which verb, and what the overlay shows.
 --
--- Both layers read the same rows. Caps Lock sends the verb to the operating
--- system and Fn sends it to the front app; targets.lua says what each verb
--- does there. A row with `layer` exists on that layer only.
+-- Both layers read the same rows. Right Option sends the verb to the
+-- operating system and Right Command sends it to the front app; targets.lua
+-- says what each verb does there. A row with `layer` exists on that layer
+-- only.
 --
 -- keys      one key, a list of keys, or a map from key to argument. With a
 --           list the argument is the key name, or `arg(key)` when set.

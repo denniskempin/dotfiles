@@ -25,13 +25,15 @@ To use the same keys for the same actions, we need to define abstract nouns for 
 There are two layer keys:
 
 
-| Role             | Key                                                         |
-| ---------------- | ----------------------------------------------------------- |
-| Operating system | Hold Caps Lock. A tap sends Escape                          |
-| App              | Hold Fn. A tap performs the native action (language change) |
+| Role             | Key                |
+| ---------------- | ------------------ |
+| Operating system | Hold Right Option  |
+| App              | Hold Right Command |
 
 
 `Layer Key + space` will trigger the layer to be locked. The layer key can then be released and all bindings can be used until escape is pressed.
+
+Left Command and Left Option stay modifiers. Fn is the globe key. Caps Lock is Escape.
 
 ### The map
 
@@ -80,18 +82,23 @@ When another key is expected in a sequence, a similar overlay window is shown af
 
 ## Implementation
 
-Karabiner translates two keys. Hammerspoon dispatches the grammar, draws the overlay, and runs the commands. The window manager is AeroSpace, left in `main` with an empty `[mode.main.binding]` table. skhd is not used.
+Karabiner translates two layer keys and maps Caps Lock to Escape. Hammerspoon dispatches the grammar, draws the overlay, and runs the commands. The window manager is AeroSpace, left in `main` with an empty `[mode.main.binding]` table. skhd is not used.
 
 ### Karabiner
 
 
-| From      | Held                       | Alone         | Timeout |
-| --------- | -------------------------- | ------------- | ------- |
-| Caps Lock | F18, via `to` | Escape        | 250 ms  |
-| Fn        | F19, via `to` | the globe key | 250 ms  |
+Caps Lock is a simple modification to Escape. It is Escape while held and when tapped.
 
 
-F18 and F19 are the interface between the two tools. Each goes down with the physical key and stays down until Caps Lock or Fn is released. A release within the timeout is a tap: Karabiner posts that key-up, then Escape or the globe key. The brief F18 or F19 press is a no-op. Leave key repeat enabled. With `repeat` set to `false`, Karabiner posts the key-up at the same time as the key-down, and the layer disarms before the next key. The globe key is the native Fn tap, so macOS changes the input source. Karabiner consumes Fn while it is held, so Fn+arrow never becomes Home, End, or Page Up/Down.
+| From          | Held          | Alone | Timeout |
+| ------------- | ------------- | ----- | ------- |
+| Right Command | F18, via `to` | —     | —       |
+| Right Option  | F19, via `to` | —     | —       |
+
+
+F18 and F19 are the interface between the two tools. Each goes down with the physical key and stays down until Right Command or Right Option is released. A tap is that key-down and key-up with no other key. The brief press is a no-op. Leave key repeat enabled on these two. With `repeat` set to `false`, Karabiner posts the key-up at the same time as the key-down, and the layer disarms before the next key.
+
+Fn is not remapped. A tap changes the input source, and Fn+arrow is Home, End, Page Up, and Page Down.
 
 ### Hammerspoon
 
@@ -99,19 +106,19 @@ F18 and F19 are the interface between the two tools. Each goes down with the phy
 
 One event tap watches key down and key up.
 
-- F18 down arms the operating-system layer. F19 down arms the App layer. Key repeat is ignored, and both keys are swallowed. Key up disarms a layer that is not locked.
+- F18 down arms the App layer. F19 down arms the operating-system layer. Key repeat is ignored, and both keys are swallowed. Key up disarms a layer that is not locked.
 - Space, while a layer is armed and no chord is pending, locks that layer. The layer key can come up and the layer stays armed. Escape, with no chord pending, clears the lock.
 - While a layer is armed, every other key is swallowed. A listed key runs its verb. Shift is read off the event flags. Command combinations are swallowed with the rest.
-- F19+Delete is posted as forward delete. F19+F1 through F12 are unbound, so the Fn-flipped F row is not available.
+- Delete on the App layer is posted as forward delete.
 - A layer that is held or locked shows its overlay after 250 ms. The overlay hides once a binding is selected, and on key up when the layer is not locked. While the layer stays locked, the 250 ms timer starts again after the binding. The overlay is an `hs.canvas` on the focused screen, non-activating. Nothing goes to Notification Center.
 - `\`, `S`, and `L` on the App layer, and `S`, `L`, and `J` on the operating-system layer, start a chord. The layer overlay hides and a follow-up overlay lists the keys that chord accepts. Split, join, and resize accept an arrow. Layout accepts `F` and `=` on the App layer, and `F`, `A`, and `=` on the operating-system layer.
-- While a chord is waiting, the tap keeps swallowing keys after the layer key comes up. A lock stays in force. The pending verb wins over the layer, so an arrow with Caps Lock still down is the argument. F18 and F19 are not arguments. One argument clears the verb. Escape and any unlisted key clear the chord and leave a lock in place. Key repeat is swallowed, including inside a chord.
+- While a chord is waiting, the tap keeps swallowing keys after the layer key comes up. A lock stays in force. The pending verb wins over the layer, so an arrow with the layer key still down is the argument. F18 and F19 are not arguments. One argument clears the verb. Escape and any unlisted key clear the chord and leave a lock in place. Key repeat is swallowed, including inside a chord.
 
 AeroSpace commands run through `hs.task` on a queue, one at a time in key order, so the tap never waits on AeroSpace.
 
 Posted shortcuts re-enter the tap. Hammerspoon marks its own events and ignores them on the way back. A two-stroke shortcut is two marked keystrokes.
 
-With Hammerspoon not running, or in a password field, a Caps Lock tap still sends Escape, a Fn tap still changes the input source, and typed characters are unchanged. The lock and Fn+Delete stop, because those need the tap.
+With Hammerspoon not running, or in a password field, Caps Lock still sends Escape. Right Command and Right Option still become F18 and F19, and those keys do nothing without the tap. Fn still changes the input source. Typed characters are unchanged. The lock and App-layer Delete stop, because those need the tap.
 
 ### Operating system
 
@@ -186,6 +193,6 @@ Where the delivered action cannot do what the specification says, the cell says 
 ## macOS settings
 
 - **Displays have separate Spaces.** Off. System Settings > Desktop & Dock. Cross-monitor Focus and Move depend on it.
-- **Globe key.** System Settings > Keyboard > "Press 🌐 key to": Change Input Source. Karabiner posts the globe key on a Fn tap, and this is the language change.
+- **Globe key.** System Settings > Keyboard > "Press 🌐 key to": Change Input Source. Fn is not remapped, and this setting is the language change.
 - **VoiceOver.** Not a concern. Control+Option is not used.
 

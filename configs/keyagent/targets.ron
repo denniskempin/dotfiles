@@ -1,0 +1,227 @@
+// What each verb does. `system` is the operating-system layer. `apps` is the
+// App layer, keyed by bundle id. An app with no entry ignores the App layer.
+// `$` is the key's argument. `Digit` posts `other_mods` + the argument, except
+// 9, which posts `nine`.
+(
+  system: {
+    "focus": Template(Aero([
+      "focus",
+      "--boundaries",
+      "all-monitors-outer-frame",
+      "--boundaries-action",
+      "wrap-around-all-monitors",
+      "$",
+    ])),
+    "move": Template(Aero([
+      "move",
+      "--boundaries",
+      "all-monitors-outer-frame",
+      "--boundaries-action",
+      "create-implicit-container",
+      "$",
+    ])),
+    "zoom": Aero(["fullscreen"]),
+    "close": Aero(["close"]),
+    "resize": ByArg({
+      "left": Aero(["resize", "width", "-100"]),
+      "right": Aero(["resize", "width", "+100"]),
+      "down": Aero(["resize", "height", "+100"]),
+      "up": Aero(["resize", "height", "-100"]),
+    }),
+    "join": Template(Aero(["join-with", "$"])),
+    "layoutFlip": Aero(["layout", "horizontal", "vertical"]),
+    "layoutAccordion": Aero(["layout", "tiles", "accordion"]),
+    "layoutEqual": Aero(["balance-sizes"]),
+    "switch": Template(Aero(["workspace", "--no-stdin", "--wrap-around", "$"])),
+    "jump": Template(Aero(["workspace", "$"])),
+    "send": Template(Aero([
+      "move-node-to-workspace",
+      "--no-stdin",
+      "--focus-follows-window",
+      "--wrap-around",
+      "$",
+    ])),
+    "sendNumber": Template(Aero(["move-node-to-workspace", "--focus-follows-window", "$"])),
+    "command": Launch("com.raycast.macos"),
+    "open": Hotkey(mods: ["cmd", "alt", "ctrl"], key: "o"),
+    "focusMonitor": Aero(["focus-monitor", "--wrap-around", "next"]),
+    "sendMonitor": Aero(["move-workspace-to-monitor", "--wrap-around", "next"]),
+  },
+  apps: {
+    "com.google.Chrome": {
+      "switch": ByArg({
+        "prev": Stroke(mods: ["cmd", "shift"], key: "["),
+        "next": Stroke(mods: ["cmd", "shift"], key: "]"),
+      }),
+      "jump": Template(Stroke(mods: ["cmd"], key: "$")),
+      "send": ByArg({
+        "prev": Stroke(mods: ["ctrl", "shift"], key: "pageup"),
+        "next": Stroke(mods: ["ctrl", "shift"], key: "pagedown"),
+      }),
+      "history": ByArg({
+        "back": Stroke(mods: ["cmd"], key: "["),
+        "forward": Stroke(mods: ["cmd"], key: "]"),
+      }),
+      "command": Stroke(mods: ["cmd", "shift"], key: "/"),
+      "open": Stroke(mods: ["cmd", "shift"], key: "a"),
+    },
+    "com.microsoft.VSCode": {
+      "focus": Template(Seq([
+        Stroke(mods: ["cmd"], key: "k"),
+        Stroke(mods: ["cmd"], key: "$"),
+      ])),
+      "zoom": Seq([
+        Stroke(mods: ["cmd"], key: "k"),
+        Stroke(mods: ["cmd"], key: "m"),
+      ]),
+      "close": Stroke(mods: ["cmd"], key: "w"),
+      "split": Stroke(mods: ["cmd"], key: "\\"),
+      "layoutFlip": Stroke(mods: ["cmd", "alt"], key: "0"),
+      "switch": ByArg({
+        "prev": Seq([
+          Stroke(mods: ["cmd"], key: "k"),
+          Stroke(mods: ["cmd", "alt"], key: "left"),
+        ]),
+        "next": Seq([
+          Stroke(mods: ["cmd"], key: "k"),
+          Stroke(mods: ["cmd", "alt"], key: "right"),
+        ]),
+      }),
+      "jump": Digit(nine: Stroke(mods: ["cmd"], key: "9"), other_mods: ["ctrl"]),
+      "send": ByArg({
+        "prev": Seq([
+          Stroke(mods: ["cmd"], key: "k"),
+          Stroke(mods: ["cmd", "shift"], key: "left"),
+        ]),
+        "next": Seq([
+          Stroke(mods: ["cmd"], key: "k"),
+          Stroke(mods: ["cmd", "shift"], key: "right"),
+        ]),
+      }),
+      "history": ByArg({
+        "back": Stroke(mods: ["ctrl"], key: "-"),
+        "forward": Stroke(mods: ["ctrl", "shift"], key: "-"),
+      }),
+      "command": Stroke(mods: ["cmd", "shift"], key: "p"),
+      "open": Stroke(mods: ["cmd"], key: "p"),
+    },
+    // Cursor keeps the VS Code keybindings.
+    "com.todesktop.230313mzl4w4u92": {
+      "focus": Template(Seq([
+        Stroke(mods: ["cmd"], key: "k"),
+        Stroke(mods: ["cmd"], key: "$"),
+      ])),
+      "zoom": Seq([
+        Stroke(mods: ["cmd"], key: "k"),
+        Stroke(mods: ["cmd"], key: "m"),
+      ]),
+      "close": Stroke(mods: ["cmd"], key: "w"),
+      "split": Stroke(mods: ["cmd"], key: "\\"),
+      "layoutFlip": Stroke(mods: ["cmd", "alt"], key: "0"),
+      "switch": ByArg({
+        "prev": Seq([
+          Stroke(mods: ["cmd"], key: "k"),
+          Stroke(mods: ["cmd", "alt"], key: "left"),
+        ]),
+        "next": Seq([
+          Stroke(mods: ["cmd"], key: "k"),
+          Stroke(mods: ["cmd", "alt"], key: "right"),
+        ]),
+      }),
+      "jump": Digit(nine: Stroke(mods: ["cmd"], key: "9"), other_mods: ["ctrl"]),
+      "send": ByArg({
+        "prev": Seq([
+          Stroke(mods: ["cmd"], key: "k"),
+          Stroke(mods: ["cmd", "shift"], key: "left"),
+        ]),
+        "next": Seq([
+          Stroke(mods: ["cmd"], key: "k"),
+          Stroke(mods: ["cmd", "shift"], key: "right"),
+        ]),
+      }),
+      "history": ByArg({
+        "back": Stroke(mods: ["ctrl"], key: "-"),
+        "forward": Stroke(mods: ["ctrl", "shift"], key: "-"),
+      }),
+      "command": Stroke(mods: ["cmd", "shift"], key: "p"),
+      "open": Stroke(mods: ["cmd"], key: "p"),
+    },
+    "com.googlecode.iterm2": {
+      "focus": MenuDir(
+        items: {
+          "left": "Select Pane Left",
+          "down": "Select Pane Below",
+          "up": "Select Pane Above",
+          "right": "Select Pane Right",
+        },
+        paths: [
+          ["Window", "Select Split Pane", "$"],
+          ["Window", "Split Pane", "Select Split Pane", "$"],
+          ["$"],
+        ],
+      ),
+      "zoom": Menu([
+        ["View", "Maximize Active Pane"],
+        ["Maximize Active Pane"],
+      ]),
+      "close": Stroke(mods: ["cmd"], key: "w"),
+      "split": ByArg({
+        "down": Stroke(mods: ["cmd", "shift"], key: "d"),
+        "right": Stroke(mods: ["cmd"], key: "d"),
+      }),
+      "resize": MenuDir(
+        items: {
+          "left": "Move Divider Left",
+          "down": "Move Divider Down",
+          "up": "Move Divider Up",
+          "right": "Move Divider Right",
+        },
+        paths: [
+          ["Window", "Resize Split Pane", "$"],
+          ["Window", "Split Pane", "Resize Split Pane", "$"],
+          ["$"],
+        ],
+      ),
+      "layoutEqual": Menu([
+        ["Window", "Arrange Windows", "Arrange Split Panes Evenly"],
+        ["Arrange Split Panes Evenly"],
+      ]),
+      "switch": ByArg({
+        "prev": Stroke(mods: ["cmd"], key: "left"),
+        "next": Stroke(mods: ["cmd"], key: "right"),
+      }),
+      "jump": Template(Stroke(mods: ["cmd"], key: "$")),
+      "send": ByArg({
+        "prev": Stroke(mods: ["cmd", "shift"], key: "left"),
+        "next": Stroke(mods: ["cmd", "shift"], key: "right"),
+      }),
+      "history": ByArg({
+        "back": Stroke(mods: ["alt"], key: "j"),
+        "forward": Stroke(mods: ["alt"], key: "k"),
+      }),
+      "command": Stroke(mods: ["cmd", "shift"], key: "/"),
+      "open": Menu([
+        ["View", "Open Quickly"],
+        ["Open Quickly"],
+      ]),
+    },
+    "md.obsidian": {
+      "close": Stroke(mods: ["cmd"], key: "w"),
+      "split": ByArg({
+        "down": Menu([["Split down"], ["Split down"]]),
+        "right": Menu([["Split right"], ["Split right"]]),
+      }),
+      "switch": ByArg({
+        "prev": Stroke(mods: ["cmd", "shift"], key: "["),
+        "next": Stroke(mods: ["cmd", "shift"], key: "]"),
+      }),
+      "jump": Template(Stroke(mods: ["cmd"], key: "$")),
+      "history": ByArg({
+        "back": Stroke(mods: ["cmd", "alt"], key: "left"),
+        "forward": Stroke(mods: ["cmd", "alt"], key: "right"),
+      }),
+      "command": Stroke(mods: ["cmd"], key: "p"),
+      "open": Stroke(mods: ["cmd"], key: "o"),
+    },
+  },
+)

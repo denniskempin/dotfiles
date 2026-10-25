@@ -23,7 +23,6 @@ in
     "${appConfig}/Cursor/User/settings.json".source = link "cursor/settings.json";
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
-    ".hammerspoon".source = link "hammerspoon";
     "${appConfig}/Code/User/settings.json".source = link "vscode/settings.json";
     "${appConfig}/Code/User/keybindings.json".source = link "vscode/keybindings.json";
   };
@@ -43,6 +42,7 @@ in
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
     "aerospace".source = link "aerospace";
     "karabiner/karabiner.json".source = link "karabiner/karabiner.json";
+    "keyagent".source = link "keyagent";
   };
 
   # A missing checkout would leave every link above dangling without an error.

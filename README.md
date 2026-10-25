@@ -14,7 +14,7 @@ Configuration for macOS and Linux machines.
   - `nix/darwin/` is nix-darwin config shared by every Mac: Homebrew, system
     defaults, and the user account.
   - `nix/hosts/` has one file per Mac with its hostname and state version.
-- `docs/` has the keybinding spec that covers Karabiner, Hammerspoon,
+- `docs/` has the keybinding spec that covers Karabiner, Keyagent,
   AeroSpace, and app shortcuts.
 
 Every machine keeps this checkout at `~/dotfiles`. Run `git add` on new `.nix`

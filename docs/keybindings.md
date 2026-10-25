@@ -80,7 +80,7 @@ When another key is expected in a sequence, a similar overlay window is shown af
 
 ## Implementation
 
-Karabiner translates two keys. Hammerspoon dispatches the grammar, draws the overlay, and runs the commands. The window manager is AeroSpace, left in `main` with an empty `[mode.main.binding]` table. skhd is not used.
+Karabiner translates two keys. Keyagent dispatches the grammar, draws the overlay, and runs the commands. The window manager is AeroSpace, left in `main` with an empty `[mode.main.binding]` table. skhd is not used.
 
 ### Karabiner
 
@@ -93,25 +93,25 @@ Karabiner translates two keys. Hammerspoon dispatches the grammar, draws the ove
 
 F18 and F19 are the interface between the two tools. Each goes down with the physical key and stays down until Caps Lock or Fn is released. A release within the timeout is a tap: Karabiner posts that key-up, then Escape or the globe key. The brief F18 or F19 press is a no-op. Leave key repeat enabled. With `repeat` set to `false`, Karabiner posts the key-up at the same time as the key-down, and the layer disarms before the next key. The globe key is the native Fn tap, so macOS changes the input source. Karabiner consumes Fn while it is held, so Fn+arrow never becomes Home, End, or Page Up/Down.
 
-### Hammerspoon
+### Keyagent
 
-`configs/hammerspoon/bindings.lua` holds the grammar as rows: key, Shift, verb or chord, and the overlay line. `configs/hammerspoon/targets.lua` says what each verb does on the operating system and in each app. `init.lua` runs the tap and the layer state, and needs no edit to change a binding.
+`configs/keyagent/bindings.ron` holds the grammar as rows: key, Shift, verb or chord, and the overlay line. `configs/keyagent/targets.ron` says what each verb does on the operating system and in each app. The agent loads both at start and again when either file changes, so a binding edit does not rebuild it. `keyagent/` is the tap and the layer state.
 
-One event tap watches key down and key up.
+One modifying session event tap watches key down and key up.
 
 - F18 down arms the operating-system layer. F19 down arms the App layer. Key repeat is ignored, and both keys are swallowed. Key up disarms a layer that is not locked.
 - Space, while a layer is armed and no chord is pending, locks that layer. The layer key can come up and the layer stays armed. Escape, with no chord pending, clears the lock.
 - While a layer is armed, every other key is swallowed. A listed key runs its verb. Shift is read off the event flags. Command combinations are swallowed with the rest.
 - F19+Delete is posted as forward delete. F19+F1 through F12 are unbound, so the Fn-flipped F row is not available.
-- A layer that is held or locked shows its overlay after 250 ms. The overlay hides once a binding is selected, and on key up when the layer is not locked. While the layer stays locked, the 250 ms timer starts again after the binding. The overlay is an `hs.canvas` on the focused screen, non-activating. Nothing goes to Notification Center.
+- A layer that is held or locked shows its overlay after 250 ms. The overlay hides once a binding is selected, and on key up when the layer is not locked. While the layer stays locked, the 250 ms timer starts again after the binding. The overlay is a non-activating panel on the focused screen. Nothing goes to Notification Center.
 - `\`, `S`, and `L` on the App layer, and `S`, `L`, and `J` on the operating-system layer, start a chord. The layer overlay hides and a follow-up overlay lists the keys that chord accepts. Split, join, and resize accept an arrow. Layout accepts `F` and `=` on the App layer, and `F`, `A`, and `=` on the operating-system layer.
 - While a chord is waiting, the tap keeps swallowing keys after the layer key comes up. A lock stays in force. The pending verb wins over the layer, so an arrow with Caps Lock still down is the argument. F18 and F19 are not arguments. One argument clears the verb. Escape and any unlisted key clear the chord and leave a lock in place. Key repeat is swallowed, including inside a chord.
 
-AeroSpace commands run through `hs.task` on a queue, one at a time in key order, so the tap never waits on AeroSpace.
+AeroSpace commands run on a worker queue, one at a time in key order, so the tap never waits on AeroSpace.
 
-Posted shortcuts re-enter the tap. Hammerspoon marks its own events and ignores them on the way back. A two-stroke shortcut is two marked keystrokes.
+Posted shortcuts re-enter the tap. Keyagent stamps them with `kCGEventSourceUserData` `0x4B424C31` and ignores them on the way back. A two-stroke shortcut is two marked keystrokes.
 
-With Hammerspoon not running, or in a password field, a Caps Lock tap still sends Escape, a Fn tap still changes the input source, and typed characters are unchanged. The lock and Fn+Delete stop, because those need the tap.
+With Keyagent not running, or in a password field, a Caps Lock tap still sends Escape, a Fn tap still changes the input source, and typed characters are unchanged. The lock and Fn+Delete stop, because those need the tap.
 
 ### Operating system
 
@@ -152,7 +152,7 @@ Cross-monitor Focus and Move require "Displays have separate Spaces" off.
 
 ### App integration
 
-Hammerspoon names the frontmost app and delivers that app's own shortcut, or selects a menu item when the action has no shortcut. The apps keep the bindings they already have. The translation lives in Hammerspoon.
+Keyagent names the frontmost app and delivers that app's own shortcut, or selects a menu item when the action has no shortcut. The apps keep the bindings they already have. The translation lives in Keyagent.
 
 An app with no row below ignores the App layer.
 
@@ -160,7 +160,7 @@ Walk history in iTerm posts Option+J and Option+K, which fish binds to `prevd` a
 
 ## Per-app delivery
 
-A cell is the shortcut Hammerspoon posts. A `menu` cell is the item it selects. A dash means the app has neither.
+A cell is the shortcut Keyagent posts. A `menu` cell is the item it selects. A dash means the app has neither.
 
 Where the delivered action cannot do what the specification says, the cell says so. Cursor uses the VS Code column.
 

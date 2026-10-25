@@ -1,6 +1,6 @@
 # Implementation gotchas
 
-Notes from building `configs/karabiner/karabiner.json` and `configs/hammerspoon/` against `keybindings.md`. Each item is something that failed or could not be done the obvious way.
+Notes from building `configs/karabiner/karabiner.json` and `configs/keyagent/` against `keybindings.md`. Each item is something that failed or could not be done the obvious way.
 
 ## Karabiner
 
@@ -14,7 +14,7 @@ Leave `repeat` unset so it stays at its default, enabled. The held key then stay
 
 That event is posted only after `basic.to_if_held_down_threshold_milliseconds`. The layer could not arm until 250 ms had passed.
 
-The hold is a `to` event, which Karabiner 16.3 posts on the physical key-down and releases on the physical key-up. The tap is `to_if_alone`, posted on key-up when no other key was pressed and the hold was shorter than `basic.to_if_alone_timeout_milliseconds`. On a tap the order is F18 or F19 down, then that key-up, then Escape or the globe key. The brief F18 or F19 press is a no-op: Hammerspoon arms the layer and disarms it before Escape arrives, and the overlay timer is the same 250 ms, so a tap does not draw the overlay.
+The hold is a `to` event, which Karabiner 16.3 posts on the physical key-down and releases on the physical key-up. The tap is `to_if_alone`, posted on key-up when no other key was pressed and the hold was shorter than `basic.to_if_alone_timeout_milliseconds`. On a tap the order is F18 or F19 down, then that key-up, then Escape or the globe key. The brief F18 or F19 press is a no-op: Keyagent arms the layer and disarms it before Escape arrives, and the overlay timer is the same 250 ms, so a tap does not draw the overlay.
 
 ### The running grabber ignores edits to the symlink target
 
@@ -28,21 +28,21 @@ The native tap is `apple_vendor_top_case_key_code: keyboard_fn` (Event Viewer la
 
 `to_if_alone` sets the variable `posting_globe` to 1, posts the globe key, then sets it back to 0. The manipulator runs only under `variable_unless posting_globe == 1`.
 
-## Hammerspoon
+## Keyagent
 
 ### Posted shortcuts come back through the tap
 
-Events posted with `hs.eventtap` are visible to the same tap. Every posted key is stamped with `eventSourceUserData` `0x4B424C31`, and `handle` returns those events unchanged. A two-stroke shortcut is two marked keystrokes 20 ms apart so the app sees a chord rather than one merged press.
+Events posted with `CGEventPost` are visible to the same tap. Every posted key is stamped with `kCGEventSourceUserData` `0x4B424C31`, and the callback returns those events before it touches the layer state. A two-stroke shortcut is two marked keystrokes 20 ms apart so the app sees a chord rather than one merged press.
 
-`Keybindings.tap` is a global. A tap stored only in a local is collected and stops.
+The mach port and its run-loop source stay alive for the process lifetime. A tap stored only in a local is released and stops.
 
 ### AeroSpace commands cannot run inside the tap
 
-The tap callback holds every key on the system until it returns. `hs.execute` waits for the command to exit: 10 to 20 ms per `aerospace` call when AeroSpace is idle, and seconds when AeroSpace waits on an app that is slow to answer it. Long enough, and macOS disables the tap, so a layer key-up can be missed and the layer stays armed.
+The tap callback holds every key on the system until it returns. Waiting for `aerospace` takes 10 to 20 ms when AeroSpace is idle, and seconds when AeroSpace waits on an app that is slow to answer it. Long enough, and macOS disables the tap, so a layer key-up can be missed and the layer stays armed. The callback re-enables the tap when macOS reports that, which does not recover a key-up that was already dropped.
 
-Commands go through `hs.task` on a queue that runs one command at a time in key order. A command still running after 5 seconds is terminated.
+Commands go through a worker queue that runs one command at a time in key order. A command still running after 5 seconds is killed.
 
-`workspace next` and `move-node-to-workspace next` pass `--no-stdin`. Without it AeroSpace may take its workspace list from stdin, and `hs.task` leaves stdin open as a pipe.
+`workspace next` and `move-node-to-workspace next` pass `--no-stdin`. Without it AeroSpace may take its workspace list from stdin, and a child left with an open stdin pipe will wait.
 
 ### iTerm's menus
 
@@ -62,11 +62,11 @@ A session event tap receives nothing while secure input is on, which is the stat
 
 ### Raycast and Contexts
 
-Keys that Hammerspoon posts reach the focused window but never trigger a global hotkey. Flags on the letter, a full modifier-down, letter, modifier-up sequence, and `hs.eventtap.keyStroke` all fail, even against an `hs.hotkey` bound in Hammerspoon itself. `hs.eventtap.event.newKeyEventSequence` is also broken: it keeps only the first modifier and sets no flags. Karabiner-EventViewer reads the keyboard before Hammerspoon, so it shows `F18`+`P` and never the posted keys.
+Keys that Keyagent posts reach the focused window but never trigger a global hotkey. Flags on the letter and a full modifier-down, letter, modifier-up sequence both fail. Karabiner-EventViewer reads the keyboard before Keyagent, so it shows `F18`+`P` and never the posted keys.
 
 Run command opens Raycast with `open -g -b com.raycast.macos`. With Raycast already running, that shows the search bar, and the bar takes keys. Without `-g`, Raycast also becomes the active app and stays active with no window after Escape closes the bar, so typed keys go nowhere.
 
-Contexts has no URL scheme or AppleScript dictionary, so Open document still goes through its Hyper+`O` hotkey (Command-Option-Control). The keystroke comes from System Events through `osascript`, run with `hs.task`, and that does trigger the hotkey. The first run asks for permission for Hammerspoon to control System Events. System Events keys reach the tap like typed keys, and the armed layer would swallow them. `actions.isExpected` lets through the expected key code with Command, Option, and Control set, until its key-up or for 2 seconds. A typed `O` has none of those flags, so it still reaches the layer. Contexts must be running. It is a login item, and with no copy running the key does nothing.
+Contexts has no URL scheme or AppleScript dictionary, so Open document still goes through its Hyper+`O` hotkey (Command-Option-Control). The keystroke comes from System Events through `osascript`, and that does trigger the hotkey. The first run asks for permission for Keyagent to control System Events. System Events keys reach the tap like typed keys, and the armed layer would swallow them. The agent lets through the expected key code with Command, Option, and Control set, until its key-up or for 2 seconds. A typed `O` has none of those flags, so it still reaches the layer. Contexts must be running. It is a login item, and with no copy running the key does nothing.
 
 Raycast stores that chord as the defaults string `raycastGlobalHotkey`. Key code 35 is `P`. The previous value was `Shift-Control-Option-Command-49`, Hyper-Shift-Space. The Application Support directory is encrypted SQLite (clipboard, AI, activity) plus window frames and install ids in the preferences plist. None of that is linked, and no Nix module sets the hotkey string either. It is machine state.
 
@@ -74,4 +74,6 @@ Contexts stores the switcher chord as an `NSKeyedArchiver` blob, `CTPreferenceSe
 
 ## Install
 
-`nix/home/links.nix` links `~/.hammerspoon` to `configs/hammerspoon` and `~/.config/karabiner/karabiner.json` to `configs/karabiner/karabiner.json`. An older copy of `karabiner.json` that mapped Caps Lock to Hyper or Escape has been deleted, so a rebuild cannot bring that profile back.
+`nix/home/links.nix` links `~/.config/keyagent` to `configs/keyagent` and `~/.config/karabiner/karabiner.json` to `configs/karabiner/karabiner.json`. An older copy of `karabiner.json` that mapped Caps Lock to Hyper or Escape has been deleted, so a rebuild cannot bring that profile back.
+
+Keyagent is a launchd agent, `com.denniskempin.keyagent`, running `Keyagent.app`. A rebuild changes the ad-hoc signature's cdhash, and macOS drops the Accessibility grant until Keyagent is enabled again. Binding edits do not: the agent reloads the RON files in place.

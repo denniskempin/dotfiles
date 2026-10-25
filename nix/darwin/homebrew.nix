@@ -36,7 +36,6 @@
       "docker-desktop"
       "google-chrome"
       "google-gemini"
-      "hammerspoon"
       "iterm2"
       "karabiner-elements"
       "kicad"

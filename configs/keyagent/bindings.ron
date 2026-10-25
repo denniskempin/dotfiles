@@ -1,0 +1,192 @@
+// Which key runs which verb, and what the overlay shows.
+// Both layers read the same rows. A row with `layer` exists on that layer only.
+// `key_args` maps a key to the argument passed to the verb. A `keys` list
+// passes the key name itself.
+(
+  titles: {
+    "os": "System",
+    "app": "App",
+  },
+  columns: [
+    [
+      (
+        keys: ["left", "down", "up", "right"],
+        verb: "focus",
+        label: "Focus tile",
+        hint: "← ↓ ↑ →",
+      ),
+      (
+        keys: ["left", "down", "up", "right"],
+        shift: true,
+        verb: "move",
+        label: "Move tile",
+        hint: "⇧ ← ↓ ↑ →",
+      ),
+      (
+        keys: ["return"],
+        verb: "zoom",
+        label: "Zoom tile",
+        hint: "↩",
+      ),
+      (
+        keys: ["x"],
+        verb: "close",
+        label: "Close tile",
+        hint: "X",
+      ),
+      (
+        keys: ["\\"],
+        layer: "app",
+        chord: "split",
+        label: "Split tile",
+        hint: "\\ then arrow",
+      ),
+      (
+        keys: ["s"],
+        chord: "resize",
+        label: "Resize tile",
+        hint: "S then arrow",
+      ),
+      (
+        keys: ["l"],
+        layer: "os",
+        chord: "layout",
+        label: "Layout tiles",
+        hint: "L then F A =",
+      ),
+      (
+        keys: ["l"],
+        layer: "app",
+        chord: "layout",
+        label: "Layout tiles",
+        hint: "L then F =",
+      ),
+      (
+        keys: ["j"],
+        layer: "os",
+        chord: "join",
+        label: "Join tile",
+        hint: "J then arrow",
+      ),
+    ],
+    [
+      (
+        key_args: {
+          ";": "prev",
+          "'": "next",
+        },
+        verb: "switch",
+        label: "Switch slot",
+        hint: ";  '",
+      ),
+      (
+        keys: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+        layer: "os",
+        verb: "jump",
+        label: "Jump to slot",
+        hint: "1–9",
+      ),
+      (
+        keys: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+        layer: "app",
+        verb: "jump",
+        label: "Jump to slot",
+        hint: "1–8   9",
+      ),
+      (
+        key_args: {
+          ";": "prev",
+          "'": "next",
+        },
+        shift: true,
+        verb: "send",
+        label: "Send to slot",
+        hint: "⇧ ; ' 1–9",
+      ),
+      (
+        keys: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+        shift: true,
+        verb: "sendNumber",
+      ),
+      (
+        key_args: {
+          "[": "back",
+          "]": "forward",
+        },
+        layer: "app",
+        verb: "history",
+        label: "Walk history",
+        hint: "[  ]",
+      ),
+      (
+        keys: ["p"],
+        verb: "command",
+        label: "Run command",
+        hint: "P",
+      ),
+      (
+        keys: ["o"],
+        verb: "open",
+        label: "Open document",
+        hint: "O",
+      ),
+      (
+        keys: ["tab"],
+        layer: "os",
+        verb: "focusMonitor",
+        label: "Focus monitor",
+        hint: "⇥",
+      ),
+      (
+        keys: ["tab"],
+        layer: "os",
+        shift: true,
+        verb: "sendMonitor",
+        label: "Send slot",
+        hint: "⇧ ⇥",
+      ),
+      (
+        keys: ["delete"],
+        layer: "app",
+        run: "forwardDelete",
+      ),
+    ],
+  ],
+  chords: {
+    "resize": (
+      title: "Resize",
+      rows: [
+        (keys: ["left"], verb: "resize", label: "Shrink width", hint: "←"),
+        (keys: ["right"], verb: "resize", label: "Grow width", hint: "→"),
+        (keys: ["down"], verb: "resize", label: "Grow height", hint: "↓"),
+        (keys: ["up"], verb: "resize", label: "Shrink height", hint: "↑"),
+      ],
+    ),
+    "split": (
+      title: "Split",
+      rows: [
+        (keys: ["left"], verb: "split", label: "Left", hint: "←"),
+        (keys: ["down"], verb: "split", label: "Down", hint: "↓"),
+        (keys: ["up"], verb: "split", label: "Up", hint: "↑"),
+        (keys: ["right"], verb: "split", label: "Right", hint: "→"),
+      ],
+    ),
+    "join": (
+      title: "Join",
+      rows: [
+        (keys: ["left"], verb: "join", label: "Left", hint: "←"),
+        (keys: ["down"], verb: "join", label: "Down", hint: "↓"),
+        (keys: ["up"], verb: "join", label: "Up", hint: "↑"),
+        (keys: ["right"], verb: "join", label: "Right", hint: "→"),
+      ],
+    ),
+    "layout": (
+      title: "Layout",
+      rows: [
+        (keys: ["f"], verb: "layoutFlip", label: "Flip axis", hint: "F"),
+        (keys: ["a"], layer: "os", verb: "layoutAccordion", label: "Tiled / accordion", hint: "A"),
+        (keys: ["="], verb: "layoutEqual", label: "Equalize", hint: "="),
+      ],
+    ),
+  },
+)

@@ -23,7 +23,7 @@
   };
 
   # Login items have no nix-darwin option. Recorded so a later reconcile can
-  # see them: Contexts, Hammerspoon, TopNotch, Raycast, Gemini, Todoist.
+  # see them: Contexts, Keyagent, TopNotch, Raycast, Gemini, Todoist.
   #
   # ~/Library/LaunchAgents/com.google.GoogleUpdater.wake.plist belongs to
   # Chrome, which rewrites it on update.

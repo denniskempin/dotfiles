@@ -32,7 +32,7 @@ local function render(spec)
     end
   end
   local pad, titleH, rowH, footerH, gap = 16, 28, 22, 22, 18
-  local colW = columns and 248 or 280
+  local colW = spec.colW or (columns and 248 or 280)
   local nCols = columns and #columns or 1
   local width = pad * 2 + colW * nCols + gap * (nCols - 1)
   local height = pad + titleH + 6 + rowCount * rowH + footerH + 8
@@ -82,18 +82,27 @@ local function render(spec)
     },
   }
   local function addRow(row, x, y)
-    local verbW = math.floor(colW * 0.56)
+    local verbW = math.floor(colW * (spec.verbShare or 0.56))
+    if row.selected then
+      elements[#elements + 1] = {
+        type = "rectangle",
+        action = "fill",
+        fillColor = { hex = accent.hex, alpha = 0.16 },
+        roundedRectRadii = { xRadius = 6, yRadius = 6 },
+        frame = { x = x - 6, y = y, w = colW + 6, h = rowH },
+      }
+    end
     elements[#elements + 1] = {
       type = "text",
       text = row.label,
-      textColor = { white = 0.92 },
+      textColor = row.selected and accent or { white = 0.92 },
       textSize = 13,
       textFont = ".AppleSystemUIFont",
       frame = { x = x, y = y, w = verbW, h = rowH },
     }
     elements[#elements + 1] = {
       type = "text",
-      text = row.hint,
+      text = row.hint or "",
       textColor = accent,
       textSize = 13,
       textFont = ".AppleSystemUIFont",

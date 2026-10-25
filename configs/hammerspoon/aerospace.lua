@@ -26,13 +26,15 @@ local running
 
 local pump
 
-local function finish(job, code)
+local function finish(job, code, stdout)
   if job.timer then
     job.timer:stop()
     job.timer = nil
   end
   if code ~= 0 then log.w("aerospace " .. job.id) end
+  local callback = job.callback
   running = nil
+  if callback then callback(code, stdout or "") end
   pump()
 end
 
@@ -42,7 +44,7 @@ pump = function()
   if running or #queue == 0 then return end
   local job = table.remove(queue, 1)
   running = job
-  job.task = hs.task.new(BINARY, function(code) finish(job, code) end, job.args)
+  job.task = hs.task.new(BINARY, function(code, stdout) finish(job, code, stdout) end, job.args)
   if not job.task or not job.task:start() then
     finish(job, -1)
     return
@@ -53,14 +55,25 @@ pump = function()
   end)
 end
 
-function M.command(args)
+local function enqueue(args, callback)
   local id = table.concat(args, " ")
   if not BINARY then
     log.w("aerospace " .. id)
+    if callback then callback(-1, "") end
     return
   end
-  queue[#queue + 1] = { id = id, args = args }
+  queue[#queue + 1] = { id = id, args = args, callback = callback }
   pump()
+end
+
+function M.command(args)
+  enqueue(args)
+end
+
+-- Like command, and the callback receives the exit code and stdout. It runs
+-- before the next queued command, so the callback may enqueue a follow-up.
+function M.query(args, callback)
+  enqueue(args, callback)
 end
 
 return M

@@ -33,7 +33,7 @@ for code, name in pairs(CODES) do
   KEYMAP[name] = code
 end
 
-local MODULES = { "actions", "aerospace", "bindings", "overlay", "targets" }
+local MODULES = { "actions", "aerospace", "bindings", "overlay", "switcher", "targets" }
 
 local chunks = {}
 local function chunk(name)
@@ -46,7 +46,7 @@ end
 local MOD_ORDER = { "cmd", "alt", "ctrl", "shift", "fn" }
 local USING = { command = "cmd", option = "alt", control = "ctrl", shift = "shift" }
 local PROPS = { eventSourceUserData = 42, keyboardEventAutorepeat = 8 }
-local TYPES = { keyDown = 10, keyUp = 11 }
+local TYPES = { keyDown = 10, keyUp = 11, flagsChanged = 12 }
 
 -- Accepts { "cmd", "shift" } or { cmd = true, shift = true }.
 local function flagSet(mods)
@@ -82,6 +82,7 @@ local M = { KEYMAP = KEYMAP, CODES = CODES }
 -- opts.hang            function(path, args) returning true keeps that process running
 -- opts.deliverHotkeys  false drops System Events keystrokes
 -- opts.menus           set of "A > B > C" menu paths the front app has
+-- opts.stdout          function(args) returning the stdout of a finished process
 -- opts.bindings        a table that replaces bindings.lua
 -- opts.targets         function(actions) returning a table that replaces targets.lua
 function M.new(opts)
@@ -99,6 +100,7 @@ function M.new(opts)
     hang = opts.hang,
     deliverHotkeys = opts.deliverHotkeys ~= false,
     menus = opts.menus or {},
+    stdout = opts.stdout,
     overlay = { visible = false, shows = 0, texts = {} },
   }, World)
   w:load()
@@ -184,16 +186,20 @@ end
 -- Input. Each returns true when the event goes on to apps, false when the
 -- tap swallows it.
 
-function World:event(code, down, flags, isRepeat)
+function World:event(code, down, flags, isRepeat, kind)
   local w = self
   local e = {
     code = code,
     down = down,
     flags = flags,
+    kind = kind,
     props = { [PROPS.eventSourceUserData] = 0, [PROPS.keyboardEventAutorepeat] = isRepeat and 1 or 0 },
   }
   function e:getKeyCode() return e.code end
-  function e:getType() return e.down and TYPES.keyDown or TYPES.keyUp end
+  function e:getType()
+    if e.kind then return e.kind end
+    return e.down and TYPES.keyDown or TYPES.keyUp
+  end
   function e:getFlags()
     local copy = {}
     for k, v in pairs(e.flags) do copy[k] = v end
@@ -211,6 +217,10 @@ end
 function World:toTap(e)
   if not (self.tapFn and self.tapRunning) then return true end
   return self.tapFn(e) ~= true
+end
+
+function World:flags(mods)
+  return self:toTap(self:event(keyCode("fn"), false, flagSet(mods), false, TYPES.flagsChanged))
 end
 
 function World:down(key, mods)
@@ -283,7 +293,9 @@ function World:task(path, callback, args)
     if t.done then return end
     t.done = true
     if code == 0 and deliver then deliver() end
-    callback(code, "", "")
+    local out = ""
+    if w.stdout then out = w.stdout(args) or "" end
+    callback(code, out, "")
   end
   function t:start()
     w:record(effect)

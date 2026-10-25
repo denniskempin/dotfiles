@@ -13,7 +13,7 @@ right          aerospace focus --boundaries all-monitors-outer-frame --boundarie
 shift+right    aerospace move --boundaries all-monitors-outer-frame --boundaries-action create-implicit-container right
 j              overlay "Join"
 l              overlay "Layout"
-o              system-events cmd+alt+ctrl+o
+o              aerospace list-windows --all --format %{window-id} ::: %{app-name} ::: %{workspace} ::: %{window-title} ; overlay "Windows"
 p              open -g -b com.raycast.macos
 s              overlay "Resize"
 x              aerospace close

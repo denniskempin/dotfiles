@@ -9,7 +9,7 @@
 local actions = require("actions")
 
 local stroke, seq, menu = actions.stroke, actions.seq, actions.menu
-local aero, launch, hotkey = actions.aero, actions.launch, actions.hotkey
+local aero, launch = actions.aero, actions.launch
 
 local system = {
   focus = function(dir)
@@ -48,8 +48,6 @@ local system = {
     return aero("move-node-to-workspace", "--focus-follows-window", tostring(n))
   end,
   command = launch("com.raycast.macos"),
-  -- Contexts has no URL scheme or AppleScript dictionary, only its hotkey.
-  open = hotkey({ "cmd", "alt", "ctrl" }, "o"),
   focusMonitor = aero("focus-monitor", "--wrap-around", "next"),
   sendMonitor = aero("move-workspace-to-monitor", "--wrap-around", "next"),
 }

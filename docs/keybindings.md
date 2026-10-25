@@ -69,7 +69,7 @@ Left Command and Left Option stay modifiers. Fn is the globe key. Caps Lock is E
 | ------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------- |
 | Walk history  | `[` back, `]` forward | —                                                                                                                                          | Back and forward in that app                |
 | Run command   | `P`                   | Open the command launcher                                                                                                                  | Open the command palette                    |
-| Open document | `O`                   | Open the document switcher                                                                                                                 | Open the switcher for documents in this app |
+| Open document | `O`                   | Search windows. Return moves the chosen one onto this workspace                                                                              | Open the switcher for documents in this app |
 | Focus monitor        | Tab               | Focus the next monitor. With two monitors, that is the other one |
 | Send slot to monitor | Shift+Tab         | Move the current workspace to the next monitor                   |
 
@@ -118,7 +118,7 @@ AeroSpace commands run through `hs.task` on a queue, one at a time in key order,
 
 Posted shortcuts re-enter the tap. Hammerspoon marks its own events and ignores them on the way back. A two-stroke shortcut is two marked keystrokes.
 
-With Hammerspoon not running, or in a password field, Caps Lock still sends Escape. Right Command and Right Option still become F18 and F19, and those keys do nothing without the tap. Fn still changes the input source. Typed characters are unchanged. The lock and App-layer Delete stop, because those need the tap.
+With Hammerspoon not running, or in a password field, Caps Lock still sends Escape. Right Command and Right Option still become F18 and F19, and those keys do nothing without the tap. Fn still changes the input source. Typed characters are unchanged. The lock, the Fn window search, and App-layer Delete stop, because those need the tap.
 
 ### Operating system
 
@@ -142,8 +142,10 @@ Each operating-system key runs `aerospace`.
 | Layout accordion     | `layout tiles accordion`                                                                         |
 | Layout equalize      | `balance-sizes`                                                                                  |
 | Run command          | `open -g -b com.raycast.macos`, which shows Raycast's search bar                                 |
-| Open document        | Hyper+`O`, Contexts' hotkey, sent through System Events                                          |
+| Open document        | Search windows. Return runs `move-node-to-workspace --focus-follows-window` onto the focused workspace. A window already there is focused |
 
+
+Holding Fn and typing focuses a window without moving it. The letters are a prefix of the app name, the title, or a word in either, and releasing Fn focuses the first match. Fn itself is not swallowed: a tap still changes the input source, and Fn with an arrow is still Home, End, Page Up, or Page Down. The list appears on the first letter, or after the overlay delay when Fn is held with no letter yet. Releasing Fn with an empty query focuses nothing.
 
 `layout horizontal vertical` picks the first argument that is not the current layout, so the axis flips and tiled-versus-accordion stays. `layout tiles accordion` toggles the other way and keeps the axis. `balance-sizes` equalizes every window in the current workspace, including windows nested by Join.
 

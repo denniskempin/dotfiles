@@ -2,7 +2,7 @@
 -- depend on the real bindings. snapshot.txt covers those.
 --
 -- Both layers:  arrows go, Shift+arrows carry, S starts the "pick" chord
--- OS layer:     P launches, O sends a hotkey
+-- OS layer:     P launches, O sends a hotkey, B searches windows
 -- App layer:    K posts a two-stroke sequence, M tries three menu paths
 -- Only APP has App-layer targets.
 
@@ -26,6 +26,7 @@ function M.bindings()
       {
         { keys = "p", layer = "os", verb = "launch", label = "Launch", hint = "P" },
         { keys = "o", layer = "os", verb = "hotkey", label = "Hotkey", hint = "O" },
+        { keys = "b", layer = "os", switcher = "move", label = "Bring", hint = "B" },
         { keys = "k", layer = "app", verb = "sequence", label = "Sequence", hint = "K" },
         { keys = "m", layer = "app", verb = "menu", label = "Menu", hint = "M" },
       },

@@ -335,4 +335,177 @@ test("a chord shows its own overlay", function(t)
   w:up("f19")
 end)
 
+-- Window search. Fn focuses. The fixture's B brings the window here.
+
+local WINDOWS = {
+  { id = "2", app = "Cursor", title = "Agents", workspace = "1" },
+  { id = "5", app = "Chrome", title = "Inbox", workspace = "4" },
+}
+
+local function install(w)
+  w.modules.switcher.install(WINDOWS)
+end
+
+test("the window list parses aerospace columns and ranks prefixes", function(t)
+  local w = world(t)
+  local parsed = w.modules.switcher.parse("5 ::: Chrome ::: 4 ::: Inbox (19)\n2 ::: Cursor ::: 1 ::: Agents\n")
+  t.eq(parsed[1].id, "5", "id")
+  t.eq(parsed[1].app, "Chrome", "app")
+  t.eq(parsed[1].workspace, "4", "workspace")
+  t.eq(parsed[1].title, "Inbox (19)", "title")
+  t.eq(w.modules.switcher.rank(parsed, "age")[1].id, "2", "word prefix")
+  t.eq(w.modules.switcher.rank(parsed, "ch")[1].id, "5", "app prefix beats a later row")
+end)
+
+test("holding Fn and typing focuses the match when Fn is released", function(t)
+  local w = world(t)
+  install(w)
+  t.eq(w:down("c", { fn = true }), false, "letter swallowed")
+  t.expectNow(w, {}, "no focus until release")
+  w:up("c", { fn = true })
+  w:press("h", { fn = true })
+  w:up("fn")
+  t.expect(w, { "aerospace focus --window-id 5" })
+end)
+
+test("releasing Fn without a query focuses nothing", function(t)
+  local w = world(t)
+  install(w)
+  w:down("fn")
+  w:advance(1)
+  t.eq(w.overlay.visible, true, "the list is up")
+  t.eq(w.overlay.title, "Windows", "title")
+  w:up("fn")
+  t.eq(w.overlay.visible, false, "hidden")
+  t.expect(w, {})
+end)
+
+test("a tap of Fn does not show the list", function(t)
+  local w = world(t)
+  install(w)
+  w:down("fn")
+  w:up("fn")
+  w:advance(1)
+  t.eq(w.overlay.shows, 0, "times shown")
+  t.expect(w, {})
+end)
+
+test("Fn and an arrow still reach the system", function(t)
+  local w = world(t)
+  install(w)
+  t.eq(w:down("left", { fn = true }), true, "arrow passes")
+  w:up("left", { fn = true })
+  w:up("fn")
+  t.expect(w, {})
+end)
+
+test("escape cancels the Fn search before release", function(t)
+  local w = world(t)
+  install(w)
+  w:press("c", { fn = true })
+  w:press("escape", { fn = true })
+  w:up("fn")
+  t.expect(w, {})
+end)
+
+test("releasing the globe key is a flags change", function(t)
+  local w = world(t)
+  install(w)
+  w:down("fn")
+  w:press("c", { fn = true })
+  w:press("h", { fn = true })
+  t.eq(w:flags({}), true, "the flags change reaches the system")
+  t.eq(w.overlay.visible, false, "hidden")
+  t.expect(w, { "aerospace focus --window-id 5" })
+end)
+
+test("escape closes the Fn search after Fn is already up", function(t)
+  local w = world(t)
+  install(w)
+  w:down("fn")
+  w:press("c", { fn = true })
+  w:press("escape")
+  t.eq(w.overlay.visible, false, "hidden")
+  w:up("fn")
+  t.expect(w, {})
+end)
+
+test("Fn search stays out of the way while a layer is held", function(t)
+  local w = world(t)
+  install(w)
+  w:down("f19")
+  w:press("c", { fn = true })
+  w:up("f19")
+  w:up("fn")
+  t.expect(w, {})
+end)
+
+test("the window search keeps typing after the layer key comes up", function(t)
+  local w = world(t, {
+    stdout = function(args)
+      if args[1] == "list-workspaces" then return "1\n" end
+    end,
+  })
+  install(w)
+  w:down("f19")
+  w:press("b")
+  w:up("f19")
+  w:press("i")
+  w:press("n")
+  w:press("return")
+  t.expect(w, {
+    "aerospace list-workspaces --focused --format %{workspace}",
+    "aerospace move-node-to-workspace --focus-follows-window --window-id 5 1",
+  })
+end)
+
+test("a window already on this workspace is focused", function(t)
+  local w = world(t, {
+    stdout = function(args)
+      if args[1] == "list-workspaces" then return "1\n" end
+    end,
+  })
+  install(w)
+  w:down("f19")
+  w:press("b")
+  w:press("a")
+  w:press("g")
+  w:press("e")
+  w:press("return")
+  w:up("f19")
+  t.expect(w, {
+    "aerospace list-workspaces --focused --format %{workspace}",
+    "aerospace focus --window-id 2",
+  })
+end)
+
+test("down picks the next window", function(t)
+  local w = world(t, {
+    stdout = function(args)
+      if args[1] == "list-workspaces" then return "9\n" end
+    end,
+  })
+  install(w)
+  w:down("f19")
+  w:press("b")
+  w:press("down")
+  w:press("return")
+  w:up("f19")
+  t.expect(w, {
+    "aerospace list-workspaces --focused --format %{workspace}",
+    "aerospace move-node-to-workspace --focus-follows-window --window-id 5 9",
+  })
+end)
+
+test("escape cancels the window search", function(t)
+  local w = world(t)
+  install(w)
+  w:down("f19")
+  w:press("b")
+  w:press("escape")
+  w:press("return")
+  w:up("f19")
+  t.expect(w, {})
+end)
+
 return tests

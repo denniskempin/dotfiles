@@ -33,7 +33,7 @@ for code, name in pairs(CODES) do
   KEYMAP[name] = code
 end
 
-local MODULES = { "actions", "aerospace", "bindings", "overlay", "switcher", "targets" }
+local MODULES = { "actions", "aerospace", "bindings", "overlay", "switcher", "targets", "workspaces" }
 
 local chunks = {}
 local function chunk(name)
@@ -101,7 +101,10 @@ function M.new(opts)
     deliverHotkeys = opts.deliverHotkeys ~= false,
     menus = opts.menus or {},
     stdout = opts.stdout,
+    -- The first canvas created is the bindings overlay. The workspace map
+    -- creates the second, and only after the bindings canvas exists.
     overlay = { visible = false, shows = 0, texts = {} },
+    map = { visible = false, shows = 0, texts = {} },
   }, World)
   w:load()
   return w
@@ -331,28 +334,40 @@ function World:fake()
     return setmetatable({ w = warn, e = warn }, { __index = function() return function() end end })
   end
 
-  local function canvas()
-    local c = {}
+  local canvasSlots = { w.overlay, w.map }
+  local canvasCount = 0
+  local function canvas(rect)
+    canvasCount = canvasCount + 1
+    local slot = canvasSlots[canvasCount]
+    if not slot then
+      slot = { visible = false, shows = 0, texts = {} }
+      canvasSlots[canvasCount] = slot
+    end
+    local c = { rect = rect }
     function c:level() return c end
     function c:clickActivating() return c end
     function c:behavior() return c end
-    function c:frame() return c end
+    function c:frame(next)
+      if next then c.rect = next end
+      return c
+    end
     function c:replaceElements(elements)
       local texts = {}
       for _, el in ipairs(elements) do
-        if el.type == "text" then texts[#texts + 1] = el.text end
+        if el.type == "text" and el.text then texts[#texts + 1] = el.text end
       end
-      w.overlay.texts = texts
-      w.overlay.title = texts[1]
+      slot.texts = texts
+      slot.title = texts[1]
+      slot.elements = elements
       return c
     end
     function c:show()
-      w.overlay.visible = true
-      w.overlay.shows = w.overlay.shows + 1
+      slot.visible = true
+      slot.shows = slot.shows + 1
       return c
     end
     function c:hide()
-      w.overlay.visible = false
+      slot.visible = false
       return c
     end
     return c

@@ -1,8 +1,15 @@
 -- Window search for the operating-system layer and for Fn.
 --
--- The list comes from AeroSpace. Matching is a prefix of the app name, a
--- prefix of the title, or a prefix of a word in either. Earlier rows win
--- ties, and the caller puts the most recently focused windows first.
+-- The list comes from AeroSpace. Each tab of a Google Chrome window is its
+-- own row, with that window's app name and the tab's title. Chrome's
+-- scripting id is not the macOS window id, so a tab is matched to its
+-- window by the window's bounds. Choosing the row focuses that window and
+-- selects the tab.
+--
+-- Matching is a prefix of the app name, a prefix of the title, or a prefix
+-- of a word in either. Earlier rows win ties, and the caller puts the most
+-- recently focused windows first. Tabs of one window stay together, with
+-- the active tab first.
 --
 -- `install` freezes the list. Tests use it so a key does not start a query.
 
@@ -15,9 +22,46 @@ local LIST_ARGS = { "list-windows", "--all", "--format", LIST_FORMAT }
 local WORKSPACE_ARGS = { "list-workspaces", "--focused", "--format", "%{workspace}" }
 
 local VISIBLE = 8
+local BOUNDS_SLOP = 4
+
+-- `tab` inside a Chrome tell is Chrome's tab class, not the tab character.
+local TAB_LIST = [[
+set nl to ASCII character 10
+set sep to ASCII character 9
+on clean(value)
+  set saved to AppleScript's text item delimiters
+  set AppleScript's text item delimiters to {ASCII character 9, ASCII character 10, ASCII character 13}
+  set pieces to text items of (value as text)
+  set AppleScript's text item delimiters to " "
+  set value to pieces as text
+  set AppleScript's text item delimiters to saved
+  return value
+end clean
+tell application "System Events" to set chromeOn to exists process "Google Chrome"
+if chromeOn is false then return ""
+tell application "Google Chrome"
+  set out to ""
+  repeat with w in windows
+    try
+      set b to bounds of w
+      set wid to id of w as text
+      set activeIndex to active tab index of w
+      set n to 0
+      repeat with t in tabs of w
+        set n to n + 1
+        set flag to "0"
+        if n is activeIndex then set flag to "1"
+        set out to out & wid & sep & (n as text) & sep & flag & sep & ((item 1 of b) as integer as text) & sep & ((item 2 of b) as integer as text) & sep & ((item 3 of b) as integer as text) & sep & ((item 4 of b) as integer as text) & sep & my clean(title of t) & nl
+      end repeat
+    end try
+  end repeat
+  return out
+end tell
+]]
 
 local windows = {}
 local frozen = false
+local token = 0
 
 local function starts(text, query)
   return text:sub(1, #query) == query
@@ -37,6 +81,95 @@ local function score(window, query)
   if starts(title, query) then return 2 end
   if wordStarts(app, query) or wordStarts(title, query) then return 3 end
   return nil
+end
+
+function M.parseTabs(text)
+  local out = {}
+  for line in ((text or "") .. "\n"):gmatch("(.-)\n") do
+    local id, index, active, left, top, right, bottom, title =
+      line:match("^(%d+)\t(%d+)\t([01])\t(-?%d+)\t(-?%d+)\t(-?%d+)\t(-?%d+)\t(.*)$")
+    if id then
+      out[#out + 1] = {
+        chrome = id,
+        index = tonumber(index),
+        active = active == "1",
+        bounds = {
+          left = tonumber(left),
+          top = tonumber(top),
+          right = tonumber(right),
+          bottom = tonumber(bottom),
+        },
+        title = title,
+      }
+    end
+  end
+  return out
+end
+
+local function nearBounds(frame, bounds)
+  return math.abs(frame.x - bounds.left) <= BOUNDS_SLOP
+    and math.abs(frame.y - bounds.top) <= BOUNDS_SLOP
+    and math.abs((frame.x + frame.w) - bounds.right) <= BOUNDS_SLOP
+    and math.abs((frame.y + frame.h) - bounds.bottom) <= BOUNDS_SLOP
+end
+
+-- Tabs grouped by macOS window id. A bounds that matches two windows, or
+-- none, is left unmatched so the window row stays as AeroSpace reported it.
+function M.groupTabs(list, tabs, frames)
+  local byChrome = {}
+  for _, tab in ipairs(tabs or {}) do
+    local group = byChrome[tab.chrome]
+    if not group then
+      group = { bounds = tab.bounds, tabs = {} }
+      byChrome[tab.chrome] = group
+    end
+    group.tabs[#group.tabs + 1] = tab
+  end
+  local grouped, used = {}, {}
+  for _, group in pairs(byChrome) do
+    local hits = {}
+    for _, window in ipairs(list) do
+      local id = tostring(window.id)
+      local frame = frames and frames[id]
+      if frame and not used[id] and nearBounds(frame, group.bounds) then
+        hits[#hits + 1] = id
+      end
+    end
+    if #hits == 1 then
+      used[hits[1]] = true
+      grouped[hits[1]] = group.tabs
+    end
+  end
+  return grouped
+end
+
+-- Replaces each window that has tabs with one row per tab. The active tab
+-- comes first. Other windows are unchanged.
+function M.expand(list, grouped)
+  local out = {}
+  for _, window in ipairs(list) do
+    local tabs = grouped[tostring(window.id)]
+    if not tabs or #tabs == 0 then
+      out[#out + 1] = window
+    else
+      table.sort(tabs, function(a, b)
+        if a.active ~= b.active then return a.active end
+        return a.index < b.index
+      end)
+      for i, tab in ipairs(tabs) do
+        out[#out + 1] = {
+          id = window.id,
+          app = window.app,
+          workspace = window.workspace,
+          title = tab.title ~= "" and tab.title or window.title,
+          tab = tab.index,
+          chrome = tab.chrome,
+          order = i,
+        }
+      end
+    end
+  end
+  return out
 end
 
 function M.parse(text)
@@ -87,17 +220,65 @@ local function orderByMru(list)
   table.sort(list, function(a, b)
     local left, right = rank[a.id] or 100000, rank[b.id] or 100000
     if left ~= right then return left < right end
-    return a.id < b.id
+    if a.id ~= b.id then return a.id < b.id end
+    return (a.order or 0) < (b.order or 0)
   end)
   return list
 end
 
+local function chromeRunning()
+  local ok, app = pcall(function()
+    return hs.application.get("com.google.Chrome")
+  end)
+  return ok and app ~= nil
+end
+
+local function windowFrames()
+  local frames = {}
+  local ok, wins = pcall(function() return hs.window.allWindows() end)
+  if not ok or type(wins) ~= "table" then return frames end
+  for _, win in ipairs(wins) do
+    local idOk, id = pcall(function() return win:id() end)
+    local frameOk, frame = pcall(function() return win:frame() end)
+    if idOk and frameOk and id and frame then
+      frames[tostring(id)] = { x = frame.x, y = frame.y, w = frame.w, h = frame.h }
+    end
+  end
+  return frames
+end
+
+local function queryTabs(done)
+  local task = hs.task.new("/usr/bin/osascript", function(code, out)
+    if code ~= 0 then done(nil) return end
+    done(M.parseTabs(out or ""))
+  end, { "-e", TAB_LIST })
+  if not task or not task:start() then done(nil) end
+end
+
 function M.refresh()
   if frozen then return end
-  aerospace.query(LIST_ARGS, function(code, out)
-    if code ~= 0 then return end
-    windows = orderByMru(M.parse(out))
+  token = token + 1
+  local mine = token
+  local parsed, tabs, frames
+  local function publish()
+    if mine ~= token or not parsed then return end
+    local list = parsed
+    if tabs then list = M.expand(parsed, M.groupTabs(parsed, tabs, frames or {})) end
+    windows = orderByMru(list)
     if M.updated then M.updated() end
+  end
+  aerospace.query(LIST_ARGS, function(code, out)
+    if mine ~= token or code ~= 0 then return end
+    parsed = M.parse(out)
+    publish()
+  end)
+  -- A tell to Chrome launches it when it is not running. Skip the query then.
+  if not chromeRunning() then return end
+  queryTabs(function(list)
+    if mine ~= token then return end
+    tabs = list or {}
+    frames = windowFrames()
+    publish()
   end)
 end
 
@@ -141,24 +322,44 @@ function M.pick(query, selected)
   return matches[selected]
 end
 
+local function afterTab(window, done)
+  local chromeId = window.chrome and tostring(window.chrome) or ""
+  if not (window.tab and chromeId:match("^%d+$") and type(window.tab) == "number") then
+    done()
+    return
+  end
+  local script = ('tell application "Google Chrome" to set active tab index of window id %s to %d'):format(
+    chromeId, window.tab
+  )
+  local task = hs.task.new("/usr/bin/osascript", function()
+    done()
+  end, { "-e", script })
+  if not task or not task:start() then done() end
+end
+
 function M.focus(window)
-  aerospace.command({ "focus", "--window-id", tostring(window.id) })
+  afterTab(window, function()
+    aerospace.command({ "focus", "--window-id", tostring(window.id) })
+  end)
 end
 
 -- Moves the window onto the focused workspace. A window already there is focused.
+-- A Chrome tab selects that tab in the window as well.
 function M.bring(window)
-  aerospace.query(WORKSPACE_ARGS, function(code, out)
-    if code ~= 0 then return end
-    local workspace = out:match("%S+")
-    if not workspace then return end
-    local id = tostring(window.id)
-    if window.workspace == workspace then
-      aerospace.command({ "focus", "--window-id", id })
-    else
-      aerospace.command({
-        "move-node-to-workspace", "--focus-follows-window", "--window-id", id, workspace,
-      })
-    end
+  afterTab(window, function()
+    aerospace.query(WORKSPACE_ARGS, function(code, out)
+      if code ~= 0 then return end
+      local workspace = out:match("%S+")
+      if not workspace then return end
+      local id = tostring(window.id)
+      if window.workspace == workspace then
+        aerospace.command({ "focus", "--window-id", id })
+      else
+        aerospace.command({
+          "move-node-to-workspace", "--focus-follows-window", "--window-id", id, workspace,
+        })
+      end
+    end)
   end)
 end
 

@@ -70,6 +70,14 @@ Raycast stores that chord as the defaults string `raycastGlobalHotkey`. Key code
 
 Contexts stores the switcher chord as an `NSKeyedArchiver` blob, `CTPreferenceSearchShortcutModal`, inside `com.contextsformac.Contexts`. Key code 31 is `O`. Modifier flags `1835008` are Command, Option, and Control. The previous flags were `1966080`, which adds Shift. The same plist holds usage counters, a Sparkle schedule, and App Center install ids, and Contexts rewrites it while running. The license file and Realm database sit beside it. That domain stays on the machine. A running copy of either app keeps the old hotkey in memory and writes it back on quit, so the preference is written while the app is not running.
 
+### Chrome tabs in the window search
+
+Chrome's AppleScript window id is not the macOS window id AeroSpace uses. The search matches a tab to its window by the window bounds, within a few pixels. `tab` inside `tell application "Google Chrome"` is Chrome's tab class, so a tab character has to be `ASCII character 9`. A tell to Chrome launches it when it is not running, so the query is skipped unless Chrome is already running. Selecting a tab needs Hammerspoon allowed to control Google Chrome under Automation. Without that permission the window still focuses and the tab stays as it was.
+
+### The workspace map cannot read a hidden tree
+
+AeroSpace 0.21 has no command that prints the workspace tree. `list-windows` sorts by app name, then title. Windows on a hidden workspace are moved off-screen, so their `hs.window` frames are not the tiled layout. The map uses frames only while the workspace is visible. A visible accordion is redrawn as strips: scaled down, the real accordion padding is a couple of pixels and the thumbnail would look like a single window. A hidden workspace gets equal columns, rows, or strips from the layout its windows share.
+
 ## Install
 
 `nix/home/links.nix` links `~/.hammerspoon` to `configs/hammerspoon` and `~/.config/karabiner/karabiner.json` to `configs/karabiner/karabiner.json`. An older copy of `karabiner.json` that mapped Caps Lock to Hyper or Escape has been deleted, so a rebuild cannot bring that profile back.

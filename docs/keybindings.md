@@ -69,14 +69,16 @@ Left Command and Left Option stay modifiers. Fn is the globe key. Caps Lock is E
 | ------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------- |
 | Walk history  | `[` back, `]` forward | —                                                                                                                                          | Back and forward in that app                |
 | Run command   | `P`                   | Open the command launcher                                                                                                                  | Open the command palette                    |
-| Open document | `O`                   | Search windows. Return moves the chosen one onto this workspace                                                                              | Open the switcher for documents in this app |
+| Open document | `O`                   | Search windows, including each Chrome tab. Return moves the chosen window onto this workspace and selects the tab                           | Open the switcher for documents in this app |
 | Focus monitor        | Tab               | Focus the next monitor. With two monitors, that is the other one |
 | Send slot to monitor | Shift+Tab         | Move the current workspace to the next monitor                   |
 
 
 ### Overlay Window
 
-An overlay window showing possible layer bindings is shown after a short delay when a layer key is held or locked. It disappears once a binding is selected. 
+An overlay window showing possible layer bindings is shown after a short delay when a layer key is held or locked. It disappears once a binding is selected.
+
+Holding or locking the operating-system layer also shows a map of workspaces on the same screen, above the bindings. Each workspace is a thumbnail of its windows. A visible workspace is drawn from the windows' frames, so a split, a nest, and unequal sizes match the screen. An accordion is drawn as strips, with the focused window open and the others beside it, because the real padding would shrink to a few pixels in the thumbnail. A hidden workspace is drawn from its layout in equal shares. The map uses the same delay as the bindings and hides with them, including while a chord or the window search is open.
 
 When another key is expected in a sequence, a similar overlay window is shown after a delay with possible follow up keys. 
 
@@ -111,6 +113,7 @@ One event tap watches key down and key up.
 - While a layer is armed, every other key is swallowed. A listed key runs its verb. Shift is read off the event flags. Command combinations are swallowed with the rest.
 - Delete on the App layer is posted as forward delete.
 - A layer that is held or locked shows its overlay after 250 ms. The overlay hides once a binding is selected, and on key up when the layer is not locked. While the layer stays locked, the 250 ms timer starts again after the binding. The overlay is an `hs.canvas` on the focused screen, non-activating. Nothing goes to Notification Center.
+- The operating-system overlay is paired with a second canvas, the workspace map, at the top of that screen. It asks AeroSpace for workspaces and windows when it appears. Visible windows are measured with `hs.window`. Hidden windows are not: AeroSpace parks them off-screen, and `list-windows` is alphabetical rather than tree order.
 - `\`, `S`, and `L` on the App layer, and `S`, `L`, and `J` on the operating-system layer, start a chord. The layer overlay hides and a follow-up overlay lists the keys that chord accepts. Split, join, and resize accept an arrow. Layout accepts `F` and `=` on the App layer, and `F`, `A`, and `=` on the operating-system layer.
 - While a chord is waiting, the tap keeps swallowing keys after the layer key comes up. A lock stays in force. The pending verb wins over the layer, so an arrow with the layer key still down is the argument. F18 and F19 are not arguments. One argument clears the verb. Escape and any unlisted key clear the chord and leave a lock in place. Key repeat is swallowed, including inside a chord.
 
@@ -142,10 +145,10 @@ Each operating-system key runs `aerospace`.
 | Layout accordion     | `layout tiles accordion`                                                                         |
 | Layout equalize      | `balance-sizes`                                                                                  |
 | Run command          | `open -g -b com.raycast.macos`, which shows Raycast's search bar                                 |
-| Open document        | Search windows. Return runs `move-node-to-workspace --focus-follows-window` onto the focused workspace. A window already there is focused |
+| Open document        | Search windows, including each Chrome tab as its own row. Return runs `move-node-to-workspace --focus-follows-window` onto the focused workspace, and selects the tab when the row is one. A window already there is focused |
 
 
-Holding Fn and typing focuses a window without moving it. The letters are a prefix of the app name, the title, or a word in either, and releasing Fn focuses the first match. Fn itself is not swallowed: a tap still changes the input source, and Fn with an arrow is still Home, End, Page Up, or Page Down. The list appears on the first letter, or after the overlay delay when Fn is held with no letter yet. Releasing Fn with an empty query focuses nothing.
+Holding Fn and typing focuses a window without moving it. The letters are a prefix of the app name, the title, or a word in either, and releasing Fn focuses the first match. Each tab of a Google Chrome window is a row of its own, with that window's app name and the tab's title. Releasing Fn on a tab focuses the window and selects the tab. Fn itself is not swallowed: a tap still changes the input source, and Fn with an arrow is still Home, End, Page Up, or Page Down. The list appears on the first letter, or after the overlay delay when Fn is held with no letter yet. Releasing Fn with an empty query focuses nothing.
 
 `layout horizontal vertical` picks the first argument that is not the current layout, so the axis flips and tiled-versus-accordion stays. `layout tiles accordion` toggles the other way and keeps the axis. `balance-sizes` equalizes every window in the current workspace, including windows nested by Join.
 

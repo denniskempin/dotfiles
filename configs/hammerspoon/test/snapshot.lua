@@ -40,6 +40,19 @@ end)
 
 local HOLD = { os = "f19", app = "f18" }
 
+-- The workspace map queries AeroSpace when the operating-system overlay
+-- appears. Holding the layer is what starts that, not the key, so the
+-- commands are left out of the key's line. Scenarios cover the map.
+local function withoutMap(parts)
+  local out = {}
+  for _, part in ipairs(parts) do
+    if not part:find("list-workspaces", 1, true) and not part:find("window-layout", 1, true) then
+      out[#out + 1] = part
+    end
+  end
+  return out
+end
+
 local function probe(layer, front, starter, key, shift, problems)
   local w = world.new({ front = front })
   local title = w.modules.bindings.title[layer]
@@ -50,7 +63,7 @@ local function probe(layer, front, starter, key, shift, problems)
   local note = w.overlay.visible and w.overlay.title ~= title and w.overlay.title or nil
   w:up(HOLD[layer])
   w:settle()
-  local parts = w:effects()
+  local parts = withoutMap(w:effects())
   if note then parts[#parts + 1] = ("overlay %q"):format(note) end
   for _, p in ipairs(w.problems) do problems[#problems + 1] = p end
   for _, warning in ipairs(w:takeWarnings()) do problems[#problems + 1] = "warning: " .. warning end

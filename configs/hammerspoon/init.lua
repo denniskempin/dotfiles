@@ -10,7 +10,8 @@
 --   actions.lua    carrying out an action, and posting events
 --   aerospace.lua  the AeroSpace command queue
 --   switcher.lua   the window search behind Open document and Fn
---   overlay.lua    the overlay canvas
+--   overlay.lua    the bindings overlay
+--   workspaces.lua the workspace map shown with the operating-system layer
 --
 -- AeroSpace stays in main with an empty binding table.
 
@@ -20,6 +21,7 @@ local actions = require("actions")
 local bindings = require("bindings")
 local overlay = require("overlay")
 local switcher = require("switcher")
+local workspaces = require("workspaces")
 local targets = require("targets")
 
 local log = hs.logger.new("keybindings", "warning")
@@ -181,6 +183,11 @@ local function overlayRows(rows, layer)
   return shown
 end
 
+local function hideOverlays()
+  overlay.hide()
+  workspaces.hide()
+end
+
 local function showLayerOverlay()
   local layer = activeLayer()
   if not layer then return end
@@ -196,10 +203,12 @@ local function showLayerOverlay()
     columns = columns,
     footer = "space locks      esc clears",
   })
+  if layer == "os" then workspaces.show() else workspaces.hide() end
 end
 
 local function showChordOverlay()
   if not chord then return end
+  workspaces.hide()
   overlay.show({
     layer = chord.layer,
     title = chord.def.title,
@@ -216,7 +225,7 @@ end
 
 local function endChord()
   chord = nil
-  overlay.hide()
+  hideOverlays()
   if locked then scheduleLayerOverlay() end
 end
 
@@ -227,12 +236,12 @@ local function beginChord(name, layer)
     def = bindings.chords[name],
     index = CHORD_INDEX[name][layer],
   }
-  overlay.hide()
+  hideOverlays()
   overlay.later(showChordOverlay)
 end
 
 local function onBinding()
-  overlay.hide()
+  hideOverlays()
   if locked and not chord then scheduleLayerOverlay() end
 end
 
@@ -255,6 +264,7 @@ end
 
 local function showSession()
   if not session then return end
+  workspaces.hide()
   local rows, selected = switcher.rows(session.query, session.selected)
   session.selected = selected
   overlay.show({
@@ -276,7 +286,7 @@ end
 local function endSession()
   session = nil
   swallowed = {}
-  overlay.hide()
+  hideOverlays()
   if locked then
     scheduleLayerOverlay()
   elseif layerFromHold() then
@@ -353,7 +363,7 @@ local function releaseFn()
     endSession()
     if chosen then switcher.focus(chosen) end
   elseif not activeLayer() and not chord and not session then
-    overlay.hide()
+    hideOverlays()
   end
 end
 
@@ -385,21 +395,21 @@ local function arm(which)
   lastHeld = which
   if session and session.kind == "focus" then session = nil end
   if chord or locked or session then return end
-  overlay.hide()
+  hideOverlays()
   scheduleLayerOverlay()
 end
 
 local function release(which)
   if which == "os" then osDown = false else appDown = false end
   if locked or chord or session then return end
-  overlay.hide()
+  hideOverlays()
   if layerFromHold() then scheduleLayerOverlay() end
 end
 
 local function unlock()
   if not locked then return end
   locked = nil
-  overlay.hide()
+  hideOverlays()
   if layerFromHold() then scheduleLayerOverlay() end
 end
 

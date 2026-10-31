@@ -92,7 +92,8 @@ aerospace list-workspaces --focused
 | Key posted to an app | `Live.front()` before and after. The window title follows the Chrome tab and the editor in VS Code or Cursor |
 | Menu item | `Live.menu({ "View", "Open Quickly" })` with the app in front. `missing` means the path does not exist in that app version |
 | Raycast | `Live.windows("Raycast")` shows `750x64 layer=8` while the bar is open. While the bar has keys, `Live.front()` shows the window "Main Window". `Live.press(nil, "escape")` closes it |
-| Window search | Right Option+O shows the list. Type, Return, and check the focused window's workspace with the AeroSpace queries above. Hold Fn and type a prefix, then release: focus changes and the workspace does not. Tap Fn: the input source still changes. Fn+Left: the cursor still goes to the start of the line |
+| Window search | Right Option+O shows the list, including a row per Chrome tab. Type, Return, and check the focused window's workspace with the AeroSpace queries above. Hold Fn and type a prefix, then release: focus changes and the workspace does not. A Chrome tab row also selects that tab. Tap Fn: the input source still changes. Fn+Left: the cursor still goes to the start of the line |
+| Workspace map | Hold Right Option past the overlay delay. A thumbnail row appears above the bindings. The focused workspace matches the on-screen layout. Release hides it. The App layer does not show it |
 | Global hotkey delivery | `q 'return Live.probe({ "cmd", "alt", "ctrl" }, "f13")'`, send the hotkey through the code path under test, then `q 'return Live.hits("cmd+alt+ctrl+f13")'` |
 
 `Live.reset()` deletes probes. A reload clears all `Live` state.

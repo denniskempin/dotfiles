@@ -1,6 +1,7 @@
--- Window search for the operating-system layer and for Fn.
+-- Window search for Fn. Right Option+O opens OmniWM's own window list
+-- instead, which has no Chrome tabs.
 --
--- The list comes from AeroSpace. Each tab of a Google Chrome window is its
+-- The list comes from OmniWM. Each tab of a Google Chrome window is its
 -- own row, with that window's app name and the tab's title. Chrome's
 -- scripting id is not the macOS window id, so a tab is matched to its
 -- window by the window's bounds. Choosing the row focuses that window and
@@ -13,13 +14,11 @@
 --
 -- `install` freezes the list. Tests use it so a key does not start a query.
 
-local aerospace = require("aerospace")
+local omniwm = require("omniwm")
 
 local M = {}
 
-local LIST_FORMAT = "%{window-id} ::: %{app-name} ::: %{workspace} ::: %{window-title}"
-local LIST_ARGS = { "list-windows", "--all", "--format", LIST_FORMAT }
-local WORKSPACE_ARGS = { "list-workspaces", "--focused", "--format", "%{workspace}" }
+local LIST_ARGS = { "windows", "--fields", "id,window-id,app,workspace,title" }
 
 local VISIBLE = 8
 local BOUNDS_SLOP = 4
@@ -114,7 +113,7 @@ local function nearBounds(frame, bounds)
 end
 
 -- Tabs grouped by macOS window id. A bounds that matches two windows, or
--- none, is left unmatched so the window row stays as AeroSpace reported it.
+-- none, is left unmatched so the window row stays as OmniWM reported it.
 function M.groupTabs(list, tabs, frames)
   local byChrome = {}
   for _, tab in ipairs(tabs or {}) do
@@ -159,6 +158,7 @@ function M.expand(list, grouped)
       for i, tab in ipairs(tabs) do
         out[#out + 1] = {
           id = window.id,
+          handle = window.handle,
           app = window.app,
           workspace = window.workspace,
           title = tab.title ~= "" and tab.title or window.title,
@@ -172,12 +172,23 @@ function M.expand(list, grouped)
   return out
 end
 
-function M.parse(text)
+-- `id` is the macOS window id, which hs.window and the Chrome bounds match
+-- on. `handle` is OmniWM's id for `window` commands, valid until OmniWM
+-- restarts.
+function M.parse(payload)
   local out = {}
-  for line in (text .. "\n"):gmatch("(.-)\n") do
-    local id, app, workspace, title = line:match("^(%d+) ::: (.-) ::: (.-) ::: (.*)$")
-    if id then
-      out[#out + 1] = { id = id, app = app, workspace = workspace, title = title }
+  local list = type(payload) == "table" and payload.windows or {}
+  for _, window in ipairs(list) do
+    if type(window) == "table" and window.id and window.windowId then
+      local app = type(window.app) == "table" and window.app or {}
+      local workspace = type(window.workspace) == "table" and window.workspace or {}
+      out[#out + 1] = {
+        id = tostring(math.tointeger(window.windowId) or window.windowId),
+        handle = window.id,
+        app = app.name or "",
+        workspace = workspace.rawName,
+        title = window.title or "",
+      }
     end
   end
   return out
@@ -267,9 +278,9 @@ function M.refresh()
     windows = orderByMru(list)
     if M.updated then M.updated() end
   end
-  aerospace.query(LIST_ARGS, function(code, out)
-    if mine ~= token or code ~= 0 then return end
-    parsed = M.parse(out)
+  omniwm.query(LIST_ARGS, function(payload)
+    if mine ~= token or not payload then return end
+    parsed = M.parse(payload)
     publish()
   end)
   -- A tell to Chrome launches it when it is not running. Skip the query then.
@@ -337,29 +348,10 @@ local function afterTab(window, done)
   if not task or not task:start() then done() end
 end
 
+-- Focuses the window where it is, switching to its workspace.
 function M.focus(window)
   afterTab(window, function()
-    aerospace.command({ "focus", "--window-id", tostring(window.id) })
-  end)
-end
-
--- Moves the window onto the focused workspace. A window already there is focused.
--- A Chrome tab selects that tab in the window as well.
-function M.bring(window)
-  afterTab(window, function()
-    aerospace.query(WORKSPACE_ARGS, function(code, out)
-      if code ~= 0 then return end
-      local workspace = out:match("%S+")
-      if not workspace then return end
-      local id = tostring(window.id)
-      if window.workspace == workspace then
-        aerospace.command({ "focus", "--window-id", id })
-      else
-        aerospace.command({
-          "move-node-to-workspace", "--focus-follows-window", "--window-id", id, workspace,
-        })
-      end
-    end)
+    omniwm.command({ "window", "navigate", window.handle })
   end)
 end
 

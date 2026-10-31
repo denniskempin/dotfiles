@@ -10,7 +10,7 @@ let
 
   # Taps beyond homebrew/core and homebrew/cask that brew refuses to load until
   # trusted. Keys are nix-homebrew tap names.
-  trustedTaps = [ "nikitabobko/homebrew-tap" ];
+  trustedTaps = [ ];
 in
 {
   imports = [
@@ -77,7 +77,6 @@ in
     taps = {
       "homebrew/homebrew-core" = inputs.homebrew-core;
       "homebrew/homebrew-cask" = inputs.homebrew-cask;
-      "nikitabobko/homebrew-tap" = inputs.aerospace-tap;
     };
     trust.taps = trustedTaps;
   };

@@ -15,7 +15,7 @@ Configuration for macOS and Linux machines.
     defaults, and the user account.
   - `nix/hosts/` has one file per Mac with its hostname and state version.
 - `docs/` has the keybinding spec that covers Karabiner, Hammerspoon,
-  AeroSpace, and app shortcuts.
+  OmniWM, and app shortcuts.
 
 Every machine keeps this checkout at `~/dotfiles`. Run `git add` on new `.nix`
 files first, because flakes only see files git tracks.

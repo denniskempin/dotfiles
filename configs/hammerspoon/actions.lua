@@ -2,7 +2,7 @@
 -- `run` carries them out. `commands` holds the App-layer keys that act the
 -- same in every app.
 
-local aerospace = require("aerospace")
+local omniwm = require("omniwm")
 
 local log = hs.logger.new("keybindings", "warning")
 
@@ -113,7 +113,12 @@ function M.seq(...) return { kind = "seq", strokes = { ... } } end
 -- Menu paths tried in order. A leaf title alone also works.
 function M.menu(...) return { kind = "menu", paths = { ... } } end
 
-function M.aero(...) return { kind = "aero", args = { ... } } end
+-- An omniwmctl command, queued behind any still running.
+function M.wm(...) return { kind = "wm", args = { ... } } end
+
+-- A function run after the tap returns, for an action that has to ask
+-- OmniWM something before it can act.
+function M.call(fn) return { kind = "call", fn = fn } end
 
 -- Reopens a running app by bundle id, which for Raycast shows the search bar.
 -- Without -g the app also activates and keeps focus after its panel closes.
@@ -133,8 +138,10 @@ function M.run(action)
     spawn("/usr/bin/open", { "-g", "-b", action.bundleID })
   elseif kind == "hotkey" then
     postHotkey(action.mods, action.key)
-  elseif kind == "aero" then
-    aerospace.command(action.args)
+  elseif kind == "wm" then
+    omniwm.command(action.args)
+  elseif kind == "call" then
+    hs.timer.doAfter(0, action.fn)
   elseif kind == "menu" then
     hs.timer.doAfter(0, function()
       local app = hs.application.frontmostApplication()

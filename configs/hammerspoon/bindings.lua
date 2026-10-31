@@ -11,10 +11,14 @@
 -- verb      the field to run on the target.
 -- chord     the chord, from `chords` below, that this key starts.
 -- run       a command in actions.commands, the same for every app.
+-- unlocks   the key ends a lock, because it opens something that takes the
+--           keys that follow.
 -- label     the overlay line, with `hint` on the right. A row without a
 --           label still runs and is not drawn.
 
 local arrows = { "left", "down", "up", "right" }
+local across = { "left", "right" }
+local along = { "down", "up" }
 local digits = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }
 
 local step = { [";"] = "prev", ["'"] = "next" }
@@ -25,15 +29,19 @@ return {
   -- Each inner list is one overlay column.
   layer = {
     {
-      { keys = arrows, verb = "focus", label = "Focus tile", hint = "← ↓ ↑ →" },
-      { keys = arrows, shift = true, verb = "move", label = "Move tile", hint = "⇧ ← ↓ ↑ →" },
+      { keys = across, layer = "os", verb = "focus", label = "Focus column", hint = "← →" },
+      { keys = along, layer = "os", verb = "focus", label = "Focus workspace", hint = "↑ ↓" },
+      { keys = across, layer = "os", shift = true, verb = "move", label = "Move column", hint = "⇧ ← →" },
+      { keys = along, layer = "os", shift = true, verb = "move", label = "Move to workspace", hint = "⇧ ↑ ↓" },
+      { keys = arrows, layer = "app", verb = "focus", label = "Focus tile", hint = "← ↓ ↑ →" },
+      { keys = arrows, layer = "app", shift = true, verb = "move", label = "Move tile", hint = "⇧ ← ↓ ↑ →" },
       { keys = "return", verb = "zoom", label = "Zoom tile", hint = "↩" },
       { keys = "x", verb = "close", label = "Close tile", hint = "X" },
       { keys = "\\", layer = "app", chord = "split", label = "Split tile", hint = "\\ then arrow" },
       { keys = "s", chord = "resize", label = "Resize tile", hint = "S then arrow" },
-      { keys = "l", layer = "os", chord = "layout", label = "Layout tiles", hint = "L then F A =" },
+      { keys = "l", layer = "os", chord = "layout", label = "Layout tiles", hint = "L then W F A C =" },
       { keys = "l", layer = "app", chord = "layout", label = "Layout tiles", hint = "L then F =" },
-      { keys = "j", layer = "os", chord = "join", label = "Join tile", hint = "J then arrow" },
+      { keys = "j", layer = "os", chord = "column", label = "Join or send column", hint = "J then arrow" },
     },
     {
       { keys = step, verb = "switch", label = "Switch slot", hint = ";  '" },
@@ -41,11 +49,13 @@ return {
       { keys = digits, arg = tonumber, layer = "app", verb = "jump", label = "Jump to slot", hint = "1–8   9" },
       { keys = step, shift = true, verb = "send", label = "Send to slot", hint = "⇧ ; ' 1–9" },
       { keys = digits, arg = tonumber, shift = true, verb = "sendNumber" },
+      { keys = { ["["] = "back", ["]"] = "forward" }, layer = "os", verb = "history",
+        label = "Last window, workspace", hint = "[  ]" },
       { keys = { ["["] = "back", ["]"] = "forward" }, layer = "app", verb = "history",
         label = "Walk history", hint = "[  ]" },
       { keys = "p", verb = "command", label = "Run command", hint = "P" },
-      { keys = "o", layer = "os", switcher = "move", label = "Open document", hint = "O then type" },
-      { keys = "o", layer = "app", verb = "open", label = "Open document", hint = "O" },
+      { keys = "o", verb = "open", unlocks = true, label = "Open document", hint = "O" },
+      { keys = "v", layer = "os", verb = "overview", unlocks = true, label = "Overview", hint = "V" },
       { keys = "tab", layer = "os", verb = "focusMonitor", label = "Focus monitor", hint = "⇥" },
       { keys = "tab", layer = "os", shift = true, verb = "sendMonitor", label = "Send slot", hint = "⇧ ⇥" },
       { keys = "delete", layer = "app", run = "forwardDelete" },
@@ -73,20 +83,23 @@ return {
         { keys = "right", verb = "split", label = "Right", hint = "→" },
       },
     },
-    join = {
-      title = "Join",
+    column = {
+      title = "Column",
       rows = {
-        { keys = "left", verb = "join", label = "Left", hint = "←" },
-        { keys = "down", verb = "join", label = "Down", hint = "↓" },
-        { keys = "up", verb = "join", label = "Up", hint = "↑" },
-        { keys = "right", verb = "join", label = "Right", hint = "→" },
+        { keys = "left", verb = "join", label = "Join left", hint = "←" },
+        { keys = "down", verb = "sendColumn", label = "To workspace below", hint = "↓" },
+        { keys = "up", verb = "sendColumn", label = "To workspace above", hint = "↑" },
+        { keys = "right", verb = "join", label = "Join right", hint = "→" },
       },
     },
     layout = {
       title = "Layout",
       rows = {
-        { keys = "f", verb = "layoutFlip", label = "Flip axis", hint = "F" },
-        { keys = "a", layer = "os", verb = "layoutAccordion", label = "Tiled / accordion", hint = "A" },
+        { keys = "w", layer = "os", verb = "layoutWidth", label = "Cycle width", hint = "W" },
+        { keys = "f", layer = "os", verb = "layoutFull", label = "Full width", hint = "F" },
+        { keys = "f", layer = "app", verb = "layoutFlip", label = "Flip axis", hint = "F" },
+        { keys = "a", layer = "os", verb = "layoutTabbed", label = "Tabbed column", hint = "A" },
+        { keys = "c", layer = "os", verb = "layoutCenter", label = "Center column", hint = "C" },
         { keys = "=", verb = "layoutEqual", label = "Equalize", hint = "=" },
       },
     },

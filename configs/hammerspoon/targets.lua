@@ -7,49 +7,73 @@
 -- function that returns nil, means the key does nothing in that target.
 
 local actions = require("actions")
+local omniwm = require("omniwm")
 
 local stroke, seq, menu = actions.stroke, actions.seq, actions.menu
-local aero, launch = actions.aero, actions.launch
+local launch = actions.launch
+
+local function wm(...) return actions.wm("command", ...) end
+
+-- OmniWM's niri layout: each workspace is a strip of columns that scrolls
+-- left and right, a column holds one or more windows stacked top to bottom,
+-- and a monitor's workspaces stack top to bottom. Left and right move along
+-- the strip. Up and down move inside the column, and past its end to the
+-- workspace above or below.
+local VERTICAL = { up = true, down = true }
 
 local system = {
   focus = function(dir)
-    return aero("focus",
-      "--boundaries", "all-monitors-outer-frame",
-      "--boundaries-action", "wrap-around-all-monitors",
-      dir)
+    if VERTICAL[dir] then return wm("focus-window-or-workspace-" .. dir) end
+    return wm("focus", dir)
   end,
   move = function(dir)
-    return aero("move",
-      "--boundaries", "all-monitors-outer-frame",
-      "--boundaries-action", "create-implicit-container",
-      dir)
+    if VERTICAL[dir] then return wm("move-window-" .. dir .. "-or-to-workspace-" .. dir) end
+    return wm("move-column", dir)
   end,
-  zoom = aero("fullscreen"),
-  close = aero("close"),
+  zoom = wm("toggle-fullscreen"),
+  close = wm("close-focused-window"),
   resize = {
-    left = aero("resize", "width", "-100"),
-    right = aero("resize", "width", "+100"),
-    down = aero("resize", "height", "+100"),
-    up = aero("resize", "height", "-100"),
+    left = wm("set-container-primary-span", "-10%"),
+    right = wm("set-container-primary-span", "+10%"),
+    down = wm("set-window-secondary-span", "+10%"),
+    up = wm("set-window-secondary-span", "-10%"),
   },
-  join = function(dir) return aero("join-with", dir) end,
-  layoutFlip = aero("layout", "horizontal", "vertical"),
-  layoutAccordion = aero("layout", "tiles", "accordion"),
-  layoutEqual = aero("balance-sizes"),
+  -- Into the neighboring column, or out of a shared column into its own.
+  join = {
+    left = wm("consume-or-expel-window-left"),
+    right = wm("consume-or-expel-window-right"),
+  },
+  sendColumn = {
+    up = wm("move-column-to-workspace", "up"),
+    down = wm("move-column-to-workspace", "down"),
+  },
+  layoutWidth = wm("cycle-size", "forward"),
+  layoutFull = wm("toggle-container-full-primary-span"),
+  layoutTabbed = wm("toggle-column-tabbed"),
+  layoutCenter = wm("center-column"),
+  layoutEqual = wm("balance-sizes"),
 
-  -- next and prev step through the workspaces on the focused monitor. Without
-  -- --no-stdin AeroSpace may read the list from hs.task's open stdin pipe.
-  switch = function(dir) return aero("workspace", "--no-stdin", "--wrap-around", dir) end,
-  jump = function(n) return aero("workspace", tostring(n)) end,
-  send = function(dir)
-    return aero("move-node-to-workspace", "--no-stdin", "--focus-follows-window", "--wrap-around", dir)
-  end,
-  sendNumber = function(n)
-    return aero("move-node-to-workspace", "--focus-follows-window", tostring(n))
-  end,
+  -- prev is the workspace above, next the one below, on this monitor.
+  switch = function(dir) return wm("switch-workspace", dir) end,
+  jump = function(n) return wm("switch-workspace", tostring(n)) end,
+  send = {
+    prev = wm("move-to-workspace", "up"),
+    next = wm("move-to-workspace", "down"),
+  },
+  sendNumber = function(n) return wm("move-to-workspace", tostring(n)) end,
+  -- OmniWM keeps one step of each: the window and the workspace focused
+  -- before this one. Pressing again goes back.
+  history = {
+    back = wm("focus", "previous"),
+    forward = wm("switch-workspace", "back-and-forth"),
+  },
   command = launch("com.raycast.macos"),
-  focusMonitor = aero("focus-monitor", "--wrap-around", "next"),
-  sendMonitor = aero("move-workspace-to-monitor", "--wrap-around", "next"),
+  -- Return focuses the window where it is. Shift+Return brings it here, as a
+  -- new column right of the focused one.
+  open = wm("open-command-palette", "windows"),
+  overview = wm("toggle-overview"),
+  focusMonitor = wm("focus-monitor", "next"),
+  sendMonitor = actions.call(omniwm.sendWorkspaceToNextMonitor),
 }
 
 local PANE_ITEM = {

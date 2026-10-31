@@ -28,8 +28,8 @@ in
     "${appConfig}/Code/User/keybindings.json".source = link "vscode/keybindings.json";
   };
 
-  # Apps that write state next to their config (fish, gh, Karabiner) get
-  # file links; the rest get the whole directory.
+  # Apps that write state next to their config (fish, gh, Karabiner, OmniWM)
+  # get file links; the rest get the whole directory.
   xdg.configFile = {
     "fish/conf.d/00-paths.fish".source = link "fish/conf.d/00-paths.fish";
     "fish/config.fish".source = link "fish/config.fish";
@@ -41,8 +41,8 @@ in
     "starship.toml".source = link "starship/starship.toml";
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
-    "aerospace".source = link "aerospace";
     "karabiner/karabiner.json".source = link "karabiner/karabiner.json";
+    "omniwm/settings.toml".source = link "omniwm/settings.toml";
   };
 
   # A missing checkout would leave every link above dangling without an error.

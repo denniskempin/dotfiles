@@ -4,7 +4,7 @@
 -- config does to the outside world as effect strings:
 --
 --   press cmd+shift+[               a key the config posted, down and up
---   aerospace focus left            an AeroSpace command it started
+--   omniwmctl command focus left    an OmniWM command it started
 --   open -b com.raycast.macos       any other process it started
 --   system-events cmd+alt+ctrl+o    a keystroke it asked System Events for
 --   menu Window > Split Pane        a menu item it tried in the front app
@@ -18,7 +18,7 @@
 -- only when listed in `menus`, so every candidate path shows up.
 --
 -- It cannot tell which keys trigger global hotkeys, whether an app honors a
--- shortcut, or what AeroSpace does with a command. AGENTS.md covers checking
+-- shortcut, or what OmniWM does with a command. AGENTS.md covers checking
 -- those on the live system.
 --
 -- The config reads the global `hs`, so only the newest world is live.
@@ -27,13 +27,14 @@ local TEST_DIR = debug.getinfo(1, "S").source:match("^@(.*)/[^/]*$") or "."
 local HS_DIR = TEST_DIR .. "/.."
 
 local CODES = dofile(TEST_DIR .. "/keycodes.lua")
+local json = dofile(TEST_DIR .. "/json.lua")
 local KEYMAP = {}
 for code, name in pairs(CODES) do
   KEYMAP[code] = name
   KEYMAP[name] = code
 end
 
-local MODULES = { "actions", "aerospace", "bindings", "overlay", "switcher", "targets", "workspaces" }
+local MODULES = { "actions", "bindings", "omniwm", "overlay", "switcher", "targets" }
 
 local chunks = {}
 local function chunk(name)
@@ -75,7 +76,7 @@ end
 local World = {}
 World.__index = World
 
-local M = { KEYMAP = KEYMAP, CODES = CODES }
+local M = { KEYMAP = KEYMAP, CODES = CODES, json = json }
 
 -- opts.front           bundle id of the front app, or nil for none
 -- opts.latency         seconds each started process runs (default 0.05)
@@ -83,6 +84,7 @@ local M = { KEYMAP = KEYMAP, CODES = CODES }
 -- opts.deliverHotkeys  false drops System Events keystrokes
 -- opts.menus           set of "A > B > C" menu paths the front app has
 -- opts.stdout          function(args) returning the stdout of a finished process
+-- opts.exit            function(args) returning its exit code (default 0)
 -- opts.bindings        a table that replaces bindings.lua
 -- opts.targets         function(actions) returning a table that replaces targets.lua
 function M.new(opts)
@@ -101,10 +103,9 @@ function M.new(opts)
     deliverHotkeys = opts.deliverHotkeys ~= false,
     menus = opts.menus or {},
     stdout = opts.stdout,
-    -- The first canvas created is the bindings overlay. The workspace map
-    -- creates the second, and only after the bindings canvas exists.
+    exit = opts.exit,
+    -- The first canvas created is the bindings overlay.
     overlay = { visible = false, shows = 0, texts = {} },
-    map = { visible = false, shows = 0, texts = {} },
   }, World)
   w:load()
   return w
@@ -303,7 +304,7 @@ function World:task(path, callback, args)
   function t:start()
     w:record(effect)
     if not (w.hang and w.hang(path, args)) then
-      w:timer(w.latency, function() finish(0) end)
+      w:timer(w.latency, function() finish(w.exit and w.exit(args) or 0) end)
     end
     return t
   end
@@ -334,7 +335,7 @@ function World:fake()
     return setmetatable({ w = warn, e = warn }, { __index = function() return function() end end })
   end
 
-  local canvasSlots = { w.overlay, w.map }
+  local canvasSlots = { w.overlay }
   local canvasCount = 0
   local function canvas(rect)
     canvasCount = canvasCount + 1
@@ -378,10 +379,11 @@ function World:fake()
     keycodes = strict("hs.keycodes", { map = KEYMAP }),
     fs = strict("hs.fs", {
       attributes = function(path)
-        if path == "/opt/homebrew/bin/aerospace" then return { mode = "file" } end
+        if path == "/opt/homebrew/bin/omniwmctl" then return { mode = "file" } end
         return nil
       end,
     }),
+    json = strict("hs.json", { decode = json.decode }),
     timer = strict("hs.timer", {
       doAfter = function(delay, fn) return w:timer(delay, fn) end,
       secondsSinceEpoch = function() return w.now end,

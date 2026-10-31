@@ -34,13 +34,23 @@ Events posted with `hs.eventtap` are visible to the same tap. Every posted key i
 
 `Keybindings.tap` is a global. A tap stored only in a local is collected and stops.
 
-### AeroSpace commands cannot run inside the tap
+### Window manager commands cannot run inside the tap
 
-The tap callback holds every key on the system until it returns. `hs.execute` waits for the command to exit: 10 to 20 ms per `aerospace` call when AeroSpace is idle, and seconds when AeroSpace waits on an app that is slow to answer it. Long enough, and macOS disables the tap, so a layer key-up can be missed and the layer stays armed.
+The tap callback holds every key on the system until it returns. `hs.execute` waits for the command to exit, and a window manager can take seconds when it waits on an app that is slow to answer it. Long enough, and macOS disables the tap, so a layer key-up can be missed and the layer stays armed.
 
-Commands go through `hs.task` on a queue that runs one command at a time in key order. A command still running after 5 seconds is terminated.
+Commands go through `hs.task` on a queue that runs one command at a time in key order. A command still running after 5 seconds is terminated. Exit 1 is OmniWM declining, such as focus with nothing on that side, and is not logged. Exit 2 means OmniWM is not running or IPC is off, and is logged.
 
-`workspace next` and `move-node-to-workspace next` pass `--no-stdin`. Without it AeroSpace may take its workspace list from stdin, and `hs.task` leaves stdin open as a pipe.
+### OmniWM's settings file is strict
+
+`configs/omniwm/settings.toml` is linked file by file, because OmniWM writes `settings.toml.pre-v<N>` and `settings.toml.corrupt` backups next to it. On OmniWM's `main`, saving from the Settings window while the file is invalid moves it to `settings.toml.corrupt` and writes the running settings in its place, which through the link replaces the repo's copy. `git diff` shows that, and `git checkout` puts the file back. It is the v0.7.6 schema, `schemaVersion = 4`. OmniWM's docs on `main` describe version 5, which v0.7.6 treats as unsupported and refuses to load or edit. A missing required key, or an unknown value for a string key, rejects the whole file. OmniWM then runs with its defaults, which have `ipcEnabled = false` and every hotkey on, so the layers stop working. Diagnostics in the status menu names the key. Re-check the file against the release's `CanonicalTOMLConfig` and `SettingsExport` before bumping the cask.
+
+The Settings window writes back through the symlink into the repo. It keeps unknown keys but sorts the file and drops comments, so the file has none; the reasons live in `keybindings.md`.
+
+`hotkeysEnabled = false` and `hotkeys = []` leave every key to Hammerspoon. An action left out of `hotkeys` is unassigned, not defaulted.
+
+### OmniWM and AeroSpace cannot both run
+
+OmniWM refuses to manage windows while AeroSpace is running. It also needs "Displays have separate Spaces" on, which AeroSpace wanted off, and Accessibility and Input Monitoring. Start at Login is a macOS login item, not a key in `settings.toml`.
 
 ### iTerm's menus
 
@@ -64,20 +74,22 @@ Keys that Hammerspoon posts reach the focused window but never trigger a global 
 
 Run command opens Raycast with `open -g -b com.raycast.macos`. With Raycast already running, that shows the search bar, and the bar takes keys. Without `-g`, Raycast also becomes the active app and stays active with no window after Escape closes the bar, so typed keys go nowhere.
 
-Contexts has no URL scheme or AppleScript dictionary. Open document used to send its hotkey through System Events. It is now the Hammerspoon window search: Right Option+O, type, Return moves the window onto the focused workspace with `move-node-to-workspace --focus-follows-window`. Holding Fn and typing focuses a match on release. Letting go of the globe key is a flags change, not a key-up, so the tap watches `flagsChanged` to close the search. Escape closes it too, including after Fn is already up. The Fn key itself is passed through, so a tap still changes the input source and Fn+arrow is still Home, End, Page Up, and Page Down. Swallowing Fn the way F19 is swallowed breaks both of those.
+Contexts has no URL scheme or AppleScript dictionary. Open document used to send its hotkey through System Events. It is now OmniWM's window list, `omniwmctl command open-command-palette windows`, whose Shift+Return summons the window next to the focused one. Holding Fn and typing is a Hammerspoon search that focuses a match on release. Letting go of the globe key is a flags change, not a key-up, so the tap watches `flagsChanged` to close the search. Escape closes it too, including after Fn is already up. The Fn key itself is passed through, so a tap still changes the input source and Fn+arrow is still Home, End, Page Up, and Page Down. Swallowing Fn the way F19 is swallowed breaks both of those.
 
 Raycast stores that chord as the defaults string `raycastGlobalHotkey`. Key code 35 is `P`. The previous value was `Shift-Control-Option-Command-49`, Hyper-Shift-Space. The Application Support directory is encrypted SQLite (clipboard, AI, activity) plus window frames and install ids in the preferences plist. None of that is linked, and no Nix module sets the hotkey string either. It is machine state.
 
 Contexts stores the switcher chord as an `NSKeyedArchiver` blob, `CTPreferenceSearchShortcutModal`, inside `com.contextsformac.Contexts`. Key code 31 is `O`. Modifier flags `1835008` are Command, Option, and Control. The previous flags were `1966080`, which adds Shift. The same plist holds usage counters, a Sparkle schedule, and App Center install ids, and Contexts rewrites it while running. The license file and Realm database sit beside it. That domain stays on the machine. A running copy of either app keeps the old hotkey in memory and writes it back on quit, so the preference is written while the app is not running.
 
-### Chrome tabs in the window search
+### Chrome tabs in the Fn search
 
-Chrome's AppleScript window id is not the macOS window id AeroSpace uses. The search matches a tab to its window by the window bounds, within a few pixels. `tab` inside `tell application "Google Chrome"` is Chrome's tab class, so a tab character has to be `ASCII character 9`. A tell to Chrome launches it when it is not running, so the query is skipped unless Chrome is already running. Selecting a tab needs Hammerspoon allowed to control Google Chrome under Automation. Without that permission the window still focuses and the tab stays as it was.
+Chrome's AppleScript window id is not the macOS window id. OmniWM reports the macOS id as `windowId` beside its own `id`, which is what `window` commands take and is only valid until OmniWM restarts. The search matches a tab to its window by the window bounds, within a few pixels. `tab` inside `tell application "Google Chrome"` is Chrome's tab class, so a tab character has to be `ASCII character 9`. A tell to Chrome launches it when it is not running, so the query is skipped unless Chrome is already running. Selecting a tab needs Hammerspoon allowed to control Google Chrome under Automation. Without that permission the window still focuses and the tab stays as it was.
 
-### The workspace map cannot read a hidden tree
+OmniWM's palette lists windows only, so the Fn search is the one place tabs appear. `--sort` and `focus-rank` from OmniWM's `main` docs are not in v0.7.6, so the Fn search orders by `hs.window.orderedWindows`.
 
-AeroSpace 0.21 has no command that prints the workspace tree. `list-windows` sorts by app name, then title. Windows on a hidden workspace are moved off-screen, so their `hs.window` frames are not the tiled layout. The map uses frames only while the workspace is visible. A visible accordion is redrawn as strips: scaled down, the real accordion padding is a couple of pixels and the thumbnail would look like a single window. A hidden workspace gets equal columns, rows, or strips from the layout its windows share.
+### OmniWM's own panels take the keyboard
+
+The window list (O) and Overview (V) are OmniWM panels. Once open they handle their own keys, but only keys the tap lets through reach them. While Right Option is held the layer still swallows every key, so release it before typing. A locked layer would keep swallowing them, so both rows are marked `unlocks` and end the lock. The workspace map Hammerspoon used to draw under the layer overlay was removed in favor of Overview, which cannot be a peek while the layer is held.
 
 ## Install
 
-`nix/home/links.nix` links `~/.hammerspoon` to `configs/hammerspoon` and `~/.config/karabiner/karabiner.json` to `configs/karabiner/karabiner.json`. An older copy of `karabiner.json` that mapped Caps Lock to Hyper or Escape has been deleted, so a rebuild cannot bring that profile back.
+`nix/home/links.nix` links `~/.hammerspoon` to `configs/hammerspoon`, `~/.config/karabiner/karabiner.json` to `configs/karabiner/karabiner.json`, and `~/.config/omniwm/settings.toml` to `configs/omniwm/settings.toml`. An older copy of `karabiner.json` that mapped Caps Lock to Hyper or Escape has been deleted, so a rebuild cannot bring that profile back.

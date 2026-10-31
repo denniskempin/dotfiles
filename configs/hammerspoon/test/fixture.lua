@@ -2,7 +2,8 @@
 -- depend on the real bindings. snapshot.txt covers those.
 --
 -- Both layers:  arrows go, Shift+arrows carry, S starts the "pick" chord
--- OS layer:     P launches, O sends a hotkey, B searches windows
+-- OS layer:     P launches, O sends a hotkey, Y calls a function that
+--               runs an OmniWM command, U opens a panel and ends a lock
 -- App layer:    K posts a two-stroke sequence, M tries three menu paths
 -- Only APP has App-layer targets.
 
@@ -26,7 +27,8 @@ function M.bindings()
       {
         { keys = "p", layer = "os", verb = "launch", label = "Launch", hint = "P" },
         { keys = "o", layer = "os", verb = "hotkey", label = "Hotkey", hint = "O" },
-        { keys = "b", layer = "os", switcher = "move", label = "Bring", hint = "B" },
+        { keys = "y", layer = "os", verb = "call", label = "Call", hint = "Y" },
+        { keys = "u", layer = "os", verb = "panel", unlocks = true, label = "Panel", hint = "U" },
         { keys = "k", layer = "app", verb = "sequence", label = "Sequence", hint = "K" },
         { keys = "m", layer = "app", verb = "menu", label = "Menu", hint = "M" },
       },
@@ -46,11 +48,13 @@ function M.targets(actions)
   local stroke = actions.stroke
   return {
     system = {
-      go = function(dir) return actions.aero("go", dir) end,
-      carry = function(dir) return actions.aero("carry", dir) end,
-      pick = function(dir) return actions.aero("pick", dir) end,
+      go = function(dir) return actions.wm("go", dir) end,
+      carry = function(dir) return actions.wm("carry", dir) end,
+      pick = function(dir) return actions.wm("pick", dir) end,
       launch = actions.launch("com.example.Launcher"),
       hotkey = actions.hotkey(M.HYPER, "o"),
+      call = actions.call(function() require("omniwm").command({ "called" }) end),
+      panel = actions.wm("panel"),
     },
     apps = {
       [M.APP] = {

@@ -2,18 +2,18 @@
 --
 -- Karabiner turns Right Option into F19 while held (operating-system layer)
 -- and Right Command into F18 while held (app layer). This file watches
--- those two keys and runs the layer grammar: AeroSpace for the operating
+-- those two keys and runs the layer grammar: OmniWM for the operating
 -- system, and each app's own shortcut or menu item for the app layer.
 --
 --   bindings.lua   which key runs which verb, and the overlay text
 --   targets.lua    what each verb does on the operating system and in each app
 --   actions.lua    carrying out an action, and posting events
---   aerospace.lua  the AeroSpace command queue
---   switcher.lua   the window search behind Open document and Fn
+--   omniwm.lua     the omniwmctl command queue
+--   switcher.lua   the window search behind Fn
 --   overlay.lua    the bindings overlay
---   workspaces.lua the workspace map shown with the operating-system layer
 --
--- AeroSpace stays in main with an empty binding table.
+-- OmniWM's own hotkeys are off in configs/omniwm/settings.toml, so every key
+-- reaches this file.
 
 require("hs.ipc") -- lets the `hs` command run Lua in this config
 
@@ -21,7 +21,6 @@ local actions = require("actions")
 local bindings = require("bindings")
 local overlay = require("overlay")
 local switcher = require("switcher")
-local workspaces = require("workspaces")
 local targets = require("targets")
 
 local log = hs.logger.new("keybindings", "warning")
@@ -160,7 +159,7 @@ local osDown, appDown = false, false
 local lastHeld = nil
 local locked = nil
 local chord = nil -- { name, layer, def, index } while a chord waits for its key
-local session = nil -- { kind = "move"|"focus", query, selected } while a window search is open
+local session = nil -- { query, selected } while the Fn window search is open
 local fnDown = false
 local swallowed = {}
 
@@ -185,7 +184,6 @@ end
 
 local function hideOverlays()
   overlay.hide()
-  workspaces.hide()
 end
 
 local function showLayerOverlay()
@@ -203,12 +201,10 @@ local function showLayerOverlay()
     columns = columns,
     footer = "space locks      esc clears",
   })
-  if layer == "os" then workspaces.show() else workspaces.hide() end
 end
 
 local function showChordOverlay()
   if not chord then return end
-  workspaces.hide()
   overlay.show({
     layer = chord.layer,
     title = chord.def.title,
@@ -264,16 +260,13 @@ end
 
 local function showSession()
   if not session then return end
-  workspaces.hide()
   local rows, selected = switcher.rows(session.query, session.selected)
   session.selected = selected
   overlay.show({
     layer = "os",
     title = session.query ~= "" and session.query or "Windows",
     rows = rows,
-    footer = session.kind == "move"
-      and "up down select      return brings here      esc cancels"
-      or "release focuses      esc cancels",
+    footer = "release focuses      esc cancels",
     colW = 520,
     verbShare = 0.34,
   })
@@ -294,52 +287,16 @@ local function endSession()
   end
 end
 
-local function beginSession(kind)
-  session = { kind = kind, query = "", selected = 1 }
+local function beginSession()
+  session = { query = "", selected = 1 }
   switcher.refresh()
-  showSession()
-end
-
-local function handleMoveKey(name)
-  if not name or not session then return end
-  if name == "escape" then
-    endSession()
-    return
-  end
-  if name == "return" then
-    local chosen = switcher.pick(session.query, session.selected)
-    if not chosen then return end
-    endSession()
-    switcher.bring(chosen)
-    return
-  end
-  if name == "delete" then
-    session.query = session.query:sub(1, -2)
-    session.selected = 1
-    showSession()
-    return
-  end
-  if name == "down" or name == "up" then
-    local matches = switcher.matches(session.query)
-    if name == "down" and session.selected < #matches then
-      session.selected = session.selected + 1
-    elseif name == "up" and session.selected > 1 then
-      session.selected = session.selected - 1
-    end
-    showSession()
-    return
-  end
-  local ch = queryChar(name)
-  if not ch then return end
-  session.query = session.query .. ch
-  session.selected = 1
   showSession()
 end
 
 -- A letter starts the Fn search. Delete and escape apply only once it is open.
 local function focusSearchKey(name)
   if queryChar(name) then return true end
-  return session and session.kind == "focus" and (name == "delete" or name == "escape")
+  return session and (name == "delete" or name == "escape")
 end
 
 local function pressFn()
@@ -348,14 +305,14 @@ local function pressFn()
   if not session and not activeLayer() and not chord then
     overlay.later(function()
       if session or not fnDown then return end
-      beginSession("focus")
+      beginSession()
     end)
   end
 end
 
 -- The globe key often arrives as a flags change and never as a key-up.
 local function releaseFn()
-  local searching = session and session.kind == "focus"
+  local searching = session ~= nil
   if not fnDown and not searching then return end
   fnDown = false
   if searching then
@@ -369,20 +326,20 @@ end
 
 local function onFocusKey(name)
   if name == "escape" then
-    if session and session.kind == "focus" then endSession() end
+    if session then endSession() end
     return
   end
   if name == "delete" then
-    if not (session and session.kind == "focus") then return end
+    if not session then return end
     session.query = session.query:sub(1, -2)
     session.selected = 1
     showSession()
     return
   end
   local ch = queryChar(name)
-  if not ch or (session and session.kind ~= "focus") then return end
+  if not ch then return end
   if not session then
-    session = { kind = "focus", query = "", selected = 1 }
+    session = { query = "", selected = 1 }
     switcher.refresh()
   end
   session.query = session.query .. ch
@@ -393,8 +350,8 @@ end
 local function arm(which)
   if which == "os" then osDown = true else appDown = true end
   lastHeld = which
-  if session and session.kind == "focus" then session = nil end
-  if chord or locked or session then return end
+  session = nil
+  if chord or locked then return end
   hideOverlays()
   scheduleLayerOverlay()
 end
@@ -442,12 +399,8 @@ local function handleLayer(name, shift, flags)
     return
   end
 
-  if binding.row.switcher then
-    beginSession(binding.row.switcher)
-    return
-  end
-
   deliver(layer, binding, name)
+  if binding.row.unlocks then locked = nil end
   onBinding()
 end
 
@@ -464,7 +417,7 @@ local function handle(event)
   if kind == hs.eventtap.event.types.flagsChanged then
     if flags.fn then
       pressFn()
-    elseif fnDown or (session and session.kind == "focus") then
+    elseif fnDown or session then
       releaseFn()
     end
     return false
@@ -490,16 +443,6 @@ local function handle(event)
     return false
   end
 
-  if session and session.kind == "move" then
-    if not isDown then
-      swallowed[code] = nil
-      return true
-    end
-    swallowed[code] = true
-    if not isRepeat or keyName(code) == "delete" then handleMoveKey(keyName(code)) end
-    return true
-  end
-
   if not isDown then
     if swallowed[code] then
       swallowed[code] = nil
@@ -510,7 +453,7 @@ local function handle(event)
 
   local name = keyName(code)
   -- Escape cancels even after Fn is already up. The key often has no Fn flag.
-  if session and session.kind == "focus" and name == "escape" and not isRepeat then
+  if session and name == "escape" and not isRepeat then
     swallowed[code] = true
     endSession()
     return true

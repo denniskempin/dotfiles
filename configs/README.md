@@ -9,7 +9,6 @@ linked, not the directory.
 
 | Directory | Destination | Platforms |
 | --- | --- | --- |
-| `aerospace/` | `~/.config/aerospace` | macOS |
 | `bash/bashrc` | `~/.bashrc` and `~/.zshrc`. Starts fish for interactive shells | all |
 | `cursor/settings.json` | `~/Library/Application Support/Cursor/User/settings.json` on macOS, `~/.config/Cursor/User/settings.json` on Linux | all |
 | `fish/config.fish`, `fish/fish_plugins`, `fish/conf.d/00-paths.fish` | `~/.config/fish/`, files only, same relative paths. Run `fisher update` afterwards | all |
@@ -20,5 +19,6 @@ linked, not the directory.
 | `iterm2/` | Not linked. Point iTerm at it: `defaults write com.googlecode.iterm2 PrefsCustomFolder -string ~/dotfiles/configs/iterm2` and `defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true` | macOS |
 | `karabiner/karabiner.json` | `~/.config/karabiner/karabiner.json`, file only | macOS |
 | `nvim/` | `~/.config/nvim` | all |
+| `omniwm/settings.toml` | `~/.config/omniwm/settings.toml`, file only | macOS |
 | `starship/starship.toml` | `~/.config/starship.toml` | all |
 | `vscode/settings.json`, `vscode/keybindings.json` | `~/Library/Application Support/Code/User/` | macOS |

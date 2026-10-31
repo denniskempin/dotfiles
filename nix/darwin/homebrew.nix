@@ -13,7 +13,9 @@
     onActivation = {
       autoUpdate = false;
       upgrade = false;
-      # One switch only: drops 1password/tap and homebrew/services.
+      # One switch only: drops 1password/tap, homebrew/services, and
+      # nikitabobko/tap. With "none" the aerospace cask also stays installed;
+      # uninstall it by hand before putting "check" back.
       cleanup = "none";
     };
 
@@ -26,8 +28,9 @@
     ];
 
     casks = [
-      # Tiling WM. Lives in nikitabobko/tap, which brew will not load until trusted.
-      "nikitabobko/tap/aerospace"
+      # Scrolling tiling WM (niri layout). Driven by Hammerspoon through
+      # omniwmctl, which the cask links into /opt/homebrew/bin.
+      "omniwm"
 
       # GUI apps that are actually on disk
       "1password"

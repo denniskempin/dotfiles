@@ -13,11 +13,11 @@ To use the same keys for the same actions, we need to define abstract nouns for 
 
 | Noun     | What it is                                                        | Operating system              | App                                                       |
 | -------- | ----------------------------------------------------------------- | ----------------------------- | --------------------------------------------------------- |
-| Tile     | The 2D unit you focus and move in a direction                     | Window                        | Pane: an editor group, a terminal split, a note tab group |
+| Tile     | The 2D unit you focus and move in a direction                     | Window, in a column of the strip | Pane: an editor group, a terminal split, a note tab group |
 | Slot     | An item in the ordered list you step through or jump to by number | Workspace                     | Tab                                                       |
-| History  | A stack you walk backward and forward                             | —                             | That app's own back and forward stack                     |
+| History  | A stack you walk backward and forward                             | The window and the workspace focused before this one | That app's own back and forward stack                     |
 | Command  | A named action                                                    | The system command launcher   | The app's command palette                                 |
-| Document | A thing you open                                                  | The system window switcher    | Webpages, files, notes, terminal sessions                 |
+| Document | A thing you open                                                  | OmniWM's window list          | Webpages, files, notes, terminal sessions                 |
 
 
 ### Layers
@@ -31,9 +31,15 @@ There are two layer keys:
 | App              | Hold Right Command |
 
 
-`Layer Key + space` will trigger the layer to be locked. The layer key can then be released and all bindings can be used until escape is pressed.
+`Layer Key + space` will trigger the layer to be locked. The layer key can then be released and all bindings can be used until escape is pressed. Open document and Overview end the lock, because what they open takes the keys typed next.
 
 Left Command and Left Option stay modifiers. Fn is the globe key. Caps Lock is Escape.
+
+### The operating system's layout
+
+Windows are laid out the way niri lays them out. Each workspace is a horizontal strip of columns that scrolls sideways and can be wider than the screen. A column holds one window, or several stacked top to bottom, or several as tabs. A monitor's workspaces stack top to bottom.
+
+The arrows follow that shape. Left and right move along the strip. Up and down move through the column, and past its top or bottom to the workspace above or below. Switch slot steps through the same stack of workspaces without going through the column.
 
 ### The map
 
@@ -42,14 +48,14 @@ Left Command and Left Option stay modifiers. Fn is the globe key. Caps Lock is E
 
 | Verb + noun  | Key                        | Operating system                                                                                                                                                                   | App                                                                                                         |
 | ------------ | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| Focus tile   | arrows                     | Focus the window in that direction. At the edge of the screen, focus crosses to the next monitor                                                                                   | Focus the pane in that direction                                                                            |
-| Move tile    | Shift+arrows               | Move the window that way. A new split is created when that direction has no neighbor. At the edge of the screen, the window moves to the next monitor                              | Carry the tab, or in a terminal the pane, into the tile in that direction, creating it when there is none   |
-| Zoom tile    | Enter                      | The window fills the workspace. Focusing another window there restores the others                                                                                                  | The pane fills the window                                                                                   |
+| Focus tile   | arrows                     | Left and right focus the column on that side, and the strip scrolls to show it. At the end of the strip, focus crosses to the next monitor. Up and down focus the window above or below in the column. Past the top or bottom of the column, they focus the workspace above or below | Focus the pane in that direction                                                                            |
+| Move tile    | Shift+arrows               | Left and right move the column one place along the strip. At the end of the strip, the column moves to the next monitor. Up and down move the window within its column. Past the top or bottom of the column, the window moves to the workspace above or below, and focus follows it | Carry the tab, or in a terminal the pane, into the tile in that direction, creating it when there is none   |
+| Zoom tile    | Enter                      | The window fills the screen. Enter again puts it back                                                                                                                              | The pane fills the window                                                                                   |
 | Close tile   | `X`                        | Close the window                                                                                                                                                                   | Close the pane. In an editor, the tabs inside it close with it. In a terminal, the last pane closes the tab |
 | Split tile   | `\` then an arrow          | —                                                                                                                                                                                  | A new pane on that side. An editor has all four directions. A terminal and a notes app have down and right  |
-| Resize tile  | `S` then an arrow          | Left shrinks the width, right grows it. Down grows the height, up shrinks it. One step per chord                                                                                   | The same, on the pane                                                                                       |
-| Layout tiles | `L` then `F`, `A`, or `=`  | `F` flips side-by-side and stacked, and leaves tiled-versus-accordion as it is. `A` flips tiled and accordion, and leaves the axis as it is. `=` makes every sibling the same size | `F` flips the axis. `=` makes sibling panes the same size                                                   |
-| Join tile            | `J` then an arrow | The window joins the neighbor in that direction                  |
+| Resize tile  | `S` then an arrow          | Left narrows the column, right widens it, by a tenth of the screen. Down makes the window taller within its column, up makes it shorter. One step per chord                       | Left shrinks the width, right grows it. Down grows the height, up shrinks it, on the pane                   |
+| Layout tiles | `L` then a letter          | `W` steps the column through a third, half, and two thirds of the screen. `F` toggles the column between the full screen width and its own width. `A` toggles the column between stacked and tabbed. `C` centers the column on the screen. `=` evens out the sizes in the workspace | `F` flips the axis. `=` makes sibling panes the same size                                                   |
+| Join tile    | `J` then `←` or `→`        | A window alone in its column joins the column on that side. A window that shares a column leaves it, as a new column on that side | —                                                                                                           |
 
 
 #### Slots
@@ -57,9 +63,10 @@ Left Command and Left Option stay modifiers. Fn is the globe key. Caps Lock is E
 
 | Verb + noun       | Key                                 | Operating system                                                                                                                                                                                            | App                                                    |
 | ----------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| Switch slot       | `;` previous, `'` next              | The previous or next workspace on this monitor, wrapping around                                                                                                                                             | The previous or next tab                               |
-| Jump to slot      | `1`–`9`; in apps `9` is last        | Workspace 1 through 9, creating it if needed                                                                                                                                                                | Tab 1 through 8. `9` is the last tab                   |
-| Send tile to slot | Shift+`;`, Shift+`'`, Shift+`1`–`9` | Move the window to that workspace and follow it. The step follows the same sequence as Switch. The number creates the workspace if needed                                                                    | Move the tab one step, to that position, or to the end |
+| Switch slot       | `;` previous, `'` next              | The workspace above or below on this monitor, wrapping around. Empty workspaces are included                                                                                                                | The previous or next tab                               |
+| Jump to slot      | `1`–`9`; in apps `9` is last        | Workspace 1 through 9, on whichever monitor holds it                                                                                                                                                        | Tab 1 through 8. `9` is the last tab                   |
+| Send tile to slot | Shift+`;`, Shift+`'`, Shift+`1`–`9` | Move the window to the workspace above, below, or with that number, and follow it                                                                                                                           | Move the tab one step, to that position, or to the end |
+| Send column to slot | `J` then `↑` or `↓`               | Move the whole column, every window in it, to the workspace above or below, and follow it                                                                                                                 | —                                                      |
 
 
 #### Other
@@ -67,9 +74,10 @@ Left Command and Left Option stay modifiers. Fn is the globe key. Caps Lock is E
 
 | Verb + noun   | Key                   | Operating system                                                                                                                           | App                                         |
 | ------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------- |
-| Walk history  | `[` back, `]` forward | —                                                                                                                                          | Back and forward in that app                |
+| Walk history  | `[` back, `]` forward | `[` focuses the window focused before this one. `]` returns to the workspace this monitor showed before this one. Each keeps one step, so pressing it again goes back | Back and forward in that app                |
 | Run command   | `P`                   | Open the command launcher                                                                                                                  | Open the command palette                    |
-| Open document | `O`                   | Search windows, including each Chrome tab. Return moves the chosen window onto this workspace and selects the tab                           | Open the switcher for documents in this app |
+| Open document | `O`                   | Open OmniWM's window list, most recently focused first. Return goes to the chosen window. Shift+Return brings it here, as a new column right of the focused one. Chrome tabs are not listed; the Fn search has them | Open the switcher for documents in this app |
+| Overview      | `V`                   | Zoom out to every workspace and its columns. Arrows move the selection, Return goes to the selected window, Escape closes it | —                                           |
 | Focus monitor        | Tab               | Focus the next monitor. With two monitors, that is the other one |
 | Send slot to monitor | Shift+Tab         | Move the current workspace to the next monitor                   |
 
@@ -78,13 +86,11 @@ Left Command and Left Option stay modifiers. Fn is the globe key. Caps Lock is E
 
 An overlay window showing possible layer bindings is shown after a short delay when a layer key is held or locked. It disappears once a binding is selected.
 
-Holding or locking the operating-system layer also shows a map of workspaces on the same screen, above the bindings. Each workspace is a thumbnail of its windows. A visible workspace is drawn from the windows' frames, so a split, a nest, and unequal sizes match the screen. An accordion is drawn as strips, with the focused window open and the others beside it, because the real padding would shrink to a few pixels in the thumbnail. A hidden workspace is drawn from its layout in equal shares. The map uses the same delay as the bindings and hides with them, including while a chord or the window search is open.
-
 When another key is expected in a sequence, a similar overlay window is shown after a delay with possible follow up keys. 
 
 ## Implementation
 
-Karabiner translates two layer keys and maps Caps Lock to Escape. Hammerspoon dispatches the grammar, draws the overlay, and runs the commands. The window manager is AeroSpace, left in `main` with an empty `[mode.main.binding]` table. skhd is not used.
+Karabiner translates two layer keys and maps Caps Lock to Escape. Hammerspoon dispatches the grammar, draws the overlay, and runs the commands. The window manager is OmniWM, a scrolling tiler with niri's layout, configured by `configs/omniwm/settings.toml`. Its own hotkeys are off (`hotkeysEnabled = false`, `hotkeys = []`) and its IPC server is on (`ipcEnabled = true`), so every key goes through Hammerspoon and `omniwmctl`. skhd is not used.
 
 ### Karabiner
 
@@ -109,15 +115,14 @@ Fn is not remapped. A tap changes the input source, and Fn+arrow is Home, End, P
 One event tap watches key down and key up.
 
 - F18 down arms the App layer. F19 down arms the operating-system layer. Key repeat is ignored, and both keys are swallowed. Key up disarms a layer that is not locked.
-- Space, while a layer is armed and no chord is pending, locks that layer. The layer key can come up and the layer stays armed. Escape, with no chord pending, clears the lock.
+- Space, while a layer is armed and no chord is pending, locks that layer. The layer key can come up and the layer stays armed. Escape, with no chord pending, clears the lock. A row marked `unlocks`, Open document and Overview, clears it too.
 - While a layer is armed, every other key is swallowed. A listed key runs its verb. Shift is read off the event flags. Command combinations are swallowed with the rest.
 - Delete on the App layer is posted as forward delete.
 - A layer that is held or locked shows its overlay after 250 ms. The overlay hides once a binding is selected, and on key up when the layer is not locked. While the layer stays locked, the 250 ms timer starts again after the binding. The overlay is an `hs.canvas` on the focused screen, non-activating. Nothing goes to Notification Center.
-- The operating-system overlay is paired with a second canvas, the workspace map, at the top of that screen. It asks AeroSpace for workspaces and windows when it appears. Visible windows are measured with `hs.window`. Hidden windows are not: AeroSpace parks them off-screen, and `list-windows` is alphabetical rather than tree order.
-- `\`, `S`, and `L` on the App layer, and `S`, `L`, and `J` on the operating-system layer, start a chord. The layer overlay hides and a follow-up overlay lists the keys that chord accepts. Split, join, and resize accept an arrow. Layout accepts `F` and `=` on the App layer, and `F`, `A`, and `=` on the operating-system layer.
+- `\`, `S`, and `L` on the App layer, and `S`, `L`, and `J` on the operating-system layer, start a chord. The layer overlay hides and a follow-up overlay lists the keys that chord accepts. Split, resize, and the column chord accept an arrow. Layout accepts `F` and `=` on the App layer, and `W`, `F`, `A`, `C`, and `=` on the operating-system layer.
 - While a chord is waiting, the tap keeps swallowing keys after the layer key comes up. A lock stays in force. The pending verb wins over the layer, so an arrow with the layer key still down is the argument. F18 and F19 are not arguments. One argument clears the verb. Escape and any unlisted key clear the chord and leave a lock in place. Key repeat is swallowed, including inside a chord.
 
-AeroSpace commands run through `hs.task` on a queue, one at a time in key order, so the tap never waits on AeroSpace.
+OmniWM commands run through `hs.task` on a queue, one at a time in key order, so the tap never waits on OmniWM.
 
 Posted shortcuts re-enter the tap. Hammerspoon marks its own events and ignores them on the way back. A two-stroke shortcut is two marked keystrokes.
 
@@ -125,42 +130,45 @@ With Hammerspoon not running, or in a password field, Caps Lock still sends Esca
 
 ### Operating system
 
-Each operating-system key runs `aerospace`.
+Each operating-system key runs `omniwmctl`, usually `omniwmctl command <name>`.
 
 
 | Verb                 | Command                                                                                          |
 | -------------------- | ------------------------------------------------------------------------------------------------ |
-| Focus tile           | `focus --boundaries all-monitors-outer-frame --boundaries-action wrap-around-all-monitors <dir>` |
-| Move tile            | `move --boundaries all-monitors-outer-frame --boundaries-action create-implicit-container <dir>` |
-| Zoom tile            | `fullscreen`                                                                                     |
-| Switch slot          | `workspace --no-stdin --wrap-around prev` / `next`                                               |
-| Jump to slot         | `workspace 1` … `workspace 9`                                                                    |
-| Send tile to slot    | `move-node-to-workspace --no-stdin --focus-follows-window --wrap-around prev` / `next`, or `N`   |
-| Focus monitor        | `focus-monitor --wrap-around next`                                                               |
-| Send slot to monitor | `move-workspace-to-monitor --wrap-around next`                                                   |
-| Close tile           | `close`                                                                                          |
-| Join tile            | `join-with <dir>`                                                                                |
-| Resize tile          | `resize width -100` / `+100` on left / right, `resize height +100` / `-100` on down / up         |
-| Layout flip          | `layout horizontal vertical`                                                                     |
-| Layout accordion     | `layout tiles accordion`                                                                         |
+| Focus tile           | `focus left` / `right`; `focus-window-or-workspace-up` / `-down`                                 |
+| Move tile            | `move-column left` / `right`; `move-window-up-or-to-workspace-up` / `move-window-down-or-to-workspace-down` |
+| Zoom tile            | `toggle-fullscreen`                                                                              |
+| Switch slot          | `switch-workspace prev` / `next`                                                                 |
+| Jump to slot         | `switch-workspace 1` … `switch-workspace 9`                                                      |
+| Send tile to slot    | `move-to-workspace up` / `down`, or `N`                                                          |
+| Focus monitor        | `focus-monitor next`                                                                             |
+| Send slot to monitor | `query displays`, then `workspace move-to-monitor <name> <direction> --force`                    |
+| Close tile           | `close-focused-window`                                                                           |
+| Join tile            | `consume-or-expel-window-left` / `-right`                                                        |
+| Send column to slot  | `move-column-to-workspace up` / `down`                                                           |
+| Walk history         | `focus previous`; `switch-workspace back-and-forth`                                              |
+| Overview             | `toggle-overview`                                                                                |
+| Resize tile          | `set-container-primary-span -10%` / `+10%` on left / right, `set-window-secondary-span +10%` / `-10%` on down / up |
+| Layout width         | `cycle-size forward`                                                                             |
+| Layout full width    | `toggle-container-full-primary-span`                                                             |
+| Layout tabbed        | `toggle-column-tabbed`                                                                           |
+| Layout center        | `center-column`                                                                                  |
 | Layout equalize      | `balance-sizes`                                                                                  |
 | Run command          | `open -g -b com.raycast.macos`, which shows Raycast's search bar                                 |
-| Open document        | Search windows, including each Chrome tab as its own row. Return runs `move-node-to-workspace --focus-follows-window` onto the focused workspace, and selects the tab when the row is one. A window already there is focused |
+| Open document        | `open-command-palette windows`. The palette handles its own keys. Shift+Return on an empty workspace moves the window there, since there is no column to place it beside |
 
 
-Holding Fn and typing focuses a window without moving it. The letters are a prefix of the app name, the title, or a word in either, and releasing Fn focuses the first match. Each tab of a Google Chrome window is a row of its own, with that window's app name and the tab's title. Releasing Fn on a tab focuses the window and selects the tab. Fn itself is not swallowed: a tap still changes the input source, and Fn with an arrow is still Home, End, Page Up, or Page Down. The list appears on the first letter, or after the overlay delay when Fn is held with no letter yet. Releasing Fn with an empty query focuses nothing.
+Holding Fn and typing focuses a window without moving it. This search is Hammerspoon's, not OmniWM's, because it acts when Fn is released and lists Chrome tabs. The letters are a prefix of the app name, the title, or a word in either, and releasing Fn runs `window navigate <id>` on the first match, which switches to its workspace. Each tab of a Google Chrome window is a row of its own, with that window's app name and the tab's title. Releasing Fn on a tab focuses the window and selects the tab. Fn itself is not swallowed: a tap still changes the input source, and Fn with an arrow is still Home, End, Page Up, or Page Down. The list appears on the first letter, or after the overlay delay when Fn is held with no letter yet. Releasing Fn with an empty query focuses nothing.
 
-`layout horizontal vertical` picks the first argument that is not the current layout, so the axis flips and tiled-versus-accordion stays. `layout tiles accordion` toggles the other way and keeps the axis. `balance-sizes` equalizes every window in the current workspace, including windows nested by Join.
+`focus.crossesMonitorAtEdge` and `focus.moveCrossesMonitorAtEdge` carry Focus and Move across monitors at the ends of the strip. `focus.followsWindowToMonitor` makes Send tile to slot and Send column to slot follow to the new workspace.
 
-When the direction has no neighbor inside the workspace, `create-implicit-container` builds the new split. When that move meets the edge of the screen and a monitor lies that way, the window moves to that monitor.
+Focus up and down do not wrap: at the top workspace up stops, and at the bottom down stops. Switch slot wraps from the last workspace to the first. Both include empty workspaces, because `workspaceBar.hideEmptyWorkspaces` is off.
 
-`focus` with `wrap-around-all-monitors` crosses to the window on the next monitor, and from the outer edge continues onto the monitor at the opposite side.
+OmniWM moves a workspace to a monitor by direction, not by "next". Send slot to monitor sorts the displays left to right, as `focus-monitor next` steps, takes the one after the current display, and passes the direction its center lies in.
 
-`fullscreen` fills the workspace. Focusing another tiling window there exits fullscreen and restores the others.
+Workspaces are defined in `settings.toml`, so all nine always exist. 1 through 5, 8, and 9 belong to the main display, and 6 and 7 to the secondary one, as in OmniWM's defaults.
 
-Switch and Send-by-step step through `list-workspaces --monitor focused`. AeroSpace drops a workspace once it is empty and not visible, except for workspaces named in `aerospace.toml`, which stay in the list even when empty. With the empty `[mode.main.binding]` table, the sequence is the workspaces that have windows plus the one you are on.
-
-Cross-monitor Focus and Move require "Displays have separate Spaces" off.
+OmniWM requires "Displays have separate Spaces" on.
 
 ### App integration
 
@@ -197,7 +205,7 @@ Where the delivered action cannot do what the specification says, the cell says 
 
 ## macOS settings
 
-- **Displays have separate Spaces.** Off. System Settings > Desktop & Dock. Cross-monitor Focus and Move depend on it.
+- **Displays have separate Spaces.** On. System Settings > Desktop & Dock. OmniWM will not manage windows without it. `nix/darwin/defaults.nix` sets it, and a change takes a logout.
 - **Globe key.** System Settings > Keyboard > "Press 🌐 key to": Change Input Source. Fn is not remapped, and this setting is the language change.
 - **VoiceOver.** Not a concern. Control+Option is not used.
 

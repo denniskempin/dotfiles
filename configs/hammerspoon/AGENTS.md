@@ -2,7 +2,7 @@
 
 `docs/keybindings.md` is the spec and `docs/keybindings-gotchas.md` records how the live system actually behaves. Read both before changing this directory.
 
-Every change gets the offline suite. Changes that depend on macOS, an app, or AeroSpace also get a live check. `~/.hammerspoon` links to `configs/hammerspoon`, so a Hammerspoon reload picks up edits. No `darwin-rebuild` is needed, and the drift check in `.cursor/rules` does not apply to a reload.
+Every change gets the offline suite. Changes that depend on macOS, an app, or OmniWM also get a live check. `~/.hammerspoon` links to `configs/hammerspoon`, so a Hammerspoon reload picks up edits. No `darwin-rebuild` is needed, and the drift check in `.cursor/rules` does not apply to a reload.
 
 ## Offline suite
 
@@ -11,10 +11,10 @@ lua configs/hammerspoon/test/run.lua            # scenarios, then the snapshot
 lua configs/hammerspoon/test/run.lua --update   # rewrite snapshot.txt
 ```
 
-It runs in under a second with Homebrew's `lua` (5.4, like Hammerspoon), and needs no permissions.
+It runs in under a second with Lua 5.4, like Hammerspoon, and needs no permissions. Without a `lua` on the path, `nix shell nixpkgs#lua5_4 -c lua configs/hammerspoon/test/run.lua` works.
 
 - `snapshot.txt` lists every key, with and without Shift, in each layer, app, and chord, with what it did. A failing snapshot prints a diff grouped by section. Read the diff. Run `--update` only when every changed line is intended, and commit the snapshot with the change.
-- `scenarios.lua` covers the framework: layers, lock and unlock, chords, each action kind, the AeroSpace queue and its timeout, the hotkey pass-through, and the overlay. It runs against the made-up grammar in `fixture.lua`, not the real bindings, and checks timing as before and after rather than exact delays. A binding change or a retuned delay should only move the snapshot. Keep it that way: per-app and per-key detail belongs in the snapshot, not in a scenario.
+- `scenarios.lua` covers the framework: layers, lock and unlock, chords, each action kind, the OmniWM queue and its timeout, the hotkey pass-through, and the overlay. It runs against the made-up grammar in `fixture.lua`, not the real bindings, and checks timing as before and after rather than exact delays. A binding change or a retuned delay should only move the snapshot. Keep it that way: per-app and per-key detail belongs in the snapshot, not in a scenario.
 - A test also fails when the config logs a warning the test does not take, or when the config's own tap swallows a key it posted.
 
 When fixing a framework bug, add a scenario that fails before the fix. When fixing a binding, the snapshot diff is the test.
@@ -22,16 +22,18 @@ When fixing a framework bug, add a scenario that fails before the fix. When fixi
 A world (`test/world.lua`) loads the config fresh against a fake `hs`. Scenarios pass the fixture as `bindings` and `targets`:
 
 ```lua
-local w = world(t, { front = fixture.APP })  -- also latency, hang, deliverHotkeys, menus
+local w = world(t, { front = fixture.APP })  -- also latency, hang, exit, stdout, deliverHotkeys, menus
 w:down("f19")                       -- Right Option held (OS layer)
 w:press("left", { shift = true })   -- returns whether down and up reached apps
 w:up("f19")
-t.expect(w, { "aerospace carry left" })  -- runs every timer first; t.expectNow does not
+t.expect(w, { "omniwmctl carry left" })  -- runs every timer first; t.expectNow does not
 ```
 
 A new action kind or layer rule gets a fixture verb, not a real binding.
 
-Effects are strings such as `press cmd+k`, `aerospace focus ... left`, `open -g -b com.raycast.macos`, `system-events cmd+alt+ctrl+o`, and `menu View > Open Quickly`.
+`omniwmctl query` replies are JSON. `hs.json.decode` is faked by `test/json.lua`, and scenarios build replies with `json.encode` through the `replies` helper in `scenarios.lua`. An empty stdout is a failed query.
+
+Effects are strings such as `press cmd+k`, `omniwmctl command focus left`, `open -g -b com.raycast.macos`, `system-events cmd+alt+ctrl+o`, and `menu View > Open Quickly`.
 
 The fake follows what the live system was seen to do, not Hammerspoon's docs. A missing `hs` function raises an error that names it. Add it to `world.lua` only after checking the real behavior live. `keycodes.lua` is the real `hs.keycodes.map`. Regenerate it with:
 
@@ -39,7 +41,7 @@ The fake follows what the live system was seen to do, not Hammerspoon's docs. A 
 /opt/homebrew/bin/hs -c 'local out = {} for code = 0, 127 do local n = hs.keycodes.map[code] if type(n) == "string" then out[#out + 1] = ("  [%d] = %q,"):format(code, n) end end return table.concat(out, "\n")' 2>/dev/null
 ```
 
-The suite cannot tell whether a key triggers a global hotkey, whether an app honors a shortcut or has a menu item, or what AeroSpace does with a command. Those need the live system.
+The suite cannot tell whether a key triggers a global hotkey, whether an app honors a shortcut or has a menu item, or what OmniWM does with a command. Those need the live system.
 
 ## Live system
 
@@ -47,7 +49,7 @@ The suite cannot tell whether a key triggers a global hotkey, whether an app hon
 
 `init.lua` loads `hs.ipc`, so `/opt/homebrew/bin/hs -c '<lua>'` runs code in the live config and prints the return value.
 
-- Shell commands that talk to Hammerspoon or AeroSpace need the sandbox disabled (`required_permissions: ["all"]`).
+- Shell commands that talk to Hammerspoon or OmniWM need the sandbox disabled (`required_permissions: ["all"]`).
 - Output includes `-- Loading extension` lines. Filter them with `grep -v "Loading extension"`.
 - Code that posts events or reloads must run on a timer (`hs.timer.doAfter(0, ...)`). Posting inside `hs -c` itself prints "hs.ipc already recursing". Anything asynchronous finishes after `hs -c` returns, so sleep, then query.
 
@@ -79,21 +81,22 @@ This is the user's desktop, and the user may be working on it:
 
 ### Checking the result
 
-AeroSpace state, for before and after:
+OmniWM state, for before and after. Queries change nothing:
 
 ```sh
-aerospace list-windows --focused --format '%{app-bundle-id} | %{window-title} | %{workspace}'
-aerospace list-workspaces --focused
+omniwmctl query windows --focused --fields app,title,workspace,column-index
+omniwmctl query workspaces --current --fields raw-name,columns
 ```
 
 | Action | How to check it |
 | --- | --- |
-| AeroSpace | The two queries above, before and after |
+| OmniWM | The two queries above, before and after |
 | Key posted to an app | `Live.front()` before and after. The window title follows the Chrome tab and the editor in VS Code or Cursor |
 | Menu item | `Live.menu({ "View", "Open Quickly" })` with the app in front. `missing` means the path does not exist in that app version |
 | Raycast | `Live.windows("Raycast")` shows `750x64 layer=8` while the bar is open. While the bar has keys, `Live.front()` shows the window "Main Window". `Live.press(nil, "escape")` closes it |
-| Window search | Right Option+O shows the list, including a row per Chrome tab. Type, Return, and check the focused window's workspace with the AeroSpace queries above. Hold Fn and type a prefix, then release: focus changes and the workspace does not. A Chrome tab row also selects that tab. Tap Fn: the input source still changes. Fn+Left: the cursor still goes to the start of the line |
-| Workspace map | Hold Right Option past the overlay delay. A thumbnail row appears above the bindings. The focused workspace matches the on-screen layout. Release hides it. The App layer does not show it |
+| Window list | Right Option+O opens OmniWM's palette in windows mode. Escape closes it. Return and Shift+Return change focus and layout, so ask first |
+| Fn search | Hold Fn and type a prefix, then release: focus changes, and the window stays on its workspace (check with the OmniWM queries above). A Chrome tab row also selects that tab. Tap Fn: the input source still changes. Fn+Left: the cursor still goes to the start of the line |
+| Overview | Right Option+V zooms out to every workspace. Escape closes it without changing anything |
 | Global hotkey delivery | `q 'return Live.probe({ "cmd", "alt", "ctrl" }, "f13")'`, send the hotkey through the code path under test, then `q 'return Live.hits("cmd+alt+ctrl+f13")'` |
 
 `Live.reset()` deletes probes. A reload clears all `Live` state.

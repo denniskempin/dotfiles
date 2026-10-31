@@ -14,7 +14,7 @@ repo="${DOTFILES:-${HOME}/dotfiles}"
 cd "${repo}"
 
 echo "Updating Homebrew tap pins..."
-nix flake update homebrew-core homebrew-cask aerospace-tap
+nix flake update homebrew-core homebrew-cask
 
 echo "Relinking taps..."
 sudo darwin-rebuild switch --flake "${repo}"

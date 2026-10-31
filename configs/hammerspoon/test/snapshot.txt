@@ -3,64 +3,69 @@
 # left showing. Keys that did nothing are left out.
 
 # System layer, Right Option held
-left           aerospace focus --boundaries all-monitors-outer-frame --boundaries-action wrap-around-all-monitors left
-shift+left     aerospace move --boundaries all-monitors-outer-frame --boundaries-action create-implicit-container left
-down           aerospace focus --boundaries all-monitors-outer-frame --boundaries-action wrap-around-all-monitors down
-shift+down     aerospace move --boundaries all-monitors-outer-frame --boundaries-action create-implicit-container down
-up             aerospace focus --boundaries all-monitors-outer-frame --boundaries-action wrap-around-all-monitors up
-shift+up       aerospace move --boundaries all-monitors-outer-frame --boundaries-action create-implicit-container up
-right          aerospace focus --boundaries all-monitors-outer-frame --boundaries-action wrap-around-all-monitors right
-shift+right    aerospace move --boundaries all-monitors-outer-frame --boundaries-action create-implicit-container right
-j              overlay "Join"
+left           omniwmctl command focus left
+shift+left     omniwmctl command move-column left
+down           omniwmctl command focus-window-or-workspace-down
+shift+down     omniwmctl command move-window-down-or-to-workspace-down
+up             omniwmctl command focus-window-or-workspace-up
+shift+up       omniwmctl command move-window-up-or-to-workspace-up
+right          omniwmctl command focus right
+shift+right    omniwmctl command move-column right
+j              overlay "Column"
 l              overlay "Layout"
-o              aerospace list-windows --all --format %{window-id} ::: %{app-name} ::: %{workspace} ::: %{window-title} ; overlay "Windows"
+o              omniwmctl command open-command-palette windows
 p              open -g -b com.raycast.macos
 s              overlay "Resize"
-x              aerospace close
-1              aerospace workspace 1
-shift+1        aerospace move-node-to-workspace --focus-follows-window 1
-2              aerospace workspace 2
-shift+2        aerospace move-node-to-workspace --focus-follows-window 2
-3              aerospace workspace 3
-shift+3        aerospace move-node-to-workspace --focus-follows-window 3
-4              aerospace workspace 4
-shift+4        aerospace move-node-to-workspace --focus-follows-window 4
-5              aerospace workspace 5
-shift+5        aerospace move-node-to-workspace --focus-follows-window 5
-6              aerospace workspace 6
-shift+6        aerospace move-node-to-workspace --focus-follows-window 6
-7              aerospace workspace 7
-shift+7        aerospace move-node-to-workspace --focus-follows-window 7
-8              aerospace workspace 8
-shift+8        aerospace move-node-to-workspace --focus-follows-window 8
-9              aerospace workspace 9
-shift+9        aerospace move-node-to-workspace --focus-follows-window 9
-'              aerospace workspace --no-stdin --wrap-around next
-shift+'        aerospace move-node-to-workspace --no-stdin --focus-follows-window --wrap-around next
-;              aerospace workspace --no-stdin --wrap-around prev
-shift+;        aerospace move-node-to-workspace --no-stdin --focus-follows-window --wrap-around prev
-return         aerospace fullscreen
+v              omniwmctl command toggle-overview
+x              omniwmctl command close-focused-window
+1              omniwmctl command switch-workspace 1
+shift+1        omniwmctl command move-to-workspace 1
+2              omniwmctl command switch-workspace 2
+shift+2        omniwmctl command move-to-workspace 2
+3              omniwmctl command switch-workspace 3
+shift+3        omniwmctl command move-to-workspace 3
+4              omniwmctl command switch-workspace 4
+shift+4        omniwmctl command move-to-workspace 4
+5              omniwmctl command switch-workspace 5
+shift+5        omniwmctl command move-to-workspace 5
+6              omniwmctl command switch-workspace 6
+shift+6        omniwmctl command move-to-workspace 6
+7              omniwmctl command switch-workspace 7
+shift+7        omniwmctl command move-to-workspace 7
+8              omniwmctl command switch-workspace 8
+shift+8        omniwmctl command move-to-workspace 8
+9              omniwmctl command switch-workspace 9
+shift+9        omniwmctl command move-to-workspace 9
+'              omniwmctl command switch-workspace next
+shift+'        omniwmctl command move-to-workspace down
+;              omniwmctl command switch-workspace prev
+shift+;        omniwmctl command move-to-workspace up
+[              omniwmctl command focus previous
+]              omniwmctl command switch-workspace back-and-forth
+return         omniwmctl command toggle-fullscreen
 space          overlay "System  ·  locked"
-tab            aerospace focus-monitor --wrap-around next
-shift+tab      aerospace move-workspace-to-monitor --wrap-around next
-padenter       aerospace fullscreen
+tab            omniwmctl command focus-monitor next
+shift+tab      omniwmctl query displays --fields frame,is-current
+padenter       omniwmctl command toggle-fullscreen
 
-# System layer, j then the key (Join)
-left           aerospace join-with left
-down           aerospace join-with down
-up             aerospace join-with up
-right          aerospace join-with right
+# System layer, j then the key (Column)
+left           omniwmctl command consume-or-expel-window-left
+down           omniwmctl command move-column-to-workspace down
+up             omniwmctl command move-column-to-workspace up
+right          omniwmctl command consume-or-expel-window-right
 
 # System layer, l then the key (Layout)
-a              aerospace layout tiles accordion
-f              aerospace layout horizontal vertical
-=              aerospace balance-sizes
+a              omniwmctl command toggle-column-tabbed
+c              omniwmctl command center-column
+f              omniwmctl command toggle-container-full-primary-span
+w              omniwmctl command cycle-size forward
+=              omniwmctl command balance-sizes
 
 # System layer, s then the key (Resize)
-left           aerospace resize width -100
-down           aerospace resize height +100
-up             aerospace resize height -100
-right          aerospace resize width +100
+left           omniwmctl command set-container-primary-span -10%
+down           omniwmctl command set-window-secondary-span +10%
+up             omniwmctl command set-window-secondary-span -10%
+right          omniwmctl command set-container-primary-span +10%
 
 # App layer, Right Command held, in com.google.Chrome
 l              overlay "Layout"

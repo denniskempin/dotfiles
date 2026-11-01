@@ -38,6 +38,8 @@ shift+8        omniwmctl command move-to-workspace 8
 shift+9        omniwmctl command move-to-workspace 9
 '              omniwmctl command switch-workspace next
 shift+'        omniwmctl command move-to-workspace down
+-              omniwmctl command scratchpad toggle 1
+shift+-        omniwmctl command scratchpad assign 1
 ;              omniwmctl command switch-workspace prev
 shift+;        omniwmctl command move-to-workspace up
 [              omniwmctl command focus previous

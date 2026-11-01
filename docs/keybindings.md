@@ -31,7 +31,7 @@ There are two layer keys:
 | App              | Hold Right Command |
 
 
-`Layer Key + space` will trigger the layer to be locked. The layer key can then be released and all bindings can be used until escape is pressed. Open document and Overview end the lock, because what they open takes the keys typed next.
+`Layer Key + space` will trigger the layer to be locked. The layer key can then be released and all bindings can be used until escape is pressed. Open document, the scratchpad, and Overview end the lock, because what they open takes the keys typed next.
 
 Left Command and Left Option stay modifiers. Fn is the globe key. Caps Lock is Escape.
 
@@ -77,6 +77,8 @@ The arrows follow that shape. Left and right move along the strip. Up and down m
 | Walk history  | `[` back, `]` forward | `[` focuses the window focused before this one. `]` returns to the workspace this monitor showed before this one. Each keeps one step, so pressing it again goes back | Back and forward in that app                |
 | Run command   | `P`                   | Open the command launcher                                                                                                                  | Open the command palette                    |
 | Open document | `O`                   | Open OmniWM's window list, most recently focused first. Return goes to the chosen window. Shift+Return brings it here, as a new column right of the focused one. Chrome tabs are not listed; the Fn search has them | Open the switcher for documents in this app |
+| Show scratchpad | `-`                 | Show scratchpad 1 on this monitor and focus it, or park it. Parking returns focus to the workspace when a scratchpad window had it | —                                           |
+| Move to scratchpad | Shift+`-`         | Move the focused window into scratchpad 1. It floats, stays visible while the scratchpad is showing, and is parked off-screen otherwise. The same key puts that window back in the layout | —                                           |
 | Overview      | `V`                   | Zoom out to every workspace and its columns. Arrows move the selection, Return goes to the selected window, Escape closes it | —                                           |
 | Focus monitor        | Tab               | Focus the next monitor. With two monitors, that is the other one |
 | Send slot to monitor | Shift+Tab         | Move the current workspace to the next monitor                   |
@@ -115,7 +117,7 @@ Fn is not remapped. A tap changes the input source, and Fn+arrow is Home, End, P
 One event tap watches key down and key up.
 
 - F18 down arms the App layer. F19 down arms the operating-system layer. Key repeat is ignored, and both keys are swallowed. Key up disarms a layer that is not locked.
-- Space, while a layer is armed and no chord is pending, locks that layer. The layer key can come up and the layer stays armed. Escape, with no chord pending, clears the lock. A row marked `unlocks`, Open document and Overview, clears it too.
+- Space, while a layer is armed and no chord is pending, locks that layer. The layer key can come up and the layer stays armed. Escape, with no chord pending, clears the lock. A row marked `unlocks`, Open document, the scratchpad, and Overview, clears it too.
 - While a layer is armed, every other key is swallowed. A listed key runs its verb. Shift is read off the event flags. Command combinations are swallowed with the rest.
 - Delete on the App layer is posted as forward delete.
 - A layer that is held or locked shows its overlay after 250 ms. The overlay hides once a binding is selected, and on key up when the layer is not locked. While the layer stays locked, the 250 ms timer starts again after the binding. The overlay is an `hs.canvas` on the focused screen, non-activating. Nothing goes to Notification Center.
@@ -147,6 +149,8 @@ Each operating-system key runs `omniwmctl`, usually `omniwmctl command <name>`.
 | Join tile            | `consume-or-expel-window-left` / `-right`                                                        |
 | Send column to slot  | `move-column-to-workspace up` / `down`                                                           |
 | Walk history         | `focus previous`; `switch-workspace back-and-forth`                                              |
+| Show scratchpad      | `scratchpad toggle 1`                                                                            |
+| Move to scratchpad   | `scratchpad assign 1`                                                                            |
 | Overview             | `toggle-overview`                                                                                |
 | Resize tile          | `set-container-primary-span -10%` / `+10%` on left / right, `set-window-secondary-span +10%` / `-10%` on down / up |
 | Layout width         | `cycle-size forward`                                                                             |
@@ -157,6 +161,8 @@ Each operating-system key runs `omniwmctl`, usually `omniwmctl command <name>`.
 | Run command          | `open -g -b com.raycast.macos`, which shows Raycast's search bar                                 |
 | Open document        | `open-command-palette windows`. The palette handles its own keys. Shift+Return on an empty workspace moves the window there, since there is no column to place it beside |
 
+
+Scratchpad keys use slot 1 only. Which windows are in it lasts until OmniWM quits, and `settings.toml` does not record them.
 
 Holding Fn and typing focuses a window without moving it. This search is Hammerspoon's, not OmniWM's, because it acts when Fn is released and lists Chrome tabs. The letters are a prefix of the app name, the title, or a word in either, and releasing Fn runs `window navigate <id>` on the first match, which switches to its workspace. Each tab of a Google Chrome window is a row of its own, with that window's app name and the tab's title. Releasing Fn on a tab focuses the window and selects the tab. Fn itself is not swallowed: a tap still changes the input source, and Fn with an arrow is still Home, End, Page Up, or Page Down. The list appears on the first letter, or after the overlay delay when Fn is held with no letter yet. Releasing Fn with an empty query focuses nothing.
 

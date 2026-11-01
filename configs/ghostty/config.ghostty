@@ -10,6 +10,10 @@ font-size = 12
 background-opacity = 0.76
 background-blur = 26
 
+# Points, not pixels. New terminals only; open a new tab to see it.
+window-padding-x = 16
+window-padding-y = 16
+
 cursor-style = bar
 cursor-style-blink = false
 
@@ -19,27 +23,3 @@ macos-option-as-alt = true
 # Hammerspoon posts these for Send to slot. Ghostty has no default for move_tab.
 keybind = super+shift+arrow_left=move_tab:-1
 keybind = super+shift+arrow_right=move_tab:1
-
-# Bytes, not lines.
-scrollback-limit = 100000000
-
-background = #1a1b23
-foreground = #edede7
-cursor-color = #eaeaea
-selection-background = #92bcd0
-palette = 0=#000000
-palette = 1=#ff5c57
-palette = 2=#5af78e
-palette = 3=#f3f99d
-palette = 4=#57c7ff
-palette = 5=#ff6ac1
-palette = 6=#9aedfe
-palette = 7=#f1f1f0
-palette = 8=#686868
-palette = 9=#ff5c57
-palette = 10=#5af78e
-palette = 11=#f3f99d
-palette = 12=#57c7ff
-palette = 13=#ff6ac1
-palette = 14=#9aedfe
-palette = 15=#f1f1f0

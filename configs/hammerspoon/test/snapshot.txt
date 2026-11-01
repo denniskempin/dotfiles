@@ -16,6 +16,7 @@ l              overlay "Layout"
 o              omniwmctl command open-command-palette windows
 p              open -g -b com.raycast.macos
 s              overlay "Resize"
+t              omniwmctl command toggle-quake-terminal
 v              omniwmctl command toggle-overview
 x              omniwmctl command close-focused-window
 1              omniwmctl command switch-workspace 1

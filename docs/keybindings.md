@@ -31,7 +31,7 @@ There are two layer keys:
 | App              | Hold Right Command |
 
 
-`Layer Key + space` will trigger the layer to be locked. The layer key can then be released and all bindings can be used until escape is pressed. Open document and Overview end the lock, because what they open takes the keys typed next.
+`Layer Key + space` will trigger the layer to be locked. The layer key can then be released and all bindings can be used until escape is pressed. Open document, the quake terminal, and Overview end the lock, because what they open takes the keys typed next.
 
 Left Command and Left Option stay modifiers. Fn is the globe key. Caps Lock is Escape.
 
@@ -77,6 +77,7 @@ The arrows follow that shape. Left and right move along the strip. Up and down m
 | Walk history  | `[` back, `]` forward | `[` focuses the window focused before this one. `]` returns to the workspace this monitor showed before this one. Each keeps one step, so pressing it again goes back | Back and forward in that app                |
 | Run command   | `P`                   | Open the command launcher                                                                                                                  | Open the command palette                    |
 | Open document | `O`                   | Open OmniWM's window list, most recently focused first. Return goes to the chosen window. Shift+Return brings it here, as a new column right of the focused one. Chrome tabs are not listed; the Fn search has them | Open the switcher for documents in this app |
+| Quake terminal | `T`                  | Show or hide OmniWM's quake terminal                                                                                         | —                                           |
 | Overview      | `V`                   | Zoom out to every workspace and its columns. Arrows move the selection, Return goes to the selected window, Escape closes it | —                                           |
 | Focus monitor        | Tab               | Focus the next monitor. With two monitors, that is the other one |
 | Send slot to monitor | Shift+Tab         | Move the current workspace to the next monitor                   |
@@ -115,7 +116,7 @@ Fn is not remapped. A tap changes the input source, and Fn+arrow is Home, End, P
 One event tap watches key down and key up.
 
 - F18 down arms the App layer. F19 down arms the operating-system layer. Key repeat is ignored, and both keys are swallowed. Key up disarms a layer that is not locked.
-- Space, while a layer is armed and no chord is pending, locks that layer. The layer key can come up and the layer stays armed. Escape, with no chord pending, clears the lock. A row marked `unlocks`, Open document and Overview, clears it too.
+- Space, while a layer is armed and no chord is pending, locks that layer. The layer key can come up and the layer stays armed. Escape, with no chord pending, clears the lock. A row marked `unlocks`, Open document, the quake terminal, and Overview, clears it too.
 - While a layer is armed, every other key is swallowed. A listed key runs its verb. Shift is read off the event flags. Command combinations are swallowed with the rest.
 - Delete on the App layer is posted as forward delete.
 - A layer that is held or locked shows its overlay after 250 ms. The overlay hides once a binding is selected, and on key up when the layer is not locked. While the layer stays locked, the 250 ms timer starts again after the binding. The overlay is an `hs.canvas` on the focused screen, non-activating. Nothing goes to Notification Center.
@@ -147,6 +148,7 @@ Each operating-system key runs `omniwmctl`, usually `omniwmctl command <name>`.
 | Join tile            | `consume-or-expel-window-left` / `-right`                                                        |
 | Send column to slot  | `move-column-to-workspace up` / `down`                                                           |
 | Walk history         | `focus previous`; `switch-workspace back-and-forth`                                              |
+| Quake terminal       | `toggle-quake-terminal`                                                                          |
 | Overview             | `toggle-overview`                                                                                |
 | Resize tile          | `set-container-primary-span -10%` / `+10%` on left / right, `set-window-secondary-span +10%` / `-10%` on down / up |
 | Layout width         | `cycle-size forward`                                                                             |

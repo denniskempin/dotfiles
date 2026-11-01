@@ -71,6 +71,7 @@ local system = {
   -- Return focuses the window where it is. Shift+Return brings it here, as a
   -- new column right of the focused one.
   open = wm("open-command-palette", "windows"),
+  quake = wm("toggle-quake-terminal"),
   overview = wm("toggle-overview"),
   focusMonitor = wm("focus-monitor", "next"),
   sendMonitor = actions.call(omniwm.sendWorkspaceToNextMonitor),

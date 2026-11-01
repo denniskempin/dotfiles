@@ -103,50 +103,6 @@ space          overlay "App  ·  locked"
 # App layer, s then the key (Resize), in com.google.Chrome
 (nothing)
 
-# App layer, Right Command held, in com.googlecode.iterm2
-left           menu Window > Select Split Pane > Select Pane Left ; menu Window > Split Pane > Select Split Pane > Select Pane Left ; menu Select Pane Left
-down           menu Window > Select Split Pane > Select Pane Below ; menu Window > Split Pane > Select Split Pane > Select Pane Below ; menu Select Pane Below
-up             menu Window > Select Split Pane > Select Pane Above ; menu Window > Split Pane > Select Split Pane > Select Pane Above ; menu Select Pane Above
-right          menu Window > Select Split Pane > Select Pane Right ; menu Window > Split Pane > Select Split Pane > Select Pane Right ; menu Select Pane Right
-l              overlay "Layout"
-o              menu View > Open Quickly ; menu Open Quickly
-p              press cmd+shift+/
-s              overlay "Resize"
-x              press cmd+w
-1              press cmd+1
-2              press cmd+2
-3              press cmd+3
-4              press cmd+4
-5              press cmd+5
-6              press cmd+6
-7              press cmd+7
-8              press cmd+8
-9              press cmd+9
-'              press cmd+right
-shift+'        press cmd+shift+right
-;              press cmd+left
-shift+;        press cmd+shift+left
-[              press alt+j
-\              overlay "Split"
-]              press alt+k
-delete         press forwarddelete
-return         menu View > Maximize Active Pane ; menu Maximize Active Pane
-space          overlay "App  ·  locked"
-padenter       menu View > Maximize Active Pane ; menu Maximize Active Pane
-
-# App layer, \ then the key (Split), in com.googlecode.iterm2
-down           press cmd+shift+d
-right          press cmd+d
-
-# App layer, l then the key (Layout), in com.googlecode.iterm2
-=              menu Window > Arrange Windows > Arrange Split Panes Evenly ; menu Arrange Split Panes Evenly
-
-# App layer, s then the key (Resize), in com.googlecode.iterm2
-left           menu Window > Resize Split Pane > Move Divider Left ; menu Window > Split Pane > Resize Split Pane > Move Divider Left ; menu Move Divider Left
-down           menu Window > Resize Split Pane > Move Divider Down ; menu Window > Split Pane > Resize Split Pane > Move Divider Down ; menu Move Divider Down
-up             menu Window > Resize Split Pane > Move Divider Up ; menu Window > Split Pane > Resize Split Pane > Move Divider Up ; menu Move Divider Up
-right          menu Window > Resize Split Pane > Move Divider Right ; menu Window > Split Pane > Resize Split Pane > Move Divider Right ; menu Move Divider Right
-
 # App layer, Right Command held, in com.microsoft.VSCode
 left           press cmd+k ; press cmd+left
 down           press cmd+k ; press cmd+down
@@ -189,6 +145,52 @@ f              press cmd+alt+0
 
 # App layer, s then the key (Resize), in com.microsoft.VSCode
 (nothing)
+
+# App layer, Right Command held, in com.mitchellh.ghostty
+left           press cmd+alt+left
+down           press cmd+alt+down
+up             press cmd+alt+up
+right          press cmd+alt+right
+l              overlay "Layout"
+o              press cmd+shift+\
+p              press cmd+shift+p
+s              overlay "Resize"
+x              press cmd+w
+1              press cmd+1
+2              press cmd+2
+3              press cmd+3
+4              press cmd+4
+5              press cmd+5
+6              press cmd+6
+7              press cmd+7
+8              press cmd+8
+9              press cmd+9
+'              press cmd+shift+]
+shift+'        press cmd+shift+right
+;              press cmd+shift+[
+shift+;        press cmd+shift+left
+[              press alt+j
+\              overlay "Split"
+]              press alt+k
+delete         press forwarddelete
+return         press cmd+shift+return
+space          overlay "App  ·  locked"
+padenter       press cmd+shift+return
+
+# App layer, \ then the key (Split), in com.mitchellh.ghostty
+left           menu File > Split Left
+down           press cmd+shift+d
+up             menu File > Split Up
+right          press cmd+d
+
+# App layer, l then the key (Layout), in com.mitchellh.ghostty
+=              press cmd+ctrl+=
+
+# App layer, s then the key (Resize), in com.mitchellh.ghostty
+left           press cmd+ctrl+left
+down           press cmd+ctrl+down
+up             press cmd+ctrl+up
+right          press cmd+ctrl+right
 
 # App layer, Right Command held, in com.todesktop.230313mzl4w4u92
 left           press cmd+k ; press cmd+left

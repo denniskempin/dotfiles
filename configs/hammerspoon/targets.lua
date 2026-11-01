@@ -79,20 +79,6 @@ local system = {
   sendMonitor = actions.call(omniwm.sendWorkspaceToNextMonitor),
 }
 
-local PANE_ITEM = {
-  left = "Select Pane Left",
-  down = "Select Pane Below",
-  up = "Select Pane Above",
-  right = "Select Pane Right",
-}
-
-local DIVIDER_ITEM = {
-  left = "Move Divider Left",
-  down = "Move Divider Down",
-  up = "Move Divider Up",
-  right = "Move Divider Right",
-}
-
 local vscode = {
   focus = function(dir)
     return seq(stroke({ "cmd" }, "k"), stroke({ "cmd" }, dir))
@@ -145,49 +131,37 @@ local apps = {
   -- Cursor keeps the VS Code keybindings.
   ["com.todesktop.230313mzl4w4u92"] = vscode,
 
-  ["com.googlecode.iterm2"] = {
-    focus = function(dir)
-      local item = PANE_ITEM[dir]
-      return menu(
-        { "Window", "Select Split Pane", item },
-        { "Window", "Split Pane", "Select Split Pane", item },
-        item
-      )
-    end,
-    zoom = menu({ "View", "Maximize Active Pane" }, "Maximize Active Pane"),
+  ["com.mitchellh.ghostty"] = {
+    focus = function(dir) return stroke({ "cmd", "alt" }, dir) end,
+    zoom = stroke({ "cmd", "shift" }, "return"),
     close = stroke({ "cmd" }, "w"),
     split = {
+      left = menu({ "File", "Split Left" }),
       down = stroke({ "cmd", "shift" }, "d"),
+      up = menu({ "File", "Split Up" }),
       right = stroke({ "cmd" }, "d"),
     },
-    resize = function(dir)
-      local item = DIVIDER_ITEM[dir]
-      return menu(
-        { "Window", "Resize Split Pane", item },
-        { "Window", "Split Pane", "Resize Split Pane", item },
-        item
-      )
-    end,
-    layoutEqual = menu(
-      { "Window", "Arrange Windows", "Arrange Split Panes Evenly" },
-      "Arrange Split Panes Evenly"
-    ),
+    resize = function(dir) return stroke({ "cmd", "ctrl" }, dir) end,
+    layoutEqual = stroke({ "cmd", "ctrl" }, "="),
     switch = {
-      prev = stroke({ "cmd" }, "left"),
-      next = stroke({ "cmd" }, "right"),
+      prev = stroke({ "cmd", "shift" }, "["),
+      next = stroke({ "cmd", "shift" }, "]"),
     },
     jump = function(n) return stroke({ "cmd" }, tostring(n)) end,
+    -- Bound to move_tab in configs/ghostty/config.ghostty; Ghostty has no default.
     send = {
       prev = stroke({ "cmd", "shift" }, "left"),
       next = stroke({ "cmd", "shift" }, "right"),
     },
-    -- fish binds Alt+J to prevd and Alt+K to nextd. Option sends Esc+.
+    -- fish binds Alt+J to prevd and Alt+K to nextd. macos-option-as-alt makes
+    -- Option send Esc+.
     history = {
       back = stroke({ "alt" }, "j"),
       forward = stroke({ "alt" }, "k"),
     },
-    command = stroke({ "cmd", "shift" }, "/"),
-    open = menu({ "View", "Open Quickly" }, "Open Quickly"),
+    command = stroke({ "cmd", "shift" }, "p"),
+    -- View > Show All Tabs, the macOS tab overview.
+    open = stroke({ "cmd", "shift" }, "\\"),
   },
 
   ["md.obsidian"] = {

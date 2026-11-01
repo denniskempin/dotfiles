@@ -16,6 +16,10 @@ cursor-style-blink = false
 # fish binds Alt+J and Alt+K, which Hammerspoon posts for Back and Forward.
 macos-option-as-alt = true
 
+# Hammerspoon posts these for Send to slot. Ghostty has no default for move_tab.
+keybind = super+shift+arrow_left=move_tab:-1
+keybind = super+shift+arrow_right=move_tab:1
+
 # Bytes, not lines.
 scrollback-limit = 100000000
 

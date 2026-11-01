@@ -52,9 +52,9 @@ The Settings window writes back through the symlink into the repo. It keeps unkn
 
 OmniWM refuses to manage windows while AeroSpace is running. It also needs "Displays have separate Spaces" on, which AeroSpace wanted off, and Accessibility and Input Monitoring. Start at Login is a macOS login item, not a key in `settings.toml`.
 
-### iTerm's menus
+### Ghostty's shortcuts
 
-Pane and divider actions try the menu path and then the leaf title, because the View, Window → Select Split Pane, and Window → Split Pane parents have differed across versions.
+Ghostty's verbs post its default shortcuts, from `ghostty +list-keybinds --default` on 1.3.1. Split Left and Split Up have no shortcut and go through the File menu. `move_tab` has neither a shortcut nor a menu item, so `configs/ghostty/config.ghostty` binds it. A `keybind` in that file that reuses one of these chords takes the verb with it.
 
 ### Cursor is a second bundle id on the VS Code table
 

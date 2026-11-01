@@ -1,0 +1,41 @@
+# Ghostty config. Reload with Cmd+Shift+, ; opacity needs a full restart.
+# Reference: https://ghostty.org/docs/config/reference
+
+# Updates go through Homebrew (scripts/upgrade-apps.sh), not Sparkle.
+auto-update = off
+
+font-family = MonaspiceNe NFM
+font-size = 12
+
+background-opacity = 0.76
+background-blur = 26
+
+cursor-style = bar
+cursor-style-blink = false
+
+# fish binds Alt+J and Alt+K, which Hammerspoon posts for Back and Forward.
+macos-option-as-alt = true
+
+# Bytes, not lines.
+scrollback-limit = 100000000
+
+background = #1a1b23
+foreground = #edede7
+cursor-color = #eaeaea
+selection-background = #92bcd0
+palette = 0=#000000
+palette = 1=#ff5c57
+palette = 2=#5af78e
+palette = 3=#f3f99d
+palette = 4=#57c7ff
+palette = 5=#ff6ac1
+palette = 6=#9aedfe
+palette = 7=#f1f1f0
+palette = 8=#686868
+palette = 9=#ff5c57
+palette = 10=#5af78e
+palette = 11=#f3f99d
+palette = 12=#57c7ff
+palette = 13=#ff6ac1
+palette = 14=#9aedfe
+palette = 15=#f1f1f0

@@ -13,10 +13,10 @@ linked, not the directory.
 | `cursor/settings.json` | `~/Library/Application Support/Cursor/User/settings.json` on macOS, `~/.config/Cursor/User/settings.json` on Linux | all |
 | `fish/config.fish`, `fish/fish_plugins`, `fish/conf.d/00-paths.fish` | `~/.config/fish/`, files only, same relative paths. Run `fisher update` afterwards | all |
 | `gh/config.yml` | `~/.config/gh/config.yml`, file only. `hosts.yml` stays local | all |
+| `ghostty/` | `~/.config/ghostty` | macOS |
 | `git/config` | `~/.config/git/config`. Remove any `~/.gitconfig` | all |
 | `hammerspoon/` | `~/.hammerspoon`. See `hammerspoon/AGENTS.md` for tests | macOS |
 | `helix/` | `~/.config/helix` | all |
-| `iterm2/` | Not linked. Point iTerm at it: `defaults write com.googlecode.iterm2 PrefsCustomFolder -string ~/dotfiles/configs/iterm2` and `defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true` | macOS |
 | `karabiner/karabiner.json` | `~/.config/karabiner/karabiner.json`, file only | macOS |
 | `nvim/` | `~/.config/nvim` | all |
 | `omniwm/settings.toml` | `~/.config/omniwm/settings.toml`, file only | macOS |

@@ -41,6 +41,7 @@ in
     "starship.toml".source = link "starship/starship.toml";
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
+    "ghostty".source = link "ghostty";
     "karabiner/karabiner.json".source = link "karabiner/karabiner.json";
     "omniwm/settings.toml".source = link "omniwm/settings.toml";
   };
@@ -53,6 +54,6 @@ in
     fi
   '';
 
-  # Left as machine state in ~/.config: raycast, iterm2/AppSupport, and the
-  # unlinked configs git/ignore and thefuck.
+  # Left as machine state in ~/.config: raycast, and the unlinked configs
+  # git/ignore and thefuck.
 }

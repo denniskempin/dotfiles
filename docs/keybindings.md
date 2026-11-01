@@ -31,7 +31,7 @@ There are two layer keys:
 | App              | Hold Right Command |
 
 
-`Layer Key + space` will trigger the layer to be locked. The layer key can then be released and all bindings can be used until escape is pressed. Open document, the scratchpad, and Overview end the lock, because what they open takes the keys typed next.
+`Layer Key + space` will trigger the layer to be locked. The layer key can then be released and all bindings can be used until escape is pressed. Open document, the quake terminal, the scratchpad, and Overview end the lock, because what they open takes the keys typed next.
 
 Left Command and Left Option stay modifiers. Fn is the globe key. Caps Lock is Escape.
 
@@ -77,6 +77,7 @@ The arrows follow that shape. Left and right move along the strip. Up and down m
 | Walk history  | `[` back, `]` forward | `[` focuses the window focused before this one. `]` returns to the workspace this monitor showed before this one. Each keeps one step, so pressing it again goes back | Back and forward in that app                |
 | Run command   | `P`                   | Open the command launcher                                                                                                                  | Open the command palette                    |
 | Open document | `O`                   | Open OmniWM's window list, most recently focused first. Return goes to the chosen window. Shift+Return brings it here, as a new column right of the focused one. Chrome tabs are not listed; the Fn search has them | Open the switcher for documents in this app |
+| Quake terminal | `T`                  | Show or hide OmniWM's quake terminal                                                                                         | —                                           |
 | Show scratchpad | `Z`                 | Show scratchpad 1 on this monitor and focus it, or park it. Parking returns focus to the workspace when a scratchpad window had it | —                                           |
 | Move to scratchpad | Shift+`Z`         | Move the focused window into scratchpad 1. It floats, stays visible while the scratchpad is showing, and is parked off-screen otherwise. The same key puts that window back in the layout | —                                           |
 | Overview      | `V`                   | Zoom out to every workspace and its columns. Arrows move the selection, Return goes to the selected window, Escape closes it | —                                           |
@@ -117,7 +118,7 @@ Fn is not remapped. A tap changes the input source, and Fn+arrow is Home, End, P
 One event tap watches key down and key up.
 
 - F18 down arms the App layer. F19 down arms the operating-system layer. Key repeat is ignored, and both keys are swallowed. Key up disarms a layer that is not locked.
-- Space, while a layer is armed and no chord is pending, locks that layer. The layer key can come up and the layer stays armed. Escape, with no chord pending, clears the lock. A row marked `unlocks`, Open document, the scratchpad, and Overview, clears it too.
+- Space, while a layer is armed and no chord is pending, locks that layer. The layer key can come up and the layer stays armed. Escape, with no chord pending, clears the lock. A row marked `unlocks`, Open document, the quake terminal, the scratchpad, and Overview, clears it too.
 - While a layer is armed, every other key is swallowed. A listed key runs its verb. Shift is read off the event flags. Command combinations are swallowed with the rest.
 - Delete on the App layer is posted as forward delete.
 - A layer that is held or locked shows its overlay after 250 ms. The overlay hides once a binding is selected, and on key up when the layer is not locked. While the layer stays locked, the 250 ms timer starts again after the binding. The overlay is an `hs.canvas` on the focused screen, non-activating. Nothing goes to Notification Center.
@@ -149,6 +150,7 @@ Each operating-system key runs `omniwmctl`, usually `omniwmctl command <name>`.
 | Join tile            | `consume-or-expel-window-left` / `-right`                                                        |
 | Send column to slot  | `move-column-to-workspace up` / `down`                                                           |
 | Walk history         | `focus previous`; `switch-workspace back-and-forth`                                              |
+| Quake terminal       | `toggle-quake-terminal`                                                                          |
 | Show scratchpad      | `scratchpad toggle 1`                                                                            |
 | Move to scratchpad   | `scratchpad assign 1`                                                                            |
 | Overview             | `toggle-overview`                                                                                |

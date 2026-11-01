@@ -88,7 +88,7 @@ OmniWM's palette lists windows only, so the Fn search is the one place tabs appe
 
 ### OmniWM's own panels take the keyboard
 
-The window list (O) and Overview (V) are OmniWM panels. Once open they handle their own keys, but only keys the tap lets through reach them. While Right Option is held the layer still swallows every key, so release it before typing. A locked layer would keep swallowing them, so both rows are marked `unlocks` and end the lock. Show scratchpad (`Z`) is marked `unlocks` for the same reason: a locked layer would swallow what is typed into the window it focuses. The workspace map Hammerspoon used to draw under the layer overlay was removed in favor of Overview, which cannot be a peek while the layer is held.
+The window list (O) and Overview (V) are OmniWM panels. Once open they handle their own keys, but only keys the tap lets through reach them. While Right Option is held the layer still swallows every key, so release it before typing. A locked layer would keep swallowing them, so both rows are marked `unlocks` and end the lock. The quake terminal (T) is marked `unlocks` for the same reason: a locked layer would swallow what is typed into it. Show scratchpad (`Z`) is marked `unlocks` for the same reason: a locked layer would swallow what is typed into the window it focuses. The workspace map Hammerspoon used to draw under the layer overlay was removed in favor of Overview, which cannot be a peek while the layer is held.
 
 ## Install
 

@@ -55,6 +55,7 @@ return {
         label = "Walk history", hint = "[  ]" },
       { keys = "p", verb = "command", label = "Run command", hint = "P" },
       { keys = "o", verb = "open", unlocks = true, label = "Open document", hint = "O" },
+      { keys = "t", layer = "os", verb = "quake", unlocks = true, label = "Quake terminal", hint = "T" },
       { keys = "z", layer = "os", verb = "scratchpad", unlocks = true, label = "Scratchpad", hint = "Z" },
       { keys = "z", layer = "os", shift = true, verb = "scratchpadSend", label = "To scratchpad", hint = "⇧ Z" },
       { keys = "v", layer = "os", verb = "overview", unlocks = true, label = "Overview", hint = "V" },

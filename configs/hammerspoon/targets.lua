@@ -71,6 +71,7 @@ local system = {
   -- Return focuses the window where it is. Shift+Return brings it here, as a
   -- new column right of the focused one.
   open = wm("open-command-palette", "windows"),
+  quake = wm("toggle-quake-terminal"),
   scratchpad = wm("scratchpad", "toggle", "1"),
   scratchpadSend = wm("scratchpad", "assign", "1"),
   overview = wm("toggle-overview"),

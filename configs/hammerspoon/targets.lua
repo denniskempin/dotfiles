@@ -72,6 +72,8 @@ local system = {
   -- new column right of the focused one.
   open = wm("open-command-palette", "windows"),
   quake = wm("toggle-quake-terminal"),
+  scratchpad = wm("scratchpad", "toggle", "1"),
+  scratchpadSend = wm("scratchpad", "assign", "1"),
   overview = wm("toggle-overview"),
   focusMonitor = wm("focus-monitor", "next"),
   sendMonitor = actions.call(omniwm.sendWorkspaceToNextMonitor),

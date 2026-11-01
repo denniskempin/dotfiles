@@ -19,6 +19,8 @@ s              overlay "Resize"
 t              omniwmctl command toggle-quake-terminal
 v              omniwmctl command toggle-overview
 x              omniwmctl command close-focused-window
+z              omniwmctl command scratchpad toggle 1
+shift+z        omniwmctl command scratchpad assign 1
 1              omniwmctl command switch-workspace 1
 shift+1        omniwmctl command move-to-workspace 1
 2              omniwmctl command switch-workspace 2

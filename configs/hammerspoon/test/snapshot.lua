@@ -44,7 +44,7 @@ local function probe(layer, front, starter, key, shift, problems)
   local w = world.new({ front = front })
   local title = w.modules.bindings.title[layer]
   w:down(HOLD[layer])
-  if starter then w:press(starter) end
+  if starter then w:press(starter.key, starter.shift and { shift = true } or nil) end
   w:press(key, shift and { shift = true } or nil)
   w:advance(2)
   local note = w.overlay.visible and w.overlay.title ~= title and w.overlay.title or nil
@@ -77,15 +77,20 @@ local function chordStarters(bindings, layer)
   local starters = {}
   for _, column in ipairs(bindings.layer) do
     for _, row in ipairs(column) do
-      if row.chord and not row.shift and (row.layer == nil or row.layer == layer) then
+      if row.chord and (row.layer == nil or row.layer == layer) then
         local keys = type(row.keys) == "string" and { row.keys } or row.keys
         for _, key in ipairs(keys) do
-          starters[#starters + 1] = { key = key, title = bindings.chords[row.chord].title }
+          starters[#starters + 1] = {
+            key = key,
+            shift = row.shift == true,
+            name = (row.shift and "shift+" or "") .. key,
+            title = bindings.chords[row.chord].title,
+          }
         end
       end
     end
   end
-  table.sort(starters, function(a, b) return a.key < b.key end)
+  table.sort(starters, function(a, b) return a.name < b.name end)
   return starters
 end
 
@@ -107,12 +112,12 @@ local function generate()
 
   section(lines, "System layer, Right Option held", "os", UNLISTED, nil, BOTH, problems)
   for _, s in ipairs(chordStarters(bindings, "os")) do
-    section(lines, ("System layer, %s then the key (%s)"):format(s.key, s.title), "os", UNLISTED, s.key, PLAIN, problems)
+    section(lines, ("System layer, %s then the key (%s)"):format(s.name, s.title), "os", UNLISTED, s, PLAIN, problems)
   end
   for _, app in ipairs(apps) do
     section(lines, "App layer, Right Command held, in " .. app, "app", app, nil, BOTH, problems)
     for _, s in ipairs(chordStarters(bindings, "app")) do
-      section(lines, ("App layer, %s then the key (%s), in %s"):format(s.key, s.title, app), "app", app, s.key, PLAIN, problems)
+      section(lines, ("App layer, %s then the key (%s), in %s"):format(s.name, s.title, app), "app", app, s, PLAIN, problems)
     end
   end
   return table.concat(lines, "\n") .. "\n", problems

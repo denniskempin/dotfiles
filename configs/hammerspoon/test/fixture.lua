@@ -1,7 +1,8 @@
 -- A small made-up grammar for scenarios.lua, so the framework tests do not
 -- depend on the real bindings. snapshot.txt covers those.
 --
--- Both layers:  arrows go, Shift+arrows carry, S starts the "pick" chord
+-- Both layers:  arrows go, Shift+arrows carry, S starts the "pick" chord,
+--               Shift+S starts the "place" chord
 -- OS layer:     P launches, O sends a hotkey, Y calls a function that
 --               runs an OmniWM command, U opens a panel and ends a lock
 -- App layer:    K posts a two-stroke sequence, M tries three menu paths
@@ -23,6 +24,7 @@ function M.bindings()
         { keys = arrows, verb = "go", label = "Go", hint = "arrows" },
         { keys = arrows, shift = true, verb = "carry", label = "Carry", hint = "⇧ arrows" },
         { keys = "s", chord = "pick", label = "Pick", hint = "S then arrow" },
+        { keys = "s", shift = true, chord = "place", label = "Place", hint = "⇧ S then arrow" },
       },
       {
         { keys = "p", layer = "os", verb = "launch", label = "Launch", hint = "P" },
@@ -40,6 +42,12 @@ function M.bindings()
           { keys = arrows, verb = "pick", label = "Pick", hint = "arrows" },
         },
       },
+      place = {
+        title = "Place",
+        rows = {
+          { keys = arrows, verb = "place", label = "Place", hint = "arrows" },
+        },
+      },
     },
   }
 end
@@ -51,6 +59,7 @@ function M.targets(actions)
       go = function(dir) return actions.wm("go", dir) end,
       carry = function(dir) return actions.wm("carry", dir) end,
       pick = function(dir) return actions.wm("pick", dir) end,
+      place = function(dir) return actions.wm("place", dir) end,
       launch = actions.launch("com.example.Launcher"),
       hotkey = actions.hotkey(M.HYPER, "o"),
       call = actions.call(function() require("omniwm").command({ "called" }) end),
@@ -61,6 +70,7 @@ function M.targets(actions)
         go = function(dir) return stroke({ "cmd" }, dir) end,
         carry = function(dir) return stroke({ "cmd", "shift" }, dir) end,
         pick = function(dir) return stroke({ "alt" }, dir) end,
+        place = function(dir) return stroke({ "ctrl" }, dir) end,
         sequence = actions.seq(stroke({ "cmd" }, "k"), stroke({ "cmd" }, "j")),
         menu = actions.menu({ "Edit", "First" }, { "Edit", "Second" }, "Third"),
       },

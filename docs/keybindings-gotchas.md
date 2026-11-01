@@ -48,6 +48,14 @@ The Settings window writes back through the symlink into the repo. It keeps unkn
 
 `hotkeysEnabled = false` and `hotkeys = []` leave every key to Hammerspoon. An action left out of `hotkeys` is unassigned, not defaulted.
 
+### Workspace names have to be numbers
+
+In v0.7.6 a workspace's raw name, `name` in `settings.toml`, must be a positive integer with no leading zero. Other entries are dropped when the file loads. A letter can only be a `displayName`. `workspace focus-name` and `window move-to-workspace` look a display name up case-insensitively, but any argument that parses as a positive integer is read as a raw name. A workspace shown as `3` would then be unreachable by its name whenever its raw name was not 3.
+
+Each workspace's raw name is therefore the character code of its letter, and Hammerspoon sends `switch-workspace <code>` and `move-to-workspace <code>`. No name lookup is involved. The commands only reach workspaces defined in `settings.toml`. They never create one, so a key whose workspace is missing does nothing (exit 1).
+
+`hideEmptyWorkspaces` also changes navigation: `switch-workspace next` / `prev` and Focus up or down past the column skip empty workspaces. `move-to-workspace up` / `down`, `move-column-to-workspace`, and Move up or down past the column ignore that setting.
+
 ### OmniWM and AeroSpace cannot both run
 
 OmniWM refuses to manage windows while AeroSpace is running. It also needs "Displays have separate Spaces" on, which AeroSpace wanted off, and Accessibility and Input Monitoring. Start at Login is a macOS login item, not a key in `settings.toml`.

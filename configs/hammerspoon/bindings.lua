@@ -21,6 +21,12 @@ local across = { "left", "right" }
 local along = { "down", "up" }
 local digits = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }
 
+-- a through z. configs/omniwm/settings.toml defines a workspace named for each.
+local letters = {}
+for key in ("abcdefghijklmnopqrstuvwxyz"):gmatch(".") do
+  letters[#letters + 1] = key
+end
+
 local step = { [";"] = "prev", ["'"] = "next" }
 
 return {
@@ -45,10 +51,10 @@ return {
     },
     {
       { keys = step, verb = "switch", label = "Switch slot", hint = ";  '" },
-      { keys = digits, arg = tonumber, layer = "os", verb = "jump", label = "Jump to slot", hint = "1–9" },
+      { keys = "g", layer = "os", chord = "jump", label = "Jump to workspace", hint = "G then key" },
       { keys = digits, arg = tonumber, layer = "app", verb = "jump", label = "Jump to slot", hint = "1–8   9" },
-      { keys = step, shift = true, verb = "send", label = "Send to slot", hint = "⇧ ; ' 1–9" },
-      { keys = digits, arg = tonumber, shift = true, verb = "sendNumber" },
+      { keys = step, shift = true, verb = "send", label = "Send to slot", hint = "⇧ ;  '" },
+      { keys = "g", layer = "os", shift = true, chord = "send", label = "Send to workspace", hint = "⇧ G then key" },
       { keys = { ["["] = "back", ["]"] = "forward" }, layer = "os", verb = "history",
         label = "Last window, workspace", hint = "[  ]" },
       { keys = { ["["] = "back", ["]"] = "forward" }, layer = "app", verb = "history",
@@ -66,8 +72,21 @@ return {
   },
 
   -- A chord takes one more key from `rows`, then ends. Escape or any other
-  -- key ends it without an action.
+  -- key ends it without an action. A chord started with Shift takes its key
+  -- with or without Shift.
   chords = {
+    jump = {
+      title = "Jump to workspace",
+      rows = {
+        { keys = letters, verb = "jump", label = "The workspace named by the key", hint = "a–z" },
+      },
+    },
+    send = {
+      title = "Send to workspace",
+      rows = {
+        { keys = letters, verb = "sendNamed", label = "The workspace named by the key", hint = "a–z" },
+      },
+    },
     resize = {
       title = "Resize",
       rows = {

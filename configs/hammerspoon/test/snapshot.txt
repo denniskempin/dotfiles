@@ -11,6 +11,8 @@ up             omniwmctl command focus-window-or-workspace-up
 shift+up       omniwmctl command move-window-up-or-to-workspace-up
 right          omniwmctl command focus right
 shift+right    omniwmctl command move-column right
+g              overlay "Jump to workspace"
+shift+g        overlay "Send to workspace"
 j              overlay "Column"
 l              overlay "Layout"
 o              omniwmctl command open-command-palette windows
@@ -21,24 +23,6 @@ v              omniwmctl command toggle-overview
 x              omniwmctl command close-focused-window
 z              omniwmctl command scratchpad toggle 1
 shift+z        omniwmctl command scratchpad assign 1
-1              omniwmctl command switch-workspace 1
-shift+1        omniwmctl command move-to-workspace 1
-2              omniwmctl command switch-workspace 2
-shift+2        omniwmctl command move-to-workspace 2
-3              omniwmctl command switch-workspace 3
-shift+3        omniwmctl command move-to-workspace 3
-4              omniwmctl command switch-workspace 4
-shift+4        omniwmctl command move-to-workspace 4
-5              omniwmctl command switch-workspace 5
-shift+5        omniwmctl command move-to-workspace 5
-6              omniwmctl command switch-workspace 6
-shift+6        omniwmctl command move-to-workspace 6
-7              omniwmctl command switch-workspace 7
-shift+7        omniwmctl command move-to-workspace 7
-8              omniwmctl command switch-workspace 8
-shift+8        omniwmctl command move-to-workspace 8
-9              omniwmctl command switch-workspace 9
-shift+9        omniwmctl command move-to-workspace 9
 '              omniwmctl command switch-workspace next
 shift+'        omniwmctl command move-to-workspace down
 ;              omniwmctl command switch-workspace prev
@@ -50,6 +34,34 @@ space          overlay "System  ·  locked"
 tab            omniwmctl command focus-monitor next
 shift+tab      omniwmctl query displays --fields frame,is-current
 padenter       omniwmctl command toggle-fullscreen
+
+# System layer, g then the key (Jump to workspace)
+a              omniwmctl command switch-workspace 97
+b              omniwmctl command switch-workspace 98
+c              omniwmctl command switch-workspace 99
+d              omniwmctl command switch-workspace 100
+e              omniwmctl command switch-workspace 101
+f              omniwmctl command switch-workspace 102
+g              omniwmctl command switch-workspace 103
+h              omniwmctl command switch-workspace 104
+i              omniwmctl command switch-workspace 105
+j              omniwmctl command switch-workspace 106
+k              omniwmctl command switch-workspace 107
+l              omniwmctl command switch-workspace 108
+m              omniwmctl command switch-workspace 109
+n              omniwmctl command switch-workspace 110
+o              omniwmctl command switch-workspace 111
+p              omniwmctl command switch-workspace 112
+q              omniwmctl command switch-workspace 113
+r              omniwmctl command switch-workspace 114
+s              omniwmctl command switch-workspace 115
+t              omniwmctl command switch-workspace 116
+u              omniwmctl command switch-workspace 117
+v              omniwmctl command switch-workspace 118
+w              omniwmctl command switch-workspace 119
+x              omniwmctl command switch-workspace 120
+y              omniwmctl command switch-workspace 121
+z              omniwmctl command switch-workspace 122
 
 # System layer, j then the key (Column)
 left           omniwmctl command consume-or-expel-window-left
@@ -69,6 +81,34 @@ left           omniwmctl command set-container-primary-span -10%
 down           omniwmctl command set-window-secondary-span +10%
 up             omniwmctl command set-window-secondary-span -10%
 right          omniwmctl command set-container-primary-span +10%
+
+# System layer, shift+g then the key (Send to workspace)
+a              omniwmctl command move-to-workspace 97
+b              omniwmctl command move-to-workspace 98
+c              omniwmctl command move-to-workspace 99
+d              omniwmctl command move-to-workspace 100
+e              omniwmctl command move-to-workspace 101
+f              omniwmctl command move-to-workspace 102
+g              omniwmctl command move-to-workspace 103
+h              omniwmctl command move-to-workspace 104
+i              omniwmctl command move-to-workspace 105
+j              omniwmctl command move-to-workspace 106
+k              omniwmctl command move-to-workspace 107
+l              omniwmctl command move-to-workspace 108
+m              omniwmctl command move-to-workspace 109
+n              omniwmctl command move-to-workspace 110
+o              omniwmctl command move-to-workspace 111
+p              omniwmctl command move-to-workspace 112
+q              omniwmctl command move-to-workspace 113
+r              omniwmctl command move-to-workspace 114
+s              omniwmctl command move-to-workspace 115
+t              omniwmctl command move-to-workspace 116
+u              omniwmctl command move-to-workspace 117
+v              omniwmctl command move-to-workspace 118
+w              omniwmctl command move-to-workspace 119
+x              omniwmctl command move-to-workspace 120
+y              omniwmctl command move-to-workspace 121
+z              omniwmctl command move-to-workspace 122
 
 # App layer, Right Command held, in com.google.Chrome
 l              overlay "Layout"

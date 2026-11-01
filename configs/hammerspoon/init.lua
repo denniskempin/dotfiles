@@ -158,7 +158,7 @@ end
 local osDown, appDown = false, false
 local lastHeld = nil
 local locked = nil
-local chord = nil -- { name, layer, def, index } while a chord waits for its key
+local chord = nil -- { name, layer, shift, def, index } while a chord waits for its key
 local session = nil -- { query, selected } while the Fn window search is open
 local fnDown = false
 local swallowed = {}
@@ -225,10 +225,11 @@ local function endChord()
   if locked then scheduleLayerOverlay() end
 end
 
-local function beginChord(name, layer)
+local function beginChord(name, layer, shift)
   chord = {
     name = name,
     layer = layer,
+    shift = shift,
     def = bindings.chords[name],
     index = CHORD_INDEX[name][layer],
   }
@@ -371,7 +372,7 @@ local function unlock()
 end
 
 local function handleChord(name, shift, flags)
-  local binding = not blocked(flags) and not shift and chord.index[name]
+  local binding = not blocked(flags) and (chord.shift or not shift) and chord.index[name]
   if binding then deliver(chord.layer, binding, name) end
   endChord()
 end
@@ -395,7 +396,7 @@ local function handleLayer(name, shift, flags)
   if not binding then return end
 
   if binding.row.chord then
-    beginChord(binding.row.chord, layer)
+    beginChord(binding.row.chord, layer, shift)
     return
   end
 

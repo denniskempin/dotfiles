@@ -1,7 +1,6 @@
 monitorBarOverrides = []
 monitorDwindleOverrides = []
 monitorGapOverrides = []
-monitorNiriOverrides = []
 monitorOrientationOverrides = []
 schemaVersion = 4
 
@@ -90,7 +89,7 @@ fingerCount = 3
 invertDirection = true
 mouseMoveModifierKey = "option"
 mouseResizeModifierKey = "option"
-overviewGestureEnabled = false
+overviewGestureEnabled = true
 overviewGestureFingerCount = 4
 scrollEnabled = true
 scrollModifierKey = "optionShift"
@@ -102,7 +101,7 @@ windowMoveFingerCount = 4
 windowResizeEnabled = false
 windowResizeFingerCount = 3
 workspaceSwipeAxis = "vertical"
-workspaceSwipeEnabled = false
+workspaceSwipeEnabled = true
 workspaceSwipeFingerCount = 3
 
 [hiddenBar]
@@ -124,7 +123,7 @@ margin = 1
 [niri]
 alwaysCenterSingleColumn = false
 centerFocusedColumn = "never"
-containerPrimarySpanPresets = [0.3333333333333333, 0.5, 0.6666666666666666]
+containerPrimarySpanPresets = [0.3333333333333333, 0.5, 0.6666666666666666, 1.0]
 edgeGaps = true
 infiniteLoop = false
 resizeStepPercent = 5
@@ -194,7 +193,7 @@ useWorkspaceId = false
 autoHide = false
 autoHideHideDelayMilliseconds = 0.0
 autoHideRevealDelayMilliseconds = 0.0
-backgroundOpacity = 0.1
+backgroundOpacity = 0.0
 deduplicateAppIcons = false
 enabled = true
 excludedBundleIDs = []
@@ -203,7 +202,7 @@ hideEmptyWorkspaces = true
 hideInNativeFullscreen = false
 hoverPreviewsEnabled = true
 notchActiveZoneWidth = 180.0
-notchMode = "splitActiveLeft"
+notchMode = "moveBelowMenuBar"
 notificationBadgeRefreshIntervalSeconds = 5.0
 notificationBadges = "off"
 position = "overlappingMenuBar"
@@ -455,214 +454,6 @@ id = "moveToWorkspace.8"
 
 [[hotkeys]]
 binding = "Unassigned"
-id = "switchWorkspace.96"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.96"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.97"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.97"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.98"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.98"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.99"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.99"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.100"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.100"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.101"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.101"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.102"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.102"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.103"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.103"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.104"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.104"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.105"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.105"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.106"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.106"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.107"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.107"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.108"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.108"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.109"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.109"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.110"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.110"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.111"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.111"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.112"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.112"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.113"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.113"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.114"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.114"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.115"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.115"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.116"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.116"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.117"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.117"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.118"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.118"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.119"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.119"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.120"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.120"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "switchWorkspace.121"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveToWorkspace.121"
-
-[[hotkeys]]
-binding = "Unassigned"
 id = "switchWorkspaceSlot.1"
 
 [[hotkeys]]
@@ -856,110 +647,6 @@ id = "moveColumnToWorkspace.7"
 [[hotkeys]]
 binding = "Unassigned"
 id = "moveColumnToWorkspace.8"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.96"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.97"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.98"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.99"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.100"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.101"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.102"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.103"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.104"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.105"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.106"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.107"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.108"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.109"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.110"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.111"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.112"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.113"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.114"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.115"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.116"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.117"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.118"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.119"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.120"
-
-[[hotkeys]]
-binding = "Unassigned"
-id = "moveColumnToWorkspace.121"
 
 [[hotkeys]]
 binding = "Unassigned"
@@ -1377,236 +1064,59 @@ id = "toggleOverview"
 binding = "Unassigned"
 id = "toggleSystemStats"
 
+[[monitorNiriOverrides]]
+id = "BF93F0E6-8D2A-4438-8EFC-5CB161AAA281"
+monitorDisplayUUID = "2FCBFF8F-9262-41A7-95B0-C31175ADC65B"
+monitorName = "LG HDR 4K"
+visibleContainerCount = 2
+
+[[monitorNiriOverrides]]
+id = "11CC6AC2-E679-47F5-8A73-308703EEB8B3"
+monitorDisplayUUID = "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+monitorName = "Built-in Retina Display"
+visibleContainerCount = 1
+
 [[workspaces]]
-displayName = "a"
+displayName = "1"
 id = "D4545C98-796A-474E-81E7-BFA51250FED3"
 layoutType = "niri"
-name = "97"
+name = "1"
 
 [workspaces.monitorAssignment]
 type = "main"
 
 [[workspaces]]
-displayName = "b"
+displayName = "2"
 id = "B66E8D56-9D63-496B-B68E-373A054CFFD0"
 layoutType = "niri"
-name = "98"
+name = "2"
 
 [workspaces.monitorAssignment]
 type = "main"
 
 [[workspaces]]
-displayName = "c"
+displayName = "3"
 id = "A0409C7D-C426-4BAF-894A-FA06F15BB20D"
 layoutType = "niri"
-name = "99"
+name = "3"
 
 [workspaces.monitorAssignment]
 type = "main"
 
 [[workspaces]]
-displayName = "d"
+displayName = "4"
 id = "ADB4A5AA-AE33-48EC-BE3B-1AD954D2660A"
 layoutType = "niri"
-name = "100"
+name = "4"
 
 [workspaces.monitorAssignment]
 type = "main"
 
 [[workspaces]]
-displayName = "e"
+displayName = "5"
 id = "0D1F041D-686C-4E7F-A6CC-C397C8B7008B"
 layoutType = "niri"
-name = "101"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "f"
-id = "B231FC35-C1EC-4264-AA9A-70F333C3FF55"
-layoutType = "niri"
-name = "102"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "g"
-id = "724B2CED-F192-4CDC-A6C6-764BAA459005"
-layoutType = "niri"
-name = "103"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "h"
-id = "475B0AF3-B453-42A0-98A4-C0C9BF1C9DC2"
-layoutType = "niri"
-name = "104"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "i"
-id = "46D9368E-1007-4F66-A87C-21608005406F"
-layoutType = "niri"
-name = "105"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "j"
-id = "C809661D-0FC1-4DBD-8910-5DFE5EDD6E54"
-layoutType = "niri"
-name = "106"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "k"
-id = "395E1700-093D-4E91-8D08-D50A0D29C04C"
-layoutType = "niri"
-name = "107"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "l"
-id = "FA616F87-CB0F-4CE2-949A-1FB43D9F32E5"
-layoutType = "niri"
-name = "108"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "m"
-id = "3813BEF3-BF9D-4777-8700-36A308E04F2D"
-layoutType = "niri"
-name = "109"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "n"
-id = "20CEAEA8-C6BA-449A-8629-5F387FD3EE32"
-layoutType = "niri"
-name = "110"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "o"
-id = "CE108304-51F0-4808-AEA3-40839BF18387"
-layoutType = "niri"
-name = "111"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "p"
-id = "B530871B-F393-4D54-BDAE-EFC0D3748B3A"
-layoutType = "niri"
-name = "112"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "q"
-id = "DCE1A515-0D27-4287-85E9-060C44D8EF17"
-layoutType = "niri"
-name = "113"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "r"
-id = "466E7A5D-7685-4DA8-AC80-661137A30FAF"
-layoutType = "niri"
-name = "114"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "s"
-id = "A70A42E3-FBB1-4A21-B96B-8697E0196E4F"
-layoutType = "niri"
-name = "115"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "t"
-id = "D49F9945-2701-4287-89AE-B575AC1274C2"
-layoutType = "niri"
-name = "116"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "u"
-id = "338CC3ED-6396-4632-AF7F-DDD015F7DFA1"
-layoutType = "niri"
-name = "117"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "v"
-id = "C12F81B9-C44E-4527-8937-A5DDFBEF29C4"
-layoutType = "niri"
-name = "118"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "w"
-id = "EECA9C6E-3818-4A59-B4C8-84FCFD0BCD31"
-layoutType = "niri"
-name = "119"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "x"
-id = "B79F5FE9-361B-4FF0-9777-1A0A32E89D95"
-layoutType = "niri"
-name = "120"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "y"
-id = "FCA1C642-CC93-454C-83A4-C86DEC6F742C"
-layoutType = "niri"
-name = "121"
-
-[workspaces.monitorAssignment]
-type = "main"
-
-[[workspaces]]
-displayName = "z"
-id = "68787DE4-4B62-4694-AF51-BAF8BC80D5EF"
-layoutType = "niri"
-name = "122"
+name = "5"
 
 [workspaces.monitorAssignment]
 type = "main"

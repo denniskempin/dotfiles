@@ -52,9 +52,9 @@ The Settings window writes back through the symlink into the repo. It keeps unkn
 
 In v0.7.6 a workspace's raw name, `name` in `settings.toml`, must be a positive integer with no leading zero. Other entries are dropped when the file loads. A letter can only be a `displayName`. `workspace focus-name` and `window move-to-workspace` look a display name up case-insensitively, but any argument that parses as a positive integer is read as a raw name. A workspace shown as `3` would then be unreachable by its name whenever its raw name was not 3.
 
-Each workspace's raw name is therefore the character code of its letter, and Hammerspoon sends `switch-workspace <code>` and `move-to-workspace <code>`. No name lookup is involved. The commands only reach workspaces defined in `settings.toml`. They never create one, so a key whose workspace is missing does nothing (exit 1).
+`settings.toml` defines five workspaces, and each one's raw name and display name are the same digit, `1` through `5`. Hammerspoon sends `switch-workspace 1` and `move-to-workspace 1`. The digit is the raw name, so the integer-parsing rule above lands on that workspace. The commands only reach workspaces defined in `settings.toml`. They never create one, so a key whose workspace is missing does nothing (exit 1).
 
-`hideEmptyWorkspaces` also changes navigation: `switch-workspace next` / `prev` and Focus up or down past the column skip empty workspaces. `move-to-workspace up` / `down`, `move-column-to-workspace`, and Move up or down past the column ignore that setting.
+`hideEmptyWorkspaces` also changes navigation. Focus up or down past the column skips empty workspaces. `move-to-workspace up` / `down`, `move-column-to-workspace`, and Move up or down past the column ignore that setting.
 
 ### OmniWM and AeroSpace cannot both run
 
@@ -96,7 +96,7 @@ OmniWM's palette lists windows only, so the Fn search is the one place tabs appe
 
 ### OmniWM's own panels take the keyboard
 
-The window list (O) and Overview (V) are OmniWM panels. Once open they handle their own keys, but only keys the tap lets through reach them. While Right Option is held the layer still swallows every key, so release it before typing. A locked layer would keep swallowing them, so both rows are marked `unlocks` and end the lock. The quake terminal (T) is marked `unlocks` for the same reason: a locked layer would swallow what is typed into it. Show scratchpad (`Z`) is marked `unlocks` for the same reason: a locked layer would swallow what is typed into the window it focuses. The workspace map Hammerspoon used to draw under the layer overlay was removed in favor of Overview, which cannot be a peek while the layer is held.
+The window list (O) and Overview (F) are OmniWM panels. Once open they handle their own keys, but only keys the tap lets through reach them. While Right Option is held the layer still swallows every key, so release it before typing. A locked layer would keep swallowing them, so both rows are marked `unlocks` and end the lock. The quake terminal (T) is marked `unlocks` for the same reason: a locked layer would swallow what is typed into it. The workspace map Hammerspoon used to draw under the layer overlay was removed in favor of Overview, which cannot be a peek while the layer is held.
 
 ## Install
 

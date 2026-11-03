@@ -14,7 +14,8 @@
 -- unlocks   the key ends a lock, because it opens something that takes the
 --           keys that follow.
 -- label     the overlay line, with `hint` on the right. A row without a
---           label still runs and is not drawn.
+--           label still runs and is not drawn. On the App layer the line
+--           comes from that app's legend in targets.lua when it has one.
 
 local arrows = { "left", "down", "up", "right" }
 local across = { "left", "right" }
@@ -30,9 +31,12 @@ local step = { [";"] = "prev", ["'"] = "next" }
 return {
   title = { os = "System", app = "App" },
 
-  -- Each inner list is one overlay column.
+  -- Each inner list is one overlay column. A column with no row for the
+  -- active layer is left out. On the App layer a row the front app cannot
+  -- run is left out too.
   layer = {
     {
+      name = "Tiles",
       { keys = across, layer = "os", verb = "focus", label = "Focus column", hint = "← →" },
       { keys = along, layer = "os", verb = "focus", label = "Focus workspace", hint = "↑ ↓" },
       { keys = across, layer = "os", shift = true, verb = "move", label = "Move column", hint = "⇧ ← →" },
@@ -48,11 +52,15 @@ return {
       { keys = "j", layer = "os", chord = "column", label = "Join or send column", hint = "J then arrow" },
     },
     {
+      name = "Slots",
       { keys = step, layer = "app", verb = "switch", label = "Switch slot", hint = ";  '" },
       { keys = workspaces, layer = "os", verb = "jump", label = "Jump to workspace", hint = "Z X C V B" },
       { keys = digits, arg = tonumber, layer = "app", verb = "jump", label = "Jump to slot", hint = "1–8   9" },
       { keys = step, shift = true, verb = "send", label = "Send to slot", hint = "⇧ ;  '" },
       { keys = workspaces, layer = "os", shift = true, verb = "sendNamed", label = "Send to workspace", hint = "⇧ Z X C V B" },
+    },
+    {
+      name = "Other",
       { keys = { ["["] = "back", ["]"] = "forward" }, layer = "os", verb = "history",
         label = "Last window, workspace", hint = "[  ]" },
       { keys = { ["["] = "back", ["]"] = "forward" }, layer = "app", verb = "history",

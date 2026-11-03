@@ -86,9 +86,11 @@ The arrows follow that shape. Left and right move along the strip. Up and down m
 
 ### Overlay Window
 
-An overlay window showing possible layer bindings is shown after a short delay when a layer key is held or locked. It disappears once a binding is selected.
+An overlay window showing possible layer bindings is shown after a short delay when a layer key is held or locked. It disappears once a binding is selected. The lines are grouped into three columns, Tiles, Slots, and Other, and a column with no lines is left out.
 
-When another key is expected in a sequence, a similar overlay window is shown after a delay with possible follow up keys. 
+On the App layer the lines use that app's own words, and a line is left out when the app has no action for it. The title names the app. An app with no entry says that it has no bindings. `targets.lua` holds the words, under `legend`.
+
+When another key is expected in a sequence, a similar overlay window is shown after a delay with possible follow up keys. Keys the app cannot run are left out, and a sequence the app cannot run does not start. 
 
 ## Implementation
 
@@ -112,7 +114,7 @@ Fn is not remapped. A tap changes the input source, and Fn+arrow is Home, End, P
 
 ### Hammerspoon
 
-`configs/hammerspoon/bindings.lua` holds the grammar as rows: key, Shift, verb or chord, and the overlay line. `configs/hammerspoon/targets.lua` says what each verb does on the operating system and in each app. `init.lua` runs the tap and the layer state, and needs no edit to change a binding.
+`configs/hammerspoon/bindings.lua` holds the grammar as rows: key, Shift, verb or chord, and the overlay line. The rows sit in three columns, Tiles, Slots, and Other. `configs/hammerspoon/targets.lua` says what each verb does on the operating system and in each app, and, under `legend`, the words the App overlay uses for that app. `init.lua` runs the tap and the layer state, and needs no edit to change a binding.
 
 One event tap watches key down and key up.
 
@@ -120,8 +122,8 @@ One event tap watches key down and key up.
 - Space, while a layer is armed and no chord is pending, locks that layer. The layer key can come up and the layer stays armed. Escape, with no chord pending, clears the lock. A row marked `unlocks`, Open document, the quake terminal, and Overview, clears it too.
 - While a layer is armed, every other key is swallowed. A listed key runs its verb. Shift is read off the event flags. Command combinations are swallowed with the rest.
 - Delete on the App layer is posted as forward delete.
-- A layer that is held or locked shows its overlay after 250 ms. The overlay hides once a binding is selected, and on key up when the layer is not locked. While the layer stays locked, the 250 ms timer starts again after the binding. The overlay is an `hs.canvas` on the focused screen, non-activating. Nothing goes to Notification Center.
-- `\` on the App layer, and `J` on the operating-system layer, start a chord. The layer overlay hides and a follow-up overlay lists the keys that chord accepts. Split and the column chord accept an arrow.
+- A layer that is held or locked shows its overlay after 250 ms. The overlay hides once a binding is selected, and on key up when the layer is not locked. While the layer stays locked, the 250 ms timer starts again after the binding. The overlay is an `hs.canvas` on the focused screen, non-activating. Nothing goes to Notification Center. Its columns are Tiles, Slots, and Other. On the App layer each line is that app's legend, the title names the app, and a line the app cannot run is left out.
+- `\` on the App layer, and `J` on the operating-system layer, start a chord. A chord the front app cannot run does not start. The layer overlay hides and a follow-up overlay lists the keys that chord accepts, leaving out keys the app cannot run. Split and the column chord accept an arrow.
 - While a chord is waiting, the tap keeps swallowing keys after the layer key comes up. A lock stays in force. The pending verb wins over the layer, so an arrow with the layer key still down is the argument. F18 and F19 are not arguments. One argument clears the verb. Escape and any unlisted key clear the chord and leave a lock in place. Shift also clears it, unless Shift started the chord, so Shift can stay down from the chord key through the next key. Key repeat is swallowed, including inside a chord.
 
 OmniWM commands run through `hs.task` on a queue, one at a time in key order, so the tap never waits on OmniWM.

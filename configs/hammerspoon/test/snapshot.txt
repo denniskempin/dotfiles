@@ -6,41 +6,38 @@
 Tiles
   Focus column             ← →
   Focus workspace          ↑ ↓
-  Move column              ⇧ ← →
+  Move window              ⇧ ← →
   Move to workspace        ⇧ ↑ ↓
   Zoom tile                ↩
   Close tile               Q
   Size tile                S
-  Join or send column      J then arrow
 Slots
   Jump to workspace        Z X C V B
-  Send to slot             ⇧ ;  '
   Send to workspace        ⇧ Z X C V B
 Other
   Last window, workspace   [  ]
   Run command              P
-  Open document            O
+  Open document            F
   Quake terminal           T
-  Overview                 F
+  Dashboard                D
   Focus monitor            ⇥
   Send slot                ⇧ ⇥
 
 # System layer, Right Option held
 left           omniwmctl command focus left
-shift+left     omniwmctl command move-column left
+shift+left     omniwmctl command move left
 down           omniwmctl command focus-window-or-workspace-down
 shift+down     omniwmctl command move-window-down-or-to-workspace-down
 up             omniwmctl command focus-window-or-workspace-up
 shift+up       omniwmctl command move-window-up-or-to-workspace-up
 right          omniwmctl command focus right
-shift+right    omniwmctl command move-column right
+shift+right    omniwmctl command move right
 b              omniwmctl command switch-workspace 5
 shift+b        omniwmctl command move-to-workspace 5
 c              omniwmctl command switch-workspace 3
 shift+c        omniwmctl command move-to-workspace 3
-f              omniwmctl command toggle-overview
-j              overlay "Column"
-o              omniwmctl command open-command-palette windows
+d              omniwmctl command toggle-overview
+f              omniwmctl command open-command-palette windows
 p              open -g -b com.raycast.macos
 q              omniwmctl command close-focused-window
 s              omniwmctl command cycle-size forward
@@ -51,8 +48,6 @@ x              omniwmctl command switch-workspace 2
 shift+x        omniwmctl command move-to-workspace 2
 z              omniwmctl command switch-workspace 1
 shift+z        omniwmctl command move-to-workspace 1
-shift+'        omniwmctl command move-to-workspace down
-shift+;        omniwmctl command move-to-workspace up
 [              omniwmctl command focus previous
 ]              omniwmctl command switch-workspace back-and-forth
 return         omniwmctl command toggle-fullscreen
@@ -61,41 +56,24 @@ tab            omniwmctl command focus-monitor next
 shift+tab      omniwmctl query displays --fields frame,is-current
 padenter       omniwmctl command toggle-fullscreen
 
-# System layer, j then the key (Column)
-left           omniwmctl command consume-or-expel-window-left
-down           omniwmctl command move-column-to-workspace down
-up             omniwmctl command move-column-to-workspace up
-right          omniwmctl command consume-or-expel-window-right
-
 # App layer overlay, in com.google.Chrome
 Slots
   Switch tab               ;  '
-  Jump to tab              1–8   9
   Move tab                 ⇧ ;  '
 Other
   Back and forward         [  ]
   Search menus             P
-  Search tabs              O
+  Search tabs              F
 
 # App layer, Right Command held, in com.google.Chrome
-o              press cmd+shift+a
+f              press cmd+shift+a
 p              press cmd+shift+/
-1              press cmd+1
-2              press cmd+2
-3              press cmd+3
-4              press cmd+4
-5              press cmd+5
-6              press cmd+6
-7              press cmd+7
-8              press cmd+8
-9              press cmd+9
 '              press cmd+shift+]
 shift+'        press ctrl+shift+pagedown
 ;              press cmd+shift+[
 shift+;        press ctrl+shift+pageup
 [              press cmd+[
 ]              press cmd+]
-delete         press forwarddelete
 space          overlay "App  ·  locked"
 
 # App layer overlay, in com.microsoft.VSCode
@@ -103,46 +81,35 @@ Tiles
   Focus group              ← ↓ ↑ →
   Zoom group               ↩
   Close editor             X
-  Split editor             \ then arrow
+  Split editor             G then arrow
 Slots
   Switch tab               ;  '
-  Jump to tab              1–8   9
   Move tab                 ⇧ ;  '
 Other
   Back and forward         [  ]
   Command palette          P
-  Quick open               O
+  Quick open               F
 
 # App layer, Right Command held, in com.microsoft.VSCode
 left           press cmd+k ; press cmd+left
 down           press cmd+k ; press cmd+down
 up             press cmd+k ; press cmd+up
 right          press cmd+k ; press cmd+right
-o              press cmd+p
+f              press cmd+p
+g              overlay "Split"
 p              press cmd+shift+p
 x              press cmd+w
-1              press ctrl+1
-2              press ctrl+2
-3              press ctrl+3
-4              press ctrl+4
-5              press ctrl+5
-6              press ctrl+6
-7              press ctrl+7
-8              press ctrl+8
-9              press cmd+9
 '              press cmd+k ; press cmd+alt+right
 shift+'        press cmd+k ; press cmd+shift+right
 ;              press cmd+k ; press cmd+alt+left
 shift+;        press cmd+k ; press cmd+shift+left
 [              press ctrl+-
-\              overlay "Split"
 ]              press ctrl+shift+-
-delete         press forwarddelete
 return         press cmd+k ; press cmd+m
 space          overlay "App  ·  locked"
 padenter       press cmd+k ; press cmd+m
 
-# App layer, \ then the key (Split), in com.microsoft.VSCode
+# App layer, g then the key (Split), in com.microsoft.VSCode
 left           press cmd+\
 down           press cmd+\
 up             press cmd+\
@@ -153,46 +120,35 @@ Tiles
   Focus pane               ← ↓ ↑ →
   Zoom pane                ↩
   Close pane               X
-  Split pane               \ then arrow
+  Split pane               G then arrow
 Slots
   Switch tab               ;  '
-  Jump to tab              1–8   9
   Move tab                 ⇧ ;  '
 Other
   Directory history        [  ]
   Command palette          P
-  Show all tabs            O
+  Show all tabs            F
 
 # App layer, Right Command held, in com.mitchellh.ghostty
 left           press cmd+alt+left
 down           press cmd+alt+down
 up             press cmd+alt+up
 right          press cmd+alt+right
-o              press cmd+shift+\
+f              press cmd+shift+\
+g              overlay "Split"
 p              press cmd+shift+p
 x              press cmd+w
-1              press cmd+1
-2              press cmd+2
-3              press cmd+3
-4              press cmd+4
-5              press cmd+5
-6              press cmd+6
-7              press cmd+7
-8              press cmd+8
-9              press cmd+9
 '              press cmd+shift+]
 shift+'        press cmd+shift+right
 ;              press cmd+shift+[
 shift+;        press cmd+shift+left
 [              press alt+j
-\              overlay "Split"
 ]              press alt+k
-delete         press forwarddelete
 return         press cmd+shift+return
 space          overlay "App  ·  locked"
 padenter       press cmd+shift+return
 
-# App layer, \ then the key (Split), in com.mitchellh.ghostty
+# App layer, g then the key (Split), in com.mitchellh.ghostty
 left           menu File > Split Left
 down           press cmd+shift+d
 up             menu File > Split Up
@@ -203,46 +159,35 @@ Tiles
   Focus group              ← ↓ ↑ →
   Zoom group               ↩
   Close editor             X
-  Split editor             \ then arrow
+  Split editor             G then arrow
 Slots
   Switch tab               ;  '
-  Jump to tab              1–8   9
   Move tab                 ⇧ ;  '
 Other
   Back and forward         [  ]
   Command palette          P
-  Quick open               O
+  Quick open               F
 
 # App layer, Right Command held, in com.todesktop.230313mzl4w4u92
 left           press cmd+k ; press cmd+left
 down           press cmd+k ; press cmd+down
 up             press cmd+k ; press cmd+up
 right          press cmd+k ; press cmd+right
-o              press cmd+p
+f              press cmd+p
+g              overlay "Split"
 p              press cmd+shift+p
 x              press cmd+w
-1              press ctrl+1
-2              press ctrl+2
-3              press ctrl+3
-4              press ctrl+4
-5              press ctrl+5
-6              press ctrl+6
-7              press ctrl+7
-8              press ctrl+8
-9              press cmd+9
 '              press cmd+k ; press cmd+alt+right
 shift+'        press cmd+k ; press cmd+shift+right
 ;              press cmd+k ; press cmd+alt+left
 shift+;        press cmd+k ; press cmd+shift+left
 [              press ctrl+-
-\              overlay "Split"
 ]              press ctrl+shift+-
-delete         press forwarddelete
 return         press cmd+k ; press cmd+m
 space          overlay "App  ·  locked"
 padenter       press cmd+k ; press cmd+m
 
-# App layer, \ then the key (Split), in com.todesktop.230313mzl4w4u92
+# App layer, g then the key (Split), in com.todesktop.230313mzl4w4u92
 left           press cmd+\
 down           press cmd+\
 up             press cmd+\
@@ -251,37 +196,26 @@ right          press cmd+\
 # App layer overlay, in md.obsidian
 Tiles
   Close tab                X
-  Split pane               \ then ↓ →
+  Split pane               G then ↓ →
 Slots
   Switch tab               ;  '
-  Jump to tab              1–8   9
 Other
   Back and forward         [  ]
   Command palette          P
-  Open note                O
+  Open note                F
 
 # App layer, Right Command held, in md.obsidian
-o              press cmd+o
+f              press cmd+o
+g              overlay "Split"
 p              press cmd+p
 x              press cmd+w
-1              press cmd+1
-2              press cmd+2
-3              press cmd+3
-4              press cmd+4
-5              press cmd+5
-6              press cmd+6
-7              press cmd+7
-8              press cmd+8
-9              press cmd+9
 '              press cmd+shift+]
 ;              press cmd+shift+[
 [              press cmd+alt+left
-\              overlay "Split"
 ]              press cmd+alt+right
-delete         press forwarddelete
 space          overlay "App  ·  locked"
 
-# App layer, \ then the key (Split), in md.obsidian
+# App layer, g then the key (Split), in md.obsidian
 down           menu Split down ; menu Split down
 right          menu Split right ; menu Split right
 
@@ -289,5 +223,4 @@ right          menu Split right ; menu Split right
 No bindings
 
 # App layer, Right Command held, in com.example.Unlisted
-delete         press forwarddelete
 space          overlay "App  ·  locked"

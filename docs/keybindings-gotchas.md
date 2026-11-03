@@ -54,7 +54,7 @@ In v0.7.6 a workspace's raw name, `name` in `settings.toml`, must be a positive 
 
 `settings.toml` defines five workspaces, and each one's raw name and display name are the same digit, `1` through `5`. Hammerspoon sends `switch-workspace 1` and `move-to-workspace 1`. The digit is the raw name, so the integer-parsing rule above lands on that workspace. The commands only reach workspaces defined in `settings.toml`. They never create one, so a key whose workspace is missing does nothing (exit 1).
 
-`hideEmptyWorkspaces` also changes navigation. Focus up or down past the column skips empty workspaces. `move-to-workspace up` / `down`, `move-column-to-workspace`, and Move up or down past the column ignore that setting.
+`hideEmptyWorkspaces` also changes navigation. Focus up or down past the column skips empty workspaces. Move up or down past the column ignores that setting.
 
 ### OmniWM and AeroSpace cannot both run
 
@@ -96,7 +96,7 @@ OmniWM's palette lists windows only, so the Fn search is the one place tabs appe
 
 ### OmniWM's own panels take the keyboard
 
-The window list (O) and Overview (F) are OmniWM panels. Once open they handle their own keys, but only keys the tap lets through reach them. While Right Option is held the layer still swallows every key, so release it before typing. A locked layer would keep swallowing them, so both rows are marked `unlocks` and end the lock. The quake terminal (T) is marked `unlocks` for the same reason: a locked layer would swallow what is typed into it. The workspace map Hammerspoon used to draw under the layer overlay was removed in favor of Overview, which cannot be a peek while the layer is held.
+The window list (F) and Dashboard (D) are OmniWM panels. Once open they handle their own keys, but only keys the tap lets through reach them. While Right Option is held the layer still swallows every key, so release it before typing. A locked layer would keep swallowing them, so both rows are marked `unlocks` and end the lock. The quake terminal (T) is marked `unlocks` for the same reason: a locked layer would swallow what is typed into it. The workspace map Hammerspoon used to draw under the layer overlay was removed in favor of Dashboard, which cannot be a peek while the layer is held.
 
 ## Install
 

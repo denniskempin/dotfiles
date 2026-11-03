@@ -154,8 +154,4 @@ end
 
 M.commands = {}
 
-function M.commands.forwardDelete()
-  postKey({}, "forwarddelete")
-end
-
 return M

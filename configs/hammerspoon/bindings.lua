@@ -20,7 +20,6 @@
 local arrows = { "left", "down", "up", "right" }
 local across = { "left", "right" }
 local along = { "down", "up" }
-local digits = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }
 
 -- Workspaces 1–5, the only ones settings.toml defines. The value is the
 -- workspace's raw name, which is also its display name.
@@ -39,7 +38,7 @@ return {
       name = "Tiles",
       { keys = across, layer = "os", verb = "focus", label = "Focus column", hint = "← →" },
       { keys = along, layer = "os", verb = "focus", label = "Focus workspace", hint = "↑ ↓" },
-      { keys = across, layer = "os", shift = true, verb = "move", label = "Move column", hint = "⇧ ← →" },
+      { keys = across, layer = "os", shift = true, verb = "move", label = "Move window", hint = "⇧ ← →" },
       { keys = along, layer = "os", shift = true, verb = "move", label = "Move to workspace", hint = "⇧ ↑ ↓" },
       { keys = arrows, layer = "app", verb = "focus", label = "Focus tile", hint = "← ↓ ↑ →" },
       { keys = arrows, layer = "app", shift = true, verb = "move", label = "Move tile", hint = "⇧ ← ↓ ↑ →" },
@@ -47,16 +46,14 @@ return {
       -- X is workspace 2, so the operating system closes with Q.
       { keys = "q", layer = "os", verb = "close", label = "Close tile", hint = "Q" },
       { keys = "x", layer = "app", verb = "close", label = "Close tile", hint = "X" },
-      { keys = "\\", layer = "app", chord = "split", label = "Split tile", hint = "\\ then arrow" },
+      { keys = "g", layer = "app", chord = "split", label = "Split tile", hint = "G then arrow" },
       { keys = "s", layer = "os", verb = "size", label = "Size tile", hint = "S" },
-      { keys = "j", layer = "os", chord = "column", label = "Join or send column", hint = "J then arrow" },
     },
     {
       name = "Slots",
       { keys = step, layer = "app", verb = "switch", label = "Switch slot", hint = ";  '" },
       { keys = workspaces, layer = "os", verb = "jump", label = "Jump to workspace", hint = "Z X C V B" },
-      { keys = digits, arg = tonumber, layer = "app", verb = "jump", label = "Jump to slot", hint = "1–8   9" },
-      { keys = step, shift = true, verb = "send", label = "Send to slot", hint = "⇧ ;  '" },
+      { keys = step, layer = "app", shift = true, verb = "send", label = "Send to slot", hint = "⇧ ;  '" },
       { keys = workspaces, layer = "os", shift = true, verb = "sendNamed", label = "Send to workspace", hint = "⇧ Z X C V B" },
     },
     {
@@ -66,12 +63,11 @@ return {
       { keys = { ["["] = "back", ["]"] = "forward" }, layer = "app", verb = "history",
         label = "Walk history", hint = "[  ]" },
       { keys = "p", verb = "command", label = "Run command", hint = "P" },
-      { keys = "o", verb = "open", unlocks = true, label = "Open document", hint = "O" },
+      { keys = "f", verb = "open", unlocks = true, label = "Open document", hint = "F" },
       { keys = "t", layer = "os", verb = "quake", unlocks = true, label = "Quake terminal", hint = "T" },
-      { keys = "f", layer = "os", verb = "overview", unlocks = true, label = "Overview", hint = "F" },
+      { keys = "d", layer = "os", verb = "dashboard", unlocks = true, label = "Dashboard", hint = "D" },
       { keys = "tab", layer = "os", verb = "focusMonitor", label = "Focus monitor", hint = "⇥" },
       { keys = "tab", layer = "os", shift = true, verb = "sendMonitor", label = "Send slot", hint = "⇧ ⇥" },
-      { keys = "delete", layer = "app", run = "forwardDelete" },
     },
   },
 
@@ -86,15 +82,6 @@ return {
         { keys = "down", verb = "split", label = "Down", hint = "↓" },
         { keys = "up", verb = "split", label = "Up", hint = "↑" },
         { keys = "right", verb = "split", label = "Right", hint = "→" },
-      },
-    },
-    column = {
-      title = "Column",
-      rows = {
-        { keys = "left", verb = "join", label = "Join left", hint = "←" },
-        { keys = "down", verb = "sendColumn", label = "To workspace below", hint = "↓" },
-        { keys = "up", verb = "sendColumn", label = "To workspace above", hint = "↑" },
-        { keys = "right", verb = "join", label = "Join right", hint = "→" },
       },
     },
   },

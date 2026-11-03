@@ -96,7 +96,7 @@ omniwmctl query workspaces --current --fields raw-name,columns
 | Raycast | `Live.windows("Raycast")` shows `750x64 layer=8` while the bar is open. While the bar has keys, `Live.front()` shows the window "Main Window". `Live.press(nil, "escape")` closes it |
 | Window list | Right Option+O opens OmniWM's palette in windows mode. Escape closes it. Return and Shift+Return change focus and layout, so ask first |
 | Fn search | Hold Fn and type a prefix, then release: focus changes, and the window stays on its workspace (check with the OmniWM queries above). A Chrome tab row also selects that tab. Tap Fn: the input source still changes. Fn+Left: the cursor still goes to the start of the line |
-| Overview | Right Option+V zooms out to every workspace. Escape closes it without changing anything |
+| Dashboard | Right Option+D zooms out to every workspace. Escape closes it without changing anything |
 | Global hotkey delivery | `q 'return Live.probe({ "cmd", "alt", "ctrl" }, "f13")'`, send the hotkey through the code path under test, then `q 'return Live.hits("cmd+alt+ctrl+f13")'` |
 
 `Live.reset()` deletes probes. A reload clears all `Live` state.

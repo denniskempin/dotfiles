@@ -21,8 +21,9 @@ local function wm(...) return actions.wm("command", ...) end
 -- OmniWM's niri layout: each workspace is a strip of columns that scrolls
 -- left and right, a column holds one or more windows stacked top to bottom,
 -- and a monitor's workspaces stack top to bottom. Left and right move along
--- the strip. Up and down move inside the column, and past its end to the
--- workspace above or below.
+-- the strip. Left and right move the window into the neighboring column,
+-- or out of a shared column into its own. Up and down move inside the
+-- column, and past its end to the workspace above or below.
 local VERTICAL = { up = true, down = true }
 
 local system = {
@@ -32,27 +33,14 @@ local system = {
   end,
   move = function(dir)
     if VERTICAL[dir] then return wm("move-window-" .. dir .. "-or-to-workspace-" .. dir) end
-    return wm("move-column", dir)
+    return wm("move", dir)
   end,
   zoom = wm("toggle-fullscreen"),
   close = wm("close-focused-window"),
   -- containerPrimarySpanPresets in settings.toml: a third, a half, two thirds, full.
   size = wm("cycle-size", "forward"),
-  -- Into the neighboring column, or out of a shared column into its own.
-  join = {
-    left = wm("consume-or-expel-window-left"),
-    right = wm("consume-or-expel-window-right"),
-  },
-  sendColumn = {
-    up = wm("move-column-to-workspace", "up"),
-    down = wm("move-column-to-workspace", "down"),
-  },
   -- The argument is the workspace's raw name: "1" through "5".
   jump = function(name) return wm("switch-workspace", name) end,
-  send = {
-    prev = wm("move-to-workspace", "up"),
-    next = wm("move-to-workspace", "down"),
-  },
   sendNamed = function(name) return wm("move-to-workspace", name) end,
   -- OmniWM keeps one step of each: the window and the workspace focused
   -- before this one. Pressing again goes back.
@@ -65,7 +53,7 @@ local system = {
   -- new column right of the focused one.
   open = wm("open-command-palette", "windows"),
   quake = wm("toggle-quake-terminal"),
-  overview = wm("toggle-overview"),
+  dashboard = wm("toggle-overview"),
   focusMonitor = wm("focus-monitor", "next"),
   sendMonitor = actions.call(omniwm.sendWorkspaceToNextMonitor),
 }
@@ -77,7 +65,6 @@ local vscode = {
     close = "Close editor",
     split = "Split editor",
     switch = "Switch tab",
-    jump = "Jump to tab",
     send = "Move tab",
     history = "Back and forward",
     command = "Command palette",
@@ -93,10 +80,6 @@ local vscode = {
     prev = seq(stroke({ "cmd" }, "k"), stroke({ "cmd", "alt" }, "left")),
     next = seq(stroke({ "cmd" }, "k"), stroke({ "cmd", "alt" }, "right")),
   },
-  jump = function(n)
-    if n == 9 then return stroke({ "cmd" }, "9") end
-    return stroke({ "ctrl" }, tostring(n))
-  end,
   send = {
     prev = seq(stroke({ "cmd" }, "k"), stroke({ "cmd", "shift" }, "left")),
     next = seq(stroke({ "cmd" }, "k"), stroke({ "cmd", "shift" }, "right")),
@@ -113,7 +96,6 @@ local apps = {
   ["com.google.Chrome"] = {
     legend = {
       switch = "Switch tab",
-      jump = "Jump to tab",
       send = "Move tab",
       history = "Back and forward",
       command = "Search menus",
@@ -123,7 +105,6 @@ local apps = {
       prev = stroke({ "cmd", "shift" }, "["),
       next = stroke({ "cmd", "shift" }, "]"),
     },
-    jump = function(n) return stroke({ "cmd" }, tostring(n)) end,
     send = {
       prev = stroke({ "ctrl", "shift" }, "pageup"),
       next = stroke({ "ctrl", "shift" }, "pagedown"),
@@ -148,7 +129,6 @@ local apps = {
       close = "Close pane",
       split = "Split pane",
       switch = "Switch tab",
-      jump = "Jump to tab",
       send = "Move tab",
       history = "Directory history",
       command = "Command palette",
@@ -167,7 +147,6 @@ local apps = {
       prev = stroke({ "cmd", "shift" }, "["),
       next = stroke({ "cmd", "shift" }, "]"),
     },
-    jump = function(n) return stroke({ "cmd" }, tostring(n)) end,
     -- Bound to move_tab in configs/ghostty/config.ghostty; Ghostty has no default.
     send = {
       prev = stroke({ "cmd", "shift" }, "left"),
@@ -187,9 +166,8 @@ local apps = {
   ["md.obsidian"] = {
     legend = {
       close = "Close tab",
-      split = { label = "Split pane", hint = "\\ then ↓ →" },
+      split = { label = "Split pane", hint = "G then ↓ →" },
       switch = "Switch tab",
-      jump = "Jump to tab",
       history = "Back and forward",
       command = "Command palette",
       open = "Open note",
@@ -203,7 +181,6 @@ local apps = {
       prev = stroke({ "cmd", "shift" }, "["),
       next = stroke({ "cmd", "shift" }, "]"),
     },
-    jump = function(n) return stroke({ "cmd" }, tostring(n)) end,
     history = {
       back = stroke({ "cmd", "alt" }, "left"),
       forward = stroke({ "cmd", "alt" }, "right"),

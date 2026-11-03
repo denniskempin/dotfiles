@@ -21,12 +21,6 @@ local function wm(...) return actions.wm("command", ...) end
 -- workspace above or below.
 local VERTICAL = { up = true, down = true }
 
--- settings.toml gives each workspace a key as its display name and the key's
--- character code as its raw name. OmniWM needs raw names that are positive
--- integers, and reads a display name such as "3" as raw name 3, so commands
--- go by the code.
-local function workspace(key) return tostring(key:byte()) end
-
 local system = {
   focus = function(dir)
     if VERTICAL[dir] then return wm("focus-window-or-workspace-" .. dir) end
@@ -49,14 +43,13 @@ local system = {
     up = wm("move-column-to-workspace", "up"),
     down = wm("move-column-to-workspace", "down"),
   },
-  -- prev is the workspace above, next the one below, on this monitor.
-  switch = function(dir) return wm("switch-workspace", dir) end,
-  jump = function(key) return wm("switch-workspace", workspace(key)) end,
+  -- The argument is the workspace's raw name: "1" through "5".
+  jump = function(name) return wm("switch-workspace", name) end,
   send = {
     prev = wm("move-to-workspace", "up"),
     next = wm("move-to-workspace", "down"),
   },
-  sendNamed = function(key) return wm("move-to-workspace", workspace(key)) end,
+  sendNamed = function(name) return wm("move-to-workspace", name) end,
   -- OmniWM keeps one step of each: the window and the workspace focused
   -- before this one. Pressing again goes back.
   history = {

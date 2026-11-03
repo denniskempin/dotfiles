@@ -21,11 +21,9 @@ local across = { "left", "right" }
 local along = { "down", "up" }
 local digits = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }
 
--- a through z. configs/omniwm/settings.toml defines a workspace named for each.
-local letters = {}
-for key in ("abcdefghijklmnopqrstuvwxyz"):gmatch(".") do
-  letters[#letters + 1] = key
-end
+-- Workspaces 1–5, the only ones settings.toml defines. The value is the
+-- workspace's raw name, which is also its display name.
+local workspaces = { z = "1", x = "2", c = "3", v = "4", b = "5" }
 
 local step = { [";"] = "prev", ["'"] = "next" }
 
@@ -42,17 +40,19 @@ return {
       { keys = arrows, layer = "app", verb = "focus", label = "Focus tile", hint = "← ↓ ↑ →" },
       { keys = arrows, layer = "app", shift = true, verb = "move", label = "Move tile", hint = "⇧ ← ↓ ↑ →" },
       { keys = "return", verb = "zoom", label = "Zoom tile", hint = "↩" },
-      { keys = "x", verb = "close", label = "Close tile", hint = "X" },
+      -- X is workspace 2, so the operating system closes with Q.
+      { keys = "q", layer = "os", verb = "close", label = "Close tile", hint = "Q" },
+      { keys = "x", layer = "app", verb = "close", label = "Close tile", hint = "X" },
       { keys = "\\", layer = "app", chord = "split", label = "Split tile", hint = "\\ then arrow" },
       { keys = "s", layer = "os", verb = "size", label = "Size tile", hint = "S" },
       { keys = "j", layer = "os", chord = "column", label = "Join or send column", hint = "J then arrow" },
     },
     {
-      { keys = step, verb = "switch", label = "Switch slot", hint = ";  '" },
-      { keys = "g", layer = "os", chord = "jump", label = "Jump to workspace", hint = "G then key" },
+      { keys = step, layer = "app", verb = "switch", label = "Switch slot", hint = ";  '" },
+      { keys = workspaces, layer = "os", verb = "jump", label = "Jump to workspace", hint = "Z X C V B" },
       { keys = digits, arg = tonumber, layer = "app", verb = "jump", label = "Jump to slot", hint = "1–8   9" },
       { keys = step, shift = true, verb = "send", label = "Send to slot", hint = "⇧ ;  '" },
-      { keys = "g", layer = "os", shift = true, chord = "send", label = "Send to workspace", hint = "⇧ G then key" },
+      { keys = workspaces, layer = "os", shift = true, verb = "sendNamed", label = "Send to workspace", hint = "⇧ Z X C V B" },
       { keys = { ["["] = "back", ["]"] = "forward" }, layer = "os", verb = "history",
         label = "Last window, workspace", hint = "[  ]" },
       { keys = { ["["] = "back", ["]"] = "forward" }, layer = "app", verb = "history",
@@ -60,7 +60,7 @@ return {
       { keys = "p", verb = "command", label = "Run command", hint = "P" },
       { keys = "o", verb = "open", unlocks = true, label = "Open document", hint = "O" },
       { keys = "t", layer = "os", verb = "quake", unlocks = true, label = "Quake terminal", hint = "T" },
-      { keys = "v", layer = "os", verb = "overview", unlocks = true, label = "Overview", hint = "V" },
+      { keys = "f", layer = "os", verb = "overview", unlocks = true, label = "Overview", hint = "F" },
       { keys = "tab", layer = "os", verb = "focusMonitor", label = "Focus monitor", hint = "⇥" },
       { keys = "tab", layer = "os", shift = true, verb = "sendMonitor", label = "Send slot", hint = "⇧ ⇥" },
       { keys = "delete", layer = "app", run = "forwardDelete" },
@@ -71,18 +71,6 @@ return {
   -- key ends it without an action. A chord started with Shift takes its key
   -- with or without Shift.
   chords = {
-    jump = {
-      title = "Jump to workspace",
-      rows = {
-        { keys = letters, verb = "jump", label = "The workspace named by the key", hint = "a–z" },
-      },
-    },
-    send = {
-      title = "Send to workspace",
-      rows = {
-        { keys = letters, verb = "sendNamed", label = "The workspace named by the key", hint = "a–z" },
-      },
-    },
     split = {
       title = "Split",
       rows = {

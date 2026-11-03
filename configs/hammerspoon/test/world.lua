@@ -98,6 +98,7 @@ function M.new(opts)
     warnings = {},
     problems = {},
     front = opts.front,
+    frontName = opts.frontName,
     latency = opts.latency or 0.05,
     hang = opts.hang,
     deliverHotkeys = opts.deliverHotkeys ~= false,
@@ -396,6 +397,7 @@ function World:fake()
         if not w.front then return nil end
         return {
           bundleID = function() return w.front end,
+          name = function() return w.frontName end,
           selectMenuItem = function(_, path)
             local text = type(path) == "table" and table.concat(path, " > ") or path
             w:record("menu " .. text)

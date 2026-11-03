@@ -431,6 +431,144 @@ test("a chord shows its own overlay", function(t)
   w:effects()
 end)
 
+test("the overlay groups its columns and uses the app's legend", function(t)
+  local bindings = {
+    title = { os = "OS", app = "App" },
+    layer = {
+      {
+        name = "Tiles",
+        { keys = "a", verb = "focus", label = "Focus tile", hint = "A" },
+        { keys = "b", layer = "os", verb = "zoom", label = "Zoom tile", hint = "B" },
+        { keys = "s", chord = "resize", label = "Resize tile", hint = "S" },
+        { keys = "\\", layer = "app", chord = "split", label = "Split tile", hint = "\\ then arrow" },
+      },
+      {
+        name = "Slots",
+        { keys = "c", verb = "switch", label = "Switch slot", hint = "C" },
+      },
+      {
+        name = "Other",
+        { keys = "d", verb = "command", label = "Run command", hint = "D" },
+      },
+    },
+    chords = {
+      resize = {
+        title = "Resize",
+        rows = {
+          { keys = "left", verb = "resize", label = "Shrink", hint = "←" },
+        },
+      },
+      split = {
+        title = "Split",
+        rows = {
+          { keys = "left", verb = "split", label = "Left", hint = "←" },
+          { keys = "right", verb = "split", label = "Right", hint = "→" },
+        },
+      },
+    },
+  }
+  local function targets(actions)
+    local stroke = actions.stroke
+    return {
+      system = {
+        focus = actions.wm("focus"),
+        zoom = actions.wm("zoom"),
+        resize = actions.wm("resize"),
+        switch = actions.wm("switch"),
+        command = actions.wm("command"),
+      },
+      apps = {
+        ["com.example.App"] = {
+          legend = {
+            focus = "Focus pane",
+            switch = { label = "Switch tab", hint = "C'" },
+            split = "Split pane",
+          },
+          focus = stroke({ "cmd" }, "a"),
+          switch = stroke({ "cmd" }, "c"),
+          split = { right = stroke({ "cmd" }, "d") },
+        },
+      },
+    }
+  end
+  local function open(front, frontName)
+    return t.world({
+      bindings = bindings,
+      targets = targets,
+      front = front,
+      frontName = frontName,
+    })
+  end
+
+  local app = open("com.example.App", "Example")
+  app:down("f18")
+  app:advance(1)
+  t.eq(app.overlay.texts, {
+    "App  ·  Example",
+    "Tiles",
+    "Focus pane",
+    "A",
+    "Split pane",
+    "\\ then arrow",
+    "Slots",
+    "Switch tab",
+    "C'",
+    "space locks      esc clears",
+  }, "app legend")
+  app:press("s")
+  app:advance(1)
+  t.eq(app.overlay.title, "App  ·  Example", "a chord the app cannot run does not start")
+  app:press("\\")
+  app:advance(1)
+  t.eq(app.overlay.texts, {
+    "Split",
+    "Right",
+    "→",
+    "esc cancels",
+  }, "only the directions the app has")
+  app:press("escape")
+  app:up("f18")
+  app:effects()
+
+  local os = open("com.example.App", "Example")
+  os:down("f19")
+  os:advance(1)
+  t.eq(os.overlay.texts, {
+    "OS",
+    "Tiles",
+    "Focus tile",
+    "A",
+    "Zoom tile",
+    "B",
+    "Resize tile",
+    "S",
+    "Slots",
+    "Switch slot",
+    "C",
+    "Other",
+    "Run command",
+    "D",
+    "space locks      esc clears",
+  }, "system legend")
+  os:press("s")
+  os:advance(1)
+  t.eq(os.overlay.title, "Resize", "the system chord still starts")
+  os:press("escape")
+  os:up("f19")
+  os:effects()
+
+  local none = open("com.example.Unlisted", "Notes")
+  none:down("f18")
+  none:advance(1)
+  t.eq(none.overlay.texts, {
+    "App  ·  Notes",
+    "No bindings",
+    "space locks      esc clears",
+  }, "an app with no entry")
+  none:up("f18")
+  none:effects()
+end)
+
 -- Fn window search. Right Option+O is OmniWM's own list, so it is a plain
 -- command in the snapshot.
 

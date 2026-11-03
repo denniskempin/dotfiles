@@ -5,6 +5,10 @@
 -- A field is one action, a table of actions keyed by the argument, or a
 -- function of the argument that returns an action. A missing field, or a
 -- function that returns nil, means the key does nothing in that target.
+--
+-- `legend` is the App overlay's words for this app, keyed by the row's verb
+-- or chord. A string replaces the label. A table replaces `label` and
+-- `hint`. A row with no action here is left out of the overlay.
 
 local actions = require("actions")
 local omniwm = require("omniwm")
@@ -86,6 +90,19 @@ local system = {
 }
 
 local vscode = {
+  legend = {
+    focus = "Focus group",
+    zoom = "Zoom group",
+    close = "Close editor",
+    split = "Split editor",
+    layout = { label = "Flip layout", hint = "L then F" },
+    switch = "Switch tab",
+    jump = "Jump to tab",
+    send = "Move tab",
+    history = "Back and forward",
+    command = "Command palette",
+    open = "Quick open",
+  },
   focus = function(dir)
     return seq(stroke({ "cmd" }, "k"), stroke({ "cmd" }, dir))
   end,
@@ -115,6 +132,14 @@ local vscode = {
 
 local apps = {
   ["com.google.Chrome"] = {
+    legend = {
+      switch = "Switch tab",
+      jump = "Jump to tab",
+      send = "Move tab",
+      history = "Back and forward",
+      command = "Search menus",
+      open = "Search tabs",
+    },
     switch = {
       prev = stroke({ "cmd", "shift" }, "["),
       next = stroke({ "cmd", "shift" }, "]"),
@@ -138,6 +163,20 @@ local apps = {
   ["com.todesktop.230313mzl4w4u92"] = vscode,
 
   ["com.mitchellh.ghostty"] = {
+    legend = {
+      focus = "Focus pane",
+      zoom = "Zoom pane",
+      close = "Close pane",
+      split = "Split pane",
+      resize = "Resize pane",
+      layout = { label = "Equalize panes", hint = "L then =" },
+      switch = "Switch tab",
+      jump = "Jump to tab",
+      send = "Move tab",
+      history = "Directory history",
+      command = "Command palette",
+      open = "Show all tabs",
+    },
     focus = function(dir) return stroke({ "cmd", "alt" }, dir) end,
     zoom = stroke({ "cmd", "shift" }, "return"),
     close = stroke({ "cmd" }, "w"),
@@ -171,6 +210,15 @@ local apps = {
   },
 
   ["md.obsidian"] = {
+    legend = {
+      close = "Close tab",
+      split = { label = "Split pane", hint = "\\ then ↓ →" },
+      switch = "Switch tab",
+      jump = "Jump to tab",
+      history = "Back and forward",
+      command = "Command palette",
+      open = "Open note",
+    },
     close = stroke({ "cmd" }, "w"),
     split = {
       down = menu({ "Split down" }, "Split down"),

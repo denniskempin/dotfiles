@@ -5,8 +5,9 @@
 -- those two keys and runs the layer grammar: OmniWM for the operating
 -- system, and each app's own shortcut or menu item for the app layer.
 --
---   bindings.lua   which key runs which verb, and the overlay text
---   targets.lua    what each verb does on the operating system and in each app
+--   bindings.lua   which key runs which verb, and the overlay's groups
+--   targets.lua    what each verb does on the operating system and in each app,
+--                  and the words the App overlay uses
 --   actions.lua    carrying out an action, and posting events
 --   omniwm.lua     the omniwmctl command queue
 --   switcher.lua   the window search behind Fn
@@ -121,7 +122,9 @@ local function checkNames()
   end
   local function unused(name, target)
     for verb in pairs(target) do
-      if not used[verb] then warn(name .. " defines " .. verb .. ", which no key runs") end
+      if verb ~= "legend" and not used[verb] then
+        warn(name .. " defines " .. verb .. ", which no key runs")
+      end
     end
   end
   unused("the operating system", targets.system)
@@ -137,10 +140,60 @@ local function resolve(target, verb, arg)
   return cell
 end
 
-local function frontApp()
+-- The front app's target, and the name macOS gives that app.
+local function frontInfo()
   local app = hs.application.frontmostApplication()
-  local bundle = app and app:bundleID()
-  return bundle and targets.apps[bundle] or nil
+  if not app then return nil, nil end
+  local bundle = app:bundleID()
+  local name = app.name and app:name() or nil
+  if name == "" then name = nil end
+  return bundle and targets.apps[bundle] or nil, name
+end
+
+local function frontApp()
+  return (frontInfo())
+end
+
+-- True when this target has an action for the row. A chord counts when any
+-- of its keys do. An app with no entry has none, so its overlay is empty
+-- and its chords do not start.
+local function rowRuns(layer, target, row)
+  if row.run then return true end
+  if not target then return false end
+  if row.verb then
+    local any = false
+    eachKey(row, function(_, arg)
+      if resolve(target, row.verb, arg) ~= nil then any = true end
+    end)
+    return any
+  end
+  if row.chord then
+    for _, binding in pairs(CHORD_INDEX[row.chord][layer]) do
+      if rowRuns(layer, target, binding.row) then return true end
+    end
+  end
+  return false
+end
+
+-- The overlay line. On the App layer the app's legend replaces the label,
+-- and a table there can replace the hint too.
+local function present(row, legend)
+  local label, hint = row.label, row.hint
+  if legend then
+    local custom = legend[row.chord or row.verb]
+    if type(custom) == "string" then
+      label = custom
+    elseif type(custom) == "table" then
+      if custom.label then label = custom.label end
+      if custom.hint then hint = custom.hint end
+    end
+  end
+  return { label = label, hint = hint }
+end
+
+local function layerTarget(layer)
+  if layer == "os" then return targets.system, nil end
+  return frontInfo()
 end
 
 local function deliver(layer, binding, key)
@@ -189,11 +242,24 @@ end
 local function showLayerOverlay()
   local layer = activeLayer()
   if not layer then return end
+  local target, appName = layerTarget(layer)
+  local legend = layer == "app" and target and target.legend or nil
   local columns = {}
-  for i, column in ipairs(bindings.layer) do
-    columns[i] = overlayRows(column, layer)
+  for _, column in ipairs(bindings.layer) do
+    local shown = {}
+    if column.name then shown.title = column.name end
+    for _, row in ipairs(overlayRows(column, layer)) do
+      if rowRuns(layer, target, row) then
+        shown[#shown + 1] = present(row, legend)
+      end
+    end
+    if #shown > 0 then columns[#columns + 1] = shown end
+  end
+  if #columns == 0 then
+    columns = { { present({ label = "No bindings", hint = "" }) } }
   end
   local title = bindings.title[layer]
+  if appName then title = title .. "  ·  " .. appName end
   if locked then title = title .. "  ·  locked" end
   overlay.show({
     layer = layer,
@@ -205,10 +271,15 @@ end
 
 local function showChordOverlay()
   if not chord then return end
+  local target = layerTarget(chord.layer)
+  local rows = {}
+  for _, row in ipairs(overlayRows(chord.def.rows, chord.layer)) do
+    if rowRuns(chord.layer, target, row) then rows[#rows + 1] = row end
+  end
   overlay.show({
     layer = chord.layer,
     title = chord.def.title,
-    rows = overlayRows(chord.def.rows, chord.layer),
+    rows = rows,
     footer = "esc cancels",
   })
 end
@@ -396,7 +467,9 @@ local function handleLayer(name, shift, flags)
   if not binding then return end
 
   if binding.row.chord then
-    beginChord(binding.row.chord, layer, shift)
+    if rowRuns(layer, layerTarget(layer), binding.row) then
+      beginChord(binding.row.chord, layer, shift)
+    end
     return
   end
 

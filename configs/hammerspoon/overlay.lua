@@ -1,6 +1,7 @@
 -- The bindings overlay: a non-activating hs.canvas at the bottom of the
 -- main screen. A spec has `layer`, `title`, `footer`, and either `columns`
--- (a list of row lists) or `rows`. A row is a bindings.lua row.
+-- or `rows`. A column is a list of rows, and a column with `title` draws
+-- that title above its rows. A row has `label`, `hint`, and maybe `selected`.
 
 local M = {}
 
@@ -26,16 +27,19 @@ local function render(spec)
   if not screen then return end
   local columns = spec.columns
   local rowCount = spec.rows and #spec.rows or 0
+  local headed = false
   if columns then
     for _, column in ipairs(columns) do
       rowCount = math.max(rowCount, #column)
+      if column.title then headed = true end
     end
   end
   local pad, titleH, rowH, footerH, gap = 16, 28, 22, 22, 18
+  local headH = headed and 26 or 0
   local colW = spec.colW or (columns and 248 or 280)
-  local nCols = columns and #columns or 1
+  local nCols = math.max(columns and #columns or 1, 1)
   local width = pad * 2 + colW * nCols + gap * (nCols - 1)
-  local height = pad + titleH + 6 + rowCount * rowH + footerH + 8
+  local height = pad + titleH + 6 + headH + rowCount * rowH + footerH + 8
   local frame = screen:frame()
   local rect = {
     x = frame.x + (frame.w - width) / 2,
@@ -100,22 +104,40 @@ local function render(spec)
       textFont = ".AppleSystemUIFont",
       frame = { x = x, y = y, w = verbW, h = rowH },
     }
-    elements[#elements + 1] = {
-      type = "text",
-      text = row.hint or "",
-      textColor = accent,
-      textSize = 13,
-      textFont = ".AppleSystemUIFont",
-      textAlignment = "right",
-      frame = { x = x + verbW, y = y, w = colW - verbW, h = rowH },
-    }
+    if row.hint and row.hint ~= "" then
+      elements[#elements + 1] = {
+        type = "text",
+        text = row.hint,
+        textColor = accent,
+        textSize = 13,
+        textFont = ".AppleSystemUIFont",
+        textAlignment = "right",
+        frame = { x = x + verbW, y = y, w = colW - verbW, h = rowH },
+      }
+    end
   end
   local top = pad + titleH + 4
   if columns then
     for c, column in ipairs(columns) do
       local x = pad + (c - 1) * (colW + gap)
+      if column.title then
+        elements[#elements + 1] = {
+          type = "text",
+          text = column.title,
+          textColor = accent,
+          textSize = 12,
+          textFont = ".AppleSystemUIFont",
+          frame = { x = x, y = top, w = colW, h = 16 },
+        }
+        elements[#elements + 1] = {
+          type = "rectangle",
+          action = "fill",
+          fillColor = { white = 1, alpha = 0.14 },
+          frame = { x = x, y = top + 18, w = colW, h = 1 },
+        }
+      end
       for r, row in ipairs(column) do
-        addRow(row, x, top + (r - 1) * rowH)
+        addRow(row, x, top + headH + (r - 1) * rowH)
       end
     end
   else

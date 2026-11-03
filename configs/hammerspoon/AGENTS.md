@@ -13,7 +13,7 @@ lua configs/hammerspoon/test/run.lua --update   # rewrite snapshot.txt
 
 It runs in under a second with Lua 5.4, like Hammerspoon, and needs no permissions. Without a `lua` on the path, `nix shell nixpkgs#lua5_4 -c lua configs/hammerspoon/test/run.lua` works.
 
-- `snapshot.txt` lists every key, with and without Shift, in each layer, app, and chord, with what it did. A failing snapshot prints a diff grouped by section. Read the diff. Run `--update` only when every changed line is intended, and commit the snapshot with the change.
+- `snapshot.txt` lists every key, with and without Shift, in each layer, app, and chord, with what it did, and the overlay lines for each layer and app. A failing snapshot prints a diff grouped by section. Read the diff. Run `--update` only when every changed line is intended, and commit the snapshot with the change.
 - `scenarios.lua` covers the framework: layers, lock and unlock, chords, each action kind, the OmniWM queue and its timeout, the hotkey pass-through, and the overlay. It runs against the made-up grammar in `fixture.lua`, not the real bindings, and checks timing as before and after rather than exact delays. A binding change or a retuned delay should only move the snapshot. Keep it that way: per-app and per-key detail belongs in the snapshot, not in a scenario.
 - A test also fails when the config logs a warning the test does not take, or when the config's own tap swallows a key it posted.
 

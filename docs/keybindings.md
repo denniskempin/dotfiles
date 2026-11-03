@@ -31,7 +31,7 @@ There are two layer keys:
 | App              | Hold Right Command |
 
 
-`Layer Key + space` will trigger the layer to be locked. The layer key can then be released and all bindings can be used until escape is pressed. Open document, the quake terminal, the scratchpad, and Overview end the lock, because what they open takes the keys typed next.
+`Layer Key + space` will trigger the layer to be locked. The layer key can then be released and all bindings can be used until escape is pressed. Open document, the quake terminal, and Overview end the lock, because what they open takes the keys typed next.
 
 Left Command and Left Option stay modifiers. Fn is the globe key. Caps Lock is Escape.
 
@@ -55,8 +55,7 @@ The arrows follow that shape. Left and right move along the strip. Up and down m
 | Zoom tile    | Enter                      | The window fills the screen. Enter again puts it back                                                                                                                              | The pane fills the window                                                                                   |
 | Close tile   | `X`                        | Close the window                                                                                                                                                                   | Close the pane. In an editor, the tabs inside it close with it. In a terminal, the last pane closes the tab |
 | Split tile   | `\` then an arrow          | —                                                                                                                                                                                  | A new pane on that side. An editor and a terminal have all four directions. A notes app has down and right  |
-| Resize tile  | `S` then an arrow          | Left narrows the column, right widens it, by a tenth of the screen. Down makes the window taller within its column, up makes it shorter. One step per chord                       | Left shrinks the width, right grows it. Down grows the height, up shrinks it, on the pane                   |
-| Layout tiles | `L` then a letter          | `W` steps the column through a third, half, and two thirds of the screen. `F` toggles the column between the full screen width and its own width. `A` toggles the column between stacked and tabbed. `C` centers the column on the screen. `=` evens out the sizes in the workspace | `F` flips the axis. `=` makes sibling panes the same size                                                   |
+| Size tile    | `S`                        | Steps the column through a third, a half, two thirds, and the full width of the screen. After full, the next press returns to a third                                         | —                                                                                                           |
 | Join tile    | `J` then `←` or `→`        | A window alone in its column joins the column on that side. A window that shares a column leaves it, as a new column on that side | —                                                                                                           |
 
 
@@ -80,8 +79,6 @@ The arrows follow that shape. Left and right move along the strip. Up and down m
 | Run command   | `P`                   | Open the command launcher                                                                                                                  | Open the command palette                    |
 | Open document | `O`                   | Open OmniWM's window list, most recently focused first. Return goes to the chosen window. Shift+Return brings it here, as a new column right of the focused one. Chrome tabs are not listed; the Fn search has them | Open the switcher for documents in this app |
 | Quake terminal | `T`                  | Show or hide OmniWM's quake terminal                                                                                         | —                                           |
-| Show scratchpad | `Z`                 | Show scratchpad 1 on this monitor and focus it, or park it. Parking returns focus to the workspace when a scratchpad window had it | —                                           |
-| Move to scratchpad | Shift+`Z`         | Move the focused window into scratchpad 1. It floats, stays visible while the scratchpad is showing, and is parked off-screen otherwise. The same key puts that window back in the layout | —                                           |
 | Overview      | `V`                   | Zoom out to every workspace and its columns. Arrows move the selection, Return goes to the selected window, Escape closes it | —                                           |
 | Focus monitor        | Tab               | Focus the next monitor. With two monitors, that is the other one |
 | Send slot to monitor | Shift+Tab         | Move the current workspace to the next monitor                   |
@@ -120,11 +117,11 @@ Fn is not remapped. A tap changes the input source, and Fn+arrow is Home, End, P
 One event tap watches key down and key up.
 
 - F18 down arms the App layer. F19 down arms the operating-system layer. Key repeat is ignored, and both keys are swallowed. Key up disarms a layer that is not locked.
-- Space, while a layer is armed and no chord is pending, locks that layer. The layer key can come up and the layer stays armed. Escape, with no chord pending, clears the lock. A row marked `unlocks`, Open document, the quake terminal, the scratchpad, and Overview, clears it too.
+- Space, while a layer is armed and no chord is pending, locks that layer. The layer key can come up and the layer stays armed. Escape, with no chord pending, clears the lock. A row marked `unlocks`, Open document, the quake terminal, and Overview, clears it too.
 - While a layer is armed, every other key is swallowed. A listed key runs its verb. Shift is read off the event flags. Command combinations are swallowed with the rest.
 - Delete on the App layer is posted as forward delete.
 - A layer that is held or locked shows its overlay after 250 ms. The overlay hides once a binding is selected, and on key up when the layer is not locked. While the layer stays locked, the 250 ms timer starts again after the binding. The overlay is an `hs.canvas` on the focused screen, non-activating. Nothing goes to Notification Center.
-- `\`, `S`, and `L` on the App layer, and `S`, `L`, `J`, `G`, and Shift+`G` on the operating-system layer, start a chord. The layer overlay hides and a follow-up overlay lists the keys that chord accepts. Split, resize, and the column chord accept an arrow. Layout accepts `F` and `=` on the App layer, and `W`, `F`, `A`, `C`, and `=` on the operating-system layer. Jump and Send accept `a` through `z`.
+- `\` on the App layer, and `J`, `G`, and Shift+`G` on the operating-system layer, start a chord. The layer overlay hides and a follow-up overlay lists the keys that chord accepts. Split and the column chord accept an arrow. Jump and Send accept `a` through `z`.
 - While a chord is waiting, the tap keeps swallowing keys after the layer key comes up. A lock stays in force. The pending verb wins over the layer, so an arrow with the layer key still down is the argument. F18 and F19 are not arguments. One argument clears the verb. Escape and any unlisted key clear the chord and leave a lock in place. Shift also clears it, unless Shift started the chord, so Shift can stay down from Shift+`G` through the key. Key repeat is swallowed, including inside a chord.
 
 OmniWM commands run through `hs.task` on a queue, one at a time in key order, so the tap never waits on OmniWM.
@@ -153,20 +150,13 @@ Each operating-system key runs `omniwmctl`, usually `omniwmctl command <name>`.
 | Send column to slot  | `move-column-to-workspace up` / `down`                                                           |
 | Walk history         | `focus previous`; `switch-workspace back-and-forth`                                              |
 | Quake terminal       | `toggle-quake-terminal`                                                                          |
-| Show scratchpad      | `scratchpad toggle 1`                                                                            |
-| Move to scratchpad   | `scratchpad assign 1`                                                                            |
 | Overview             | `toggle-overview`                                                                                |
-| Resize tile          | `set-container-primary-span -10%` / `+10%` on left / right, `set-window-secondary-span +10%` / `-10%` on down / up |
-| Layout width         | `cycle-size forward`                                                                             |
-| Layout full width    | `toggle-container-full-primary-span`                                                             |
-| Layout tabbed        | `toggle-column-tabbed`                                                                           |
-| Layout center        | `center-column`                                                                                  |
-| Layout equalize      | `balance-sizes`                                                                                  |
+| Size tile            | `cycle-size forward`                                                                             |
 | Run command          | `open -g -b com.raycast.macos`, which shows Raycast's search bar                                 |
 | Open document        | `open-command-palette windows`. The palette handles its own keys. Shift+Return on an empty workspace moves the window there, since there is no column to place it beside |
 
 
-Scratchpad keys use slot 1 only. Which windows are in it lasts until OmniWM quits, and `settings.toml` does not record them.
+Size steps through `containerPrimarySpanPresets` in `settings.toml`: a third, a half, two thirds, and the full width.
 
 Holding Fn and typing focuses a window without moving it. This search is Hammerspoon's, not OmniWM's, because it acts when Fn is released and lists Chrome tabs. The letters are a prefix of the app name, the title, or a word in either, and releasing Fn runs `window navigate <id>` on the first match, which switches to its workspace. Each tab of a Google Chrome window is a row of its own, with that window's app name and the tab's title. Releasing Fn on a tab focuses the window and selects the tab. Fn itself is not swallowed: a tap still changes the input source, and Fn with an arrow is still Home, End, Page Up, or Page Down. The list appears on the first letter, or after the overlay delay when Fn is held with no letter yet. Releasing Fn with an empty query focuses nothing.
 
@@ -209,9 +199,6 @@ Where the delivered action cannot do what the specification says, the cell says 
 | Run command               | `Command+Shift+/` (Help menu search)                  | `Command+Shift+P`                                                                                                                                        | `Command+Shift+P`                                                                                                                                                                               | `Command+P`                                                                                       |
 | Open document             | `Command+Shift+A` (Search tabs)                       | `Command+P`                                                                                                                                              | `Command+Shift+\` (Show All Tabs)                                                                                                                                                               | `Command+O`                                                                                       |
 | Split tile ← ↓ ↑ →        | —                                                     | `Command+\` splits along the current layout                                                                                                              | menu Split Left, `Command+Shift+D`, menu Split Up, `Command+D`                                                                                                                                  | —, menu Split down, —, menu Split right                                                           |
-| Resize tile ← ↓ ↑ →       | —                                                     | Unbound. The commands resize the editor against the sidebar and panel                                                                                    | `Command+Control+←` / `↓` / `↑` / `→`. The divider moves, and the focused pane grows or shrinks from the side the divider is on                                                                 | —                                                                                                 |
-| Layout flip               | —                                                     | `Command+Option+0`                                                                                                                                       | —                                                                                                                                                                                               | —                                                                                                 |
-| Layout equalize           | —                                                     | Unbound                                                                                                                                                  | `Command+Control+=`                                                                                                                                                                             | —                                                                                                 |
 
 
 ## macOS settings

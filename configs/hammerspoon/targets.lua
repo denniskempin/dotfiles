@@ -38,12 +38,8 @@ local system = {
   end,
   zoom = wm("toggle-fullscreen"),
   close = wm("close-focused-window"),
-  resize = {
-    left = wm("set-container-primary-span", "-10%"),
-    right = wm("set-container-primary-span", "+10%"),
-    down = wm("set-window-secondary-span", "+10%"),
-    up = wm("set-window-secondary-span", "-10%"),
-  },
+  -- containerPrimarySpanPresets in settings.toml: a third, a half, two thirds, full.
+  size = wm("cycle-size", "forward"),
   -- Into the neighboring column, or out of a shared column into its own.
   join = {
     left = wm("consume-or-expel-window-left"),
@@ -53,12 +49,6 @@ local system = {
     up = wm("move-column-to-workspace", "up"),
     down = wm("move-column-to-workspace", "down"),
   },
-  layoutWidth = wm("cycle-size", "forward"),
-  layoutFull = wm("toggle-container-full-primary-span"),
-  layoutTabbed = wm("toggle-column-tabbed"),
-  layoutCenter = wm("center-column"),
-  layoutEqual = wm("balance-sizes"),
-
   -- prev is the workspace above, next the one below, on this monitor.
   switch = function(dir) return wm("switch-workspace", dir) end,
   jump = function(key) return wm("switch-workspace", workspace(key)) end,
@@ -78,8 +68,6 @@ local system = {
   -- new column right of the focused one.
   open = wm("open-command-palette", "windows"),
   quake = wm("toggle-quake-terminal"),
-  scratchpad = wm("scratchpad", "toggle", "1"),
-  scratchpadSend = wm("scratchpad", "assign", "1"),
   overview = wm("toggle-overview"),
   focusMonitor = wm("focus-monitor", "next"),
   sendMonitor = actions.call(omniwm.sendWorkspaceToNextMonitor),
@@ -92,7 +80,6 @@ local vscode = {
   zoom = seq(stroke({ "cmd" }, "k"), stroke({ "cmd" }, "m")),
   close = stroke({ "cmd" }, "w"),
   split = stroke({ "cmd" }, "\\"),
-  layoutFlip = stroke({ "cmd", "alt" }, "0"),
   switch = {
     prev = seq(stroke({ "cmd" }, "k"), stroke({ "cmd", "alt" }, "left")),
     next = seq(stroke({ "cmd" }, "k"), stroke({ "cmd", "alt" }, "right")),
@@ -147,8 +134,6 @@ local apps = {
       up = menu({ "File", "Split Up" }),
       right = stroke({ "cmd" }, "d"),
     },
-    resize = function(dir) return stroke({ "cmd", "ctrl" }, dir) end,
-    layoutEqual = stroke({ "cmd", "ctrl" }, "="),
     switch = {
       prev = stroke({ "cmd", "shift" }, "["),
       next = stroke({ "cmd", "shift" }, "]"),

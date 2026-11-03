@@ -14,15 +14,12 @@ shift+right    omniwmctl command move-column right
 g              overlay "Jump to workspace"
 shift+g        overlay "Send to workspace"
 j              overlay "Column"
-l              overlay "Layout"
 o              omniwmctl command open-command-palette windows
 p              open -g -b com.raycast.macos
-s              overlay "Resize"
+s              omniwmctl command cycle-size forward
 t              omniwmctl command toggle-quake-terminal
 v              omniwmctl command toggle-overview
 x              omniwmctl command close-focused-window
-z              omniwmctl command scratchpad toggle 1
-shift+z        omniwmctl command scratchpad assign 1
 '              omniwmctl command switch-workspace next
 shift+'        omniwmctl command move-to-workspace down
 ;              omniwmctl command switch-workspace prev
@@ -69,19 +66,6 @@ down           omniwmctl command move-column-to-workspace down
 up             omniwmctl command move-column-to-workspace up
 right          omniwmctl command consume-or-expel-window-right
 
-# System layer, l then the key (Layout)
-a              omniwmctl command toggle-column-tabbed
-c              omniwmctl command center-column
-f              omniwmctl command toggle-container-full-primary-span
-w              omniwmctl command cycle-size forward
-=              omniwmctl command balance-sizes
-
-# System layer, s then the key (Resize)
-left           omniwmctl command set-container-primary-span -10%
-down           omniwmctl command set-window-secondary-span +10%
-up             omniwmctl command set-window-secondary-span -10%
-right          omniwmctl command set-container-primary-span +10%
-
 # System layer, shift+g then the key (Send to workspace)
 a              omniwmctl command move-to-workspace 97
 b              omniwmctl command move-to-workspace 98
@@ -111,10 +95,8 @@ y              omniwmctl command move-to-workspace 121
 z              omniwmctl command move-to-workspace 122
 
 # App layer, Right Command held, in com.google.Chrome
-l              overlay "Layout"
 o              press cmd+shift+a
 p              press cmd+shift+/
-s              overlay "Resize"
 1              press cmd+1
 2              press cmd+2
 3              press cmd+3
@@ -137,21 +119,13 @@ space          overlay "App  ·  locked"
 # App layer, \ then the key (Split), in com.google.Chrome
 (nothing)
 
-# App layer, l then the key (Layout), in com.google.Chrome
-(nothing)
-
-# App layer, s then the key (Resize), in com.google.Chrome
-(nothing)
-
 # App layer, Right Command held, in com.microsoft.VSCode
 left           press cmd+k ; press cmd+left
 down           press cmd+k ; press cmd+down
 up             press cmd+k ; press cmd+up
 right          press cmd+k ; press cmd+right
-l              overlay "Layout"
 o              press cmd+p
 p              press cmd+shift+p
-s              overlay "Resize"
 x              press cmd+w
 1              press ctrl+1
 2              press ctrl+2
@@ -180,21 +154,13 @@ down           press cmd+\
 up             press cmd+\
 right          press cmd+\
 
-# App layer, l then the key (Layout), in com.microsoft.VSCode
-f              press cmd+alt+0
-
-# App layer, s then the key (Resize), in com.microsoft.VSCode
-(nothing)
-
 # App layer, Right Command held, in com.mitchellh.ghostty
 left           press cmd+alt+left
 down           press cmd+alt+down
 up             press cmd+alt+up
 right          press cmd+alt+right
-l              overlay "Layout"
 o              press cmd+shift+\
 p              press cmd+shift+p
-s              overlay "Resize"
 x              press cmd+w
 1              press cmd+1
 2              press cmd+2
@@ -223,24 +189,13 @@ down           press cmd+shift+d
 up             menu File > Split Up
 right          press cmd+d
 
-# App layer, l then the key (Layout), in com.mitchellh.ghostty
-=              press cmd+ctrl+=
-
-# App layer, s then the key (Resize), in com.mitchellh.ghostty
-left           press cmd+ctrl+left
-down           press cmd+ctrl+down
-up             press cmd+ctrl+up
-right          press cmd+ctrl+right
-
 # App layer, Right Command held, in com.todesktop.230313mzl4w4u92
 left           press cmd+k ; press cmd+left
 down           press cmd+k ; press cmd+down
 up             press cmd+k ; press cmd+up
 right          press cmd+k ; press cmd+right
-l              overlay "Layout"
 o              press cmd+p
 p              press cmd+shift+p
-s              overlay "Resize"
 x              press cmd+w
 1              press ctrl+1
 2              press ctrl+2
@@ -269,17 +224,9 @@ down           press cmd+\
 up             press cmd+\
 right          press cmd+\
 
-# App layer, l then the key (Layout), in com.todesktop.230313mzl4w4u92
-f              press cmd+alt+0
-
-# App layer, s then the key (Resize), in com.todesktop.230313mzl4w4u92
-(nothing)
-
 # App layer, Right Command held, in md.obsidian
-l              overlay "Layout"
 o              press cmd+o
 p              press cmd+p
-s              overlay "Resize"
 x              press cmd+w
 1              press cmd+1
 2              press cmd+2
@@ -302,24 +249,10 @@ space          overlay "App  ·  locked"
 down           menu Split down ; menu Split down
 right          menu Split right ; menu Split right
 
-# App layer, l then the key (Layout), in md.obsidian
-(nothing)
-
-# App layer, s then the key (Resize), in md.obsidian
-(nothing)
-
 # App layer, Right Command held, in com.example.Unlisted
-l              overlay "Layout"
-s              overlay "Resize"
 \              overlay "Split"
 delete         press forwarddelete
 space          overlay "App  ·  locked"
 
 # App layer, \ then the key (Split), in com.example.Unlisted
-(nothing)
-
-# App layer, l then the key (Layout), in com.example.Unlisted
-(nothing)
-
-# App layer, s then the key (Resize), in com.example.Unlisted
 (nothing)

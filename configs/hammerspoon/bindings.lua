@@ -44,9 +44,7 @@ return {
       { keys = "return", verb = "zoom", label = "Zoom tile", hint = "↩" },
       { keys = "x", verb = "close", label = "Close tile", hint = "X" },
       { keys = "\\", layer = "app", chord = "split", label = "Split tile", hint = "\\ then arrow" },
-      { keys = "s", chord = "resize", label = "Resize tile", hint = "S then arrow" },
-      { keys = "l", layer = "os", chord = "layout", label = "Layout tiles", hint = "L then W F A C =" },
-      { keys = "l", layer = "app", chord = "layout", label = "Layout tiles", hint = "L then F =" },
+      { keys = "s", layer = "os", verb = "size", label = "Size tile", hint = "S" },
       { keys = "j", layer = "os", chord = "column", label = "Join or send column", hint = "J then arrow" },
     },
     {
@@ -62,8 +60,6 @@ return {
       { keys = "p", verb = "command", label = "Run command", hint = "P" },
       { keys = "o", verb = "open", unlocks = true, label = "Open document", hint = "O" },
       { keys = "t", layer = "os", verb = "quake", unlocks = true, label = "Quake terminal", hint = "T" },
-      { keys = "z", layer = "os", verb = "scratchpad", unlocks = true, label = "Scratchpad", hint = "Z" },
-      { keys = "z", layer = "os", shift = true, verb = "scratchpadSend", label = "To scratchpad", hint = "⇧ Z" },
       { keys = "v", layer = "os", verb = "overview", unlocks = true, label = "Overview", hint = "V" },
       { keys = "tab", layer = "os", verb = "focusMonitor", label = "Focus monitor", hint = "⇥" },
       { keys = "tab", layer = "os", shift = true, verb = "sendMonitor", label = "Send slot", hint = "⇧ ⇥" },
@@ -87,15 +83,6 @@ return {
         { keys = letters, verb = "sendNamed", label = "The workspace named by the key", hint = "a–z" },
       },
     },
-    resize = {
-      title = "Resize",
-      rows = {
-        { keys = "left", verb = "resize", label = "Shrink width", hint = "←" },
-        { keys = "right", verb = "resize", label = "Grow width", hint = "→" },
-        { keys = "down", verb = "resize", label = "Grow height", hint = "↓" },
-        { keys = "up", verb = "resize", label = "Shrink height", hint = "↑" },
-      },
-    },
     split = {
       title = "Split",
       rows = {
@@ -112,17 +99,6 @@ return {
         { keys = "down", verb = "sendColumn", label = "To workspace below", hint = "↓" },
         { keys = "up", verb = "sendColumn", label = "To workspace above", hint = "↑" },
         { keys = "right", verb = "join", label = "Join right", hint = "→" },
-      },
-    },
-    layout = {
-      title = "Layout",
-      rows = {
-        { keys = "w", layer = "os", verb = "layoutWidth", label = "Cycle width", hint = "W" },
-        { keys = "f", layer = "os", verb = "layoutFull", label = "Full width", hint = "F" },
-        { keys = "f", layer = "app", verb = "layoutFlip", label = "Flip axis", hint = "F" },
-        { keys = "a", layer = "os", verb = "layoutTabbed", label = "Tabbed column", hint = "A" },
-        { keys = "c", layer = "os", verb = "layoutCenter", label = "Center column", hint = "C" },
-        { keys = "=", verb = "layoutEqual", label = "Equalize", hint = "=" },
       },
     },
   },

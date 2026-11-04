@@ -219,6 +219,32 @@ space          overlay "App  ·  locked"
 down           menu Split down ; menu Split down
 right          menu Split right ; menu Split right
 
+# App layer overlay, in org.yanex.marta
+Tiles
+  Switch pane              ← →
+  Clone folder             ⇧ ← →
+  Close tab                X
+Slots
+  Switch tab               ;  '
+Other
+  Back and forward         [  ]
+  Actions panel            P
+  Look up                  F
+
+# App layer, Right Command held, in org.yanex.marta
+left           press tab
+shift+left     press cmd+left
+right          press tab
+shift+right    press cmd+right
+f              press cmd+p
+p              press cmd+shift+p
+x              press cmd+w
+'              press cmd+shift+]
+;              press cmd+shift+[
+[              press cmd+[
+]              press cmd+]
+space          overlay "App  ·  locked"
+
 # App layer overlay, in com.example.Unlisted
 No bindings
 

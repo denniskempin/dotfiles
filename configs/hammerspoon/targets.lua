@@ -188,6 +188,38 @@ local apps = {
     command = stroke({ "cmd" }, "p"),
     open = stroke({ "cmd" }, "o"),
   },
+
+  -- Two panes, left and right. Left and right both post Tab, which switches
+  -- to the other pane. Up and down have no pane. Command+arrow clones the
+  -- selected folder into that pane; the tab stays put.
+  ["org.yanex.marta"] = {
+    legend = {
+      focus = { label = "Switch pane", hint = "← →" },
+      move = { label = "Clone folder", hint = "⇧ ← →" },
+      close = "Close tab",
+      switch = "Switch tab",
+      history = "Back and forward",
+      command = "Actions panel",
+      open = "Look up",
+    },
+    focus = function(dir)
+      if dir == "left" or dir == "right" then return stroke({}, "tab") end
+    end,
+    move = function(dir)
+      if dir == "left" or dir == "right" then return stroke({ "cmd" }, dir) end
+    end,
+    close = stroke({ "cmd" }, "w"),
+    switch = {
+      prev = stroke({ "cmd", "shift" }, "["),
+      next = stroke({ "cmd", "shift" }, "]"),
+    },
+    history = {
+      back = stroke({ "cmd" }, "["),
+      forward = stroke({ "cmd" }, "]"),
+    },
+    command = stroke({ "cmd", "shift" }, "p"),
+    open = stroke({ "cmd" }, "p"),
+  },
 }
 
 return { system = system, apps = apps }

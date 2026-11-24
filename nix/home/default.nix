@@ -1,30 +1,8 @@
-# Home configuration shared by every machine, macOS and Linux.
-{ pkgs, ... }:
+# Home configuration for main systems (macOS and Linux workstations).
+{ ... }:
 {
-  imports = [ ./links.nix ];
-
-  home.stateVersion = "26.05";
-
-  home.packages = with pkgs; [
-    bat
-    bottom
-    delta
-    direnv
-    eza
-    fd
-    fzf
-    gh
-    grc
-    helix
-    jq
-    less
-    neovim
-    procs
-    ripgrep
-    rsync
-    starship
-    tldr
-    wget
-    zoxide
+  imports = [
+    ./cli.nix
+    ./links.nix
   ];
 }

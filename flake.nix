@@ -53,17 +53,34 @@
           system,
           username ? "denniskempin",
           homeDirectory ? "/home/${username}",
+          modules ? [
+            ./nix/home
+            ./nix/home/linux.nix
+          ],
         }:
         home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs {
             inherit system;
             config.allowUnfree = true;
           };
-          modules = [
-            ./nix/home
-            ./nix/home/linux.nix
+          modules = modules ++ [
             { home = { inherit username homeDirectory; }; }
           ];
+        };
+
+      # Devcontainer home-manager configuration. Pass --impure so $USER and $HOME
+      # resolve to the container user; pure eval falls back to vscode.
+      mkDevcontainer =
+        system:
+        let
+          envUser = builtins.getEnv "USER";
+          envHome = builtins.getEnv "HOME";
+        in
+        mkHome {
+          inherit system;
+          username = if envUser != "" then envUser else "vscode";
+          homeDirectory = if envHome != "" then envHome else "/home/vscode";
+          modules = [ ./nix/home/devcontainer.nix ];
         };
     in
     {
@@ -78,9 +95,11 @@
           system = "x86_64-linux";
           homeDirectory = "/usr/local/google/home/denniskempin";
         };
+        "devcontainer-x86_64" = mkDevcontainer "x86_64-linux";
+        "devcontainer-aarch64" = mkDevcontainer "aarch64-linux";
       };
 
-      formatter = nixpkgs.lib.genAttrs [ "aarch64-darwin" "x86_64-linux" ] (
+      formatter = nixpkgs.lib.genAttrs [ "aarch64-darwin" "x86_64-linux" "aarch64-linux" ] (
         system: nixpkgs.legacyPackages.${system}.nixfmt-tree
       );
     };

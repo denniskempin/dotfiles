@@ -1,6 +1,6 @@
 # Links each directory under configs/ to where its app reads it. Keep
 # configs/README.md in step: it lists the same destinations for installing
-# without Nix.
+# without Nix. CLI links live in links-cli.nix so devcontainers can reuse them.
 {
   config,
   lib,
@@ -8,8 +8,6 @@
   ...
 }:
 let
-  # Every machine keeps the checkout at ~/dotfiles. Out-of-store links keep
-  # edits live without a rebuild.
   configs = "${config.home.homeDirectory}/dotfiles/configs";
   link = rel: config.lib.file.mkOutOfStoreSymlink "${configs}/${rel}";
 
@@ -17,9 +15,9 @@ let
   appConfig = if pkgs.stdenv.hostPlatform.isDarwin then "Library/Application Support" else ".config";
 in
 {
+  imports = [ ./links-cli.nix ];
+
   home.file = {
-    ".bashrc".source = link "bash/bashrc";
-    ".zshrc".source = link "bash/bashrc";
     "${appConfig}/Cursor/User/settings.json".source = link "cursor/settings.json";
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
@@ -28,31 +26,17 @@ in
     "${appConfig}/Code/User/keybindings.json".source = link "vscode/keybindings.json";
   };
 
-  # Apps that write state next to their config (fish, gh, Karabiner, OmniWM)
-  # get file links; the rest get the whole directory.
+  # Apps that write state next to their config (Karabiner, OmniWM) get file
+  # links; the rest get the whole directory. git/config stays out of
+  # links-cli.nix because it points ssh signing at 1Password on macOS.
   xdg.configFile = {
-    "fish/conf.d/00-paths.fish".source = link "fish/conf.d/00-paths.fish";
-    "fish/config.fish".source = link "fish/config.fish";
-    "fish/fish_plugins".source = link "fish/fish_plugins";
-    "gh/config.yml".source = link "gh/config.yml";
     "git/config".source = link "git/config";
-    "helix".source = link "helix";
-    "nvim".source = link "nvim";
-    "starship.toml".source = link "starship/starship.toml";
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
     "ghostty".source = link "ghostty";
     "karabiner/karabiner.json".source = link "karabiner/karabiner.json";
     "omniwm/settings.toml".source = link "omniwm/settings.toml";
   };
-
-  # A missing checkout would leave every link above dangling without an error.
-  home.activation.checkDotfiles = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
-    if [ ! -d ${lib.escapeShellArg configs} ]; then
-      echo "Missing ${configs}; clone the dotfiles repo there first." >&2
-      exit 1
-    fi
-  '';
 
   # Left as machine state in ~/.config: raycast, and the unlinked configs
   # git/ignore and thefuck.

@@ -8,9 +8,14 @@ Configuration for macOS and Linux machines.
   names the app expects. Nothing in it depends on Nix.
   [configs/README.md](configs/README.md) lists where each one goes.
 - `nix/` installs packages and links `configs/` into place:
-  - `nix/home/` is home-manager config. `links.nix` holds every link,
-    `default.nix` the CLI packages shared by all machines, and `darwin.nix`
-    and `linux.nix` the platform extras.
+  - `nix/home/` is home-manager config:
+    - `cli.nix` holds the shared CLI dev utilities and `links-cli.nix` the CLI
+      config links.
+    - `default.nix` and `links.nix` add the main-system configs (GUI apps,
+      editors, git signing), with `darwin.nix` and `linux.nix` for platform
+      extras.
+    - `devcontainer.nix` combines `cli.nix`, `linux.nix`, and `links-cli.nix`
+      for devcontainers.
   - `nix/darwin/` is nix-darwin config shared by every Mac: Homebrew, system
     defaults, and the user account.
   - `nix/hosts/` has one file per Mac with its hostname and state version.
@@ -34,6 +39,10 @@ the fish plugins, run
 
 Without Nix: symlink the directories as listed in
 [configs/README.md](configs/README.md) and install the apps yourself.
+
+Devcontainers: point the devcontainers `dotfiles` feature at this repo. It
+will automatically run [`install.sh`](install.sh), which bootstraps single-user
+Nix and applies `devcontainer-x86_64` or `devcontainer-aarch64`.
 
 ## Key bindings
 

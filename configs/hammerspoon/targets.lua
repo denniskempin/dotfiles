@@ -117,6 +117,34 @@ local apps = {
     open = stroke({ "cmd", "shift" }, "a"),
   },
 
+  ["com.google.antigravity"] = {
+    legend = {
+      zoom = "Zoom side panel",
+      close = "Close tab",
+      split = { label = "Split pane", hint = "G then ↓ →" },
+      switch = "Switch tab",
+      history = "Back and forward",
+      command = "Command palette",
+      open = "Conversation picker",
+    },
+    zoom = stroke({ "cmd", "shift" }, "m"),
+    close = stroke({ "cmd" }, "w"),
+    split = {
+      down = stroke({ "cmd", "shift" }, "d"),
+      right = stroke({ "cmd" }, "d"),
+    },
+    switch = {
+      prev = stroke({ "cmd", "shift" }, ","),
+      next = stroke({ "cmd", "shift" }, "."),
+    },
+    history = {
+      back = stroke({ "cmd" }, "["),
+      forward = stroke({ "cmd" }, "]"),
+    },
+    command = stroke({ "cmd", "shift" }, "p"),
+    open = stroke({ "cmd" }, "k"),
+  },
+
   ["com.microsoft.VSCode"] = vscode,
 
   -- Cursor keeps the VS Code keybindings.

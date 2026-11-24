@@ -1,3 +1,7 @@
+# The following lines were added by Docker Desktop to add commands to your PATH.
+export PATH="$PATH:/Users/denniskempin/.docker/bin"
+# End of Docker Desktop section.
+
 set dotfiles_dir (realpath (dirname (realpath (status --current-filename)))/../..)
 
 # Nix and Homebrew paths are set earlier, in conf.d/00-paths.fish.
@@ -94,3 +98,7 @@ and . (code --locate-shell-integration-path fish)
 set -gx PATH $PATH /Users/denniskempin/.lmstudio/bin
 # End of LM Studio CLI section
 
+
+# Added by OrbStack: command-line tools and integration
+# This won't be added again if you remove it.
+source ~/.orbstack/shell/init2.fish 2>/dev/null || :

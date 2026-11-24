@@ -112,6 +112,10 @@ rehideIntervalSeconds = 5.0
 [monitors]
 
 [[monitors.ranking]]
+displayUUID = "2FCBFF8F-9262-41A7-95B0-C31175ADC65B"
+name = "LG HDR 4K"
+
+[[monitors.ranking]]
 displayUUID = "37D8832A-2D66-02CA-B9F7-8F30A301B230"
 name = "Built-in Retina Display"
 
@@ -176,8 +180,22 @@ position = "bottom"
 widthPercent = 50.0
 
 [routing]
-arrangements = []
-mode = "macOS"
+mode = "custom"
+
+[[routing.arrangements]]
+id = "F99ECA85-F3B2-464A-83CB-9C284E9C82FF"
+
+[[routing.arrangements.monitors]]
+gridColumn = 0
+gridRow = 0
+monitorDisplayUUID = "2FCBFF8F-9262-41A7-95B0-C31175ADC65B"
+monitorName = "LG HDR 4K"
+
+[[routing.arrangements.monitors]]
+gridColumn = 1
+gridRow = 0
+monitorDisplayUUID = "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+monitorName = "Built-in Retina Display"
 
 [scratchpads]
 

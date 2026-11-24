@@ -76,6 +76,35 @@ shift+;        press ctrl+shift+pageup
 ]              press cmd+]
 space          overlay "App  ·  locked"
 
+# App layer overlay, in com.google.antigravity
+Tiles
+  Zoom side panel          ↩
+  Close tab                X
+  Split pane               G then ↓ →
+Slots
+  Switch tab               ;  '
+Other
+  Back and forward         [  ]
+  Command palette          P
+  Conversation picker      F
+
+# App layer, Right Command held, in com.google.antigravity
+f              press cmd+k
+g              overlay "Split"
+p              press cmd+shift+p
+x              press cmd+w
+'              press cmd+shift+.
+;              press cmd+shift+,
+[              press cmd+[
+]              press cmd+]
+return         press cmd+shift+m
+space          overlay "App  ·  locked"
+padenter       press cmd+shift+m
+
+# App layer, g then the key (Split), in com.google.antigravity
+down           press cmd+shift+d
+right          press cmd+d
+
 # App layer overlay, in com.microsoft.VSCode
 Tiles
   Focus group              ← ↓ ↑ →

@@ -4,6 +4,7 @@
   home.stateVersion = "26.05";
 
   home.packages = with pkgs; [
+    antigravity-cli
     bat
     bottom
     delta

@@ -9,9 +9,10 @@ linked, not the directory.
 
 | Directory | Destination | Platforms |
 | --- | --- | --- |
+| `1password/agent.toml` | `~/.config/1Password/ssh/agent.toml`, file only | macOS |
 | `bash/bashrc` | `~/.bashrc` and `~/.zshrc`. Starts fish for interactive shells | all |
-| `cursor/settings.json` | `~/Library/Application Support/Cursor/User/settings.json` on macOS, `~/.config/Cursor/User/settings.json` on Linux | all |
-| `fish/config.fish`, `fish/fish_plugins`, `fish/conf.d/00-paths.fish` | `~/.config/fish/`, files only, same relative paths. Run `fisher update` afterwards | all |
+| `direnv/direnv.toml` | `~/.config/direnv/direnv.toml`, file only | macOS |
+| `fish/config.fish`, `fish/conf.d/00-paths.fish` | `~/.config/fish/`, files only, same relative paths | all |
 | `gh/config.yml` | `~/.config/gh/config.yml`, file only. `hosts.yml` stays local | all |
 | `ghostty/` | `~/.config/ghostty` | macOS |
 | `git/config` | `~/.config/git/config`. Remove any `~/.gitconfig` | all |
@@ -20,5 +21,7 @@ linked, not the directory.
 | `karabiner/karabiner.json` | `~/.config/karabiner/karabiner.json`, file only | macOS |
 | `nvim/` | `~/.config/nvim` | all |
 | `omniwm/settings.toml` | `~/.config/omniwm/settings.toml`, file only | macOS |
+| `ssh/config` | `~/.ssh/config`, file only | macOS |
 | `starship/starship.toml` | `~/.config/starship.toml` | all |
 | `vscode/settings.json`, `vscode/keybindings.json` | `~/Library/Application Support/Code/User/` | macOS |
+| `zed/settings.json` | `~/.config/zed/settings.json`, file only | all |

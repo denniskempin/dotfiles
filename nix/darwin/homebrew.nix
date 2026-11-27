@@ -30,7 +30,6 @@
       # GUI apps that are actually on disk
       "1password"
       "contexts"
-      "cursor"
       "google-chrome"
       "ghostty"
       "google-gemini"
@@ -47,6 +46,7 @@
       "todoist-app"
       "topnotch"
       "visual-studio-code"
+      "zed"
     ];
 
     # Apps with an App Store receipt on 19 Oct 2026. mas needs an App Store

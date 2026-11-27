@@ -105,49 +105,44 @@ flowchart LR
 ---
 
 ### Layer 2: Credentials, SSH Keys, Tokens & Browser/TCC Isolation
-- [ ] **Eliminate plaintext SSH private keys on host:**
-  - Import any still-needed keys from `~/.ssh/id_rsa` and `~/.ssh/id_rsa_devc` into **1Password**.
-  - Verify connectivity through `~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock`, then delete `~/.ssh/id_rsa*` and `~/.ssh/authorized_keys` from disk.
-- [ ] **Remove SSH agent forwarding & stale includes in `~/.ssh/config`:**
-  - Remove `ForwardAgent yes` from `Host sres.devpod`.
-  - Remove `Include "gitpod/config"` (if retired) and `Include ~/.orbstack/ssh/config` (replace with explicit, non-forwarding `Host dev-local` entry so OrbStack cannot silently forward your host agent).
-  - Add `ForwardAgent no` explicitly under `Host *` (or per VM host block).
-- [ ] **Harden 1Password SSH Agent:**
-  - Create `~/.config/1Password/ssh/agent.toml` explicitly listing only the keys allowed for host SSH usage.
-  - In **1Password -> Settings -> Developer**, require **Touch ID per signature request** (disable session-wide authorization caching).
-- [ ] **Create a `Dev-Sandboxed` 1Password Vault & Service Account:**
-  - Keep all personal/financial credentials in your main vault.
-  - Store only non-critical dev/API secrets in a separate `Dev-Sandboxed` vault, and create a **read-only 1Password Service Account** scoped strictly to `Dev-Sandboxed` for `op run` inside VMs.
-- [ ] **Eliminate static cloud & package tokens from host:**
-  - Move `~/.kube/config` off the macOS host into the specific VM that needs cluster access (preferring short-lived OIDC/exec auth over static certs/tokens).
-  - Keep `gh`, `npm`, `cargo`, `gcloud`, and `aws` unauthenticated on macOS so no dev tokens reside in `login.keychain-db` or `~/.config`.
-- [ ] **Browser & TCC compartmenting:**
+- [x] **Eliminate plaintext SSH private keys on host:**
+  - Verified `~/.ssh/id_rsa*` are absent and imported key is stored in 1Password (`Personal` + `Dev` vaults); deleted `~/.ssh/authorized_keys` from disk.
+- [x] **Remove SSH agent forwarding & stale includes in `~/.ssh/config`:**
+  - Replaced `~/.ssh/config` via `configs/ssh/config` (`nix/home/links.nix`): removed `ForwardAgent yes` (`Host sres.devpod`), removed `Include "gitpod/config"` and `Include ~/.orbstack/ssh/config`, and enforced `ForwardAgent no` across `Host *` and all hosts.
+- [x] **Harden 1Password SSH Agent:**
+  - Created `configs/1password/agent.toml` (linked to `~/.config/1Password/ssh/agent.toml` via Home Manager) listing `Personal` and `Dev` vaults; `Personal SSH Key (ED25519)` is active via `agent.sock` and per-request Touch ID is enabled. *(Note: if the `Dev` key should also be served on host SSH, ensure its 1Password item category is **SSH Key** and toggle **Use the SSH Agent** off/on once; 1Password CLI desktop integration can stay off until needed for `vm-seed.sh`.)*
+- [ ] **Create a `Dev` 1Password Vault & Service Account:**
+  - [x] Created the separate `Dev` vault in 1Password (kept personal/financial credentials strictly in `Personal`).
+  - [ ] Create a **read-only 1Password Service Account** scoped strictly to `Dev` for `op run` inside VMs (needed for Phase 4/5 `scripts/vm-seed.sh`).
+- [x] **Eliminate static cloud & package tokens from host:**
+  - Deleted `~/.kube` and logged out `gh` CLI on host; verified `~/.aws`, `~/.config/gcloud`, `~/.npmrc`, `~/.pypirc`, `~/.cargo/credentials*`, `~/.netrc`, and `~/.git-credentials` are absent on host.
+- [x] **Browser & TCC compartmenting:**
   - Reserve **Safari** (`1Password for Safari` + `Wipr 2`) exclusively for personal high-trust sessions (banking, email, iCloud, 1Password web, personal Google).
   - Use **Chrome** (clean profile, minimal/zero extensions) only for dev previews and documentation.
-  - Audit `System Settings -> Privacy & Security -> Full Disk Access` and verify `Ghostty`, `Visual Studio Code`, `Zed`, `Obsidian`, and `Raycast` do **not** have Full Disk Access.
+  - Audited macOS Full Disk Access (`Ghostty`, `Visual Studio Code`, `Zed`, `Obsidian`, `Raycast` without FDA; confirmed external access to `~/Library/Mobile Documents/.../PKM` returns `Operation not permitted`).
 
 ---
 
 ### Layer 3: Host Application Hardening (Obsidian, Raycast, Editors)
 
 #### Obsidian (`~/Library/Mobile Documents/com~apple~CloudDocs/Files/PKM`)
-- [ ] **Delete disabled plugin remnants:** Remove the 7 unused plugin directories sitting on disk under `PKM/.obsidian/plugins/` (`advanced-random-note`, `calendar`, `helix`, `obsidian-minimal-settings`, `obsidian-outliner`, `obsidian-tasks-plugin`, `readwise-official`).
-- [ ] **Retire `obsidian-git`:** Rely on iCloud Drive for sync; if Git history is desired for backup, use an external read-only host `launchd` snapshot script (`git -c core.hooksPath=/dev/null ...`) rather than executing host `git` + network inside Obsidian's Electron process. Never sync `.obsidian/plugins/` from an external Git remote.
-- [ ] **Minimize & freeze remaining plugins:** Audit `battery-indicator`, `key-promoter`, and `cm-editor-syntax-highlight-obsidian` (remove any you no longer need). Turn off automatic plugin updates and wait **7–14 days** after upstream plugin releases before manually updating.
+- [x] **Delete disabled plugin remnants:** Removed the 7 unused plugin directories under `PKM/.obsidian/plugins/` (`advanced-random-note`, `calendar`, `helix`, `obsidian-minimal-settings`, `obsidian-outliner`, `obsidian-tasks-plugin`, `readwise-official`).
+- [x] **Retire `obsidian-git`:** Uninstalled `obsidian-git`; relying on iCloud Drive for sync (never syncing `.obsidian/plugins/` from an external Git remote).
+- [x] **Minimize & freeze remaining plugins:** Audited remaining plugins, turned off auto-updates, and adopted a **7–14 day** wait before manual updates.
 - [ ] **Block `Obsidian.app` network access (in Layer 6):** Deny outbound connections for `Obsidian.app` in LuLu—iCloud sync happens via macOS's `bird` daemon, so Obsidian itself needs zero direct internet access.
 
 #### Raycast (`~/.config/raycast/extensions`)
-- [ ] **Remove community 1Password extension:** Uninstall `1password by khasbilegt` and use the official `1Password.app` Quick Access shortcut (`Cmd+Shift+Space` or custom keybind) instead.
-- [ ] **Prune high-privilege & unused extensions:** Audit the remaining 25 community extensions and uninstall anything that reads browser tabs, personal notes, or launches coding agents (`apple-notes`, `cursor-agents`, `browser-tabs`, `safari`, `google-chrome`, `firefox-tabs`, `zen-browser`, `aerospace` [replaced by `omniwm`], `bunch`, `naver-search`, `kill-process`).
+- [x] **Remove community 1Password extension:** Removed all community extensions from `~/.config/raycast/extensions` (use official `1Password.app` Quick Access shortcut instead).
+- [x] **Prune high-privilege & unused extensions:** Verified `~/.config/raycast/extensions` has zero third-party extensions remaining (only the `node_modules` symlink to `Raycast.app`).
 
 #### Cursor Removal & Thin-Client Editors (VS Code + Zed)
-- [ ] **Remove Cursor completely:**
-  - Remove `"cursor"` from `homebrew.casks` in `nix/darwin/homebrew.nix` (so `cleanup = "check"` uninstalls `/Applications/Cursor.app`).
-  - Remove the Cursor config symlink from `nix/home/links.nix` and delete `configs/cursor/`.
-  - Delete host state and binaries: `~/.cursor`, `~/Library/Application Support/Cursor`, `~/.local/bin/cursor`, `~/.local/bin/cursor-agent`, and the `cursor-agents` Raycast extension.
-- [ ] **Keep VS Code as a hardened thin client (`configs/vscode/settings.json`):**
-  - Keep host extensions minimal (`ms-vscode-remote.remote-ssh`, `ms-vscode-remote.remote-ssh-edit`, `ms-vscode.remote-explorer`, `teabyii.ayu`, and `vscodevim.vim` if needed).
-  - Add strict security & remote defaults to `configs/vscode/settings.json`:
+- [x] **Remove Cursor completely:**
+  - Removed `"cursor"` from `homebrew.casks` in `nix/darwin/homebrew.nix` and uninstalled Cursor via `brew uninstall --cask --force cursor`.
+  - Removed the Cursor config symlink from `nix/home/links.nix` and deleted `configs/cursor/`.
+  - Deleted host state and binaries: `~/.cursor`, `~/Library/Application Support/Cursor`, Cursor caches/preferences/saved state, `~/.local/share/cursor-agent`, and `~/.local/bin/{cursor,cursor-agent,agent,node}`.
+- [x] **Keep VS Code as a hardened thin client (`configs/vscode/settings.json`):**
+  - Verified host extensions remain minimal (`ms-vscode-remote.remote-ssh`, `ms-vscode-remote.remote-ssh-edit`, `ms-vscode.remote-explorer`, `teabyii.ayu`).
+  - Added strict security & remote defaults to `configs/vscode/settings.json`:
     ```jsonc
     "security.workspace.trust.enabled": true,
     "security.workspace.trust.startupPrompt": "always",
@@ -169,10 +164,8 @@ flowchart LR
     ]
     ```
     *(Note: `rust-analyzer` disabled-buildScripts/procMacro defaults protect you if a local folder is ever opened on host; override inside remote VM settings when working in `dev-local` / `dev-remote`.)*
-- [ ] **Add and harden Zed as a thin SSH client (`nix/darwin/homebrew.nix` + `configs/zed/settings.json`):**
-  - Add `"zed"` to `homebrew.casks` in `nix/darwin/homebrew.nix` and manage `configs/zed/settings.json` via `nix/home/links.nix`.
-  - Disable Zed's built-in updater (`"auto_update": false`) so updates stay pinned through `scripts/upgrade-apps.sh`.
-  - Use Zed strictly via native SSH remote development against `dev-local` and `dev-remote` (so `rust-analyzer`, `lldb`, and formatters execute inside the VM, never on macOS), and avoid opening untrusted local folders or installing unnecessary host Zed extensions.
+- [x] **Add and harden Zed as a thin SSH client (`nix/darwin/homebrew.nix` + `configs/zed/settings.json`):**
+  - Added `"zed"` to `homebrew.casks` in `nix/darwin/homebrew.nix`, created `configs/zed/settings.json` (`"auto_update": false`, telemetry off, `rust-analyzer` `buildScripts`/`procMacro` off on host), wired it into `nix/home/links.nix`, and activated via `sudo darwin-rebuild switch --flake ~/dotfiles` (`/Applications/Zed.app` installed and `~/.config/zed/settings.json` linked). Use Zed strictly via native SSH remote development against `dev-local` and `dev-remote`.
 
 ---
 

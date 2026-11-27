@@ -198,7 +198,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "workbench.fontAliasing": "auto",
-  "go.toolsManagement.autoUpdate": true,
+  "go.toolsManagement.autoUpdate": false,
   "editor.accessibilitySupport": "off",
   "vim.easymotion": true,
   "chromiumide.board": "brya",
@@ -218,7 +218,7 @@
   "git.blame.editorDecoration.enabled": true,
   "update.showReleaseNotes": false,
   "github.copilot.nextEditSuggestions.enabled": true,
-  "chat.mcp.gallery.enabled": true,
+  "chat.mcp.gallery.enabled": false,
   "claudeCode.preferredLocation": "panel",
   "chat.viewSessions.orientation": "stacked",
   "pi.cornerStyle": "rounded",
@@ -227,4 +227,22 @@
   "pi.transparentChatInputArea": true,
   "pi.alignUserMessagesRight": true,
   "pi.enableAnimations": true,
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  // Supply-chain & thin-client hardening
+  "security.workspace.trust.enabled": true,
+  "security.workspace.trust.startupPrompt": "always",
+  "task.allowAutomaticTasks": "off",
+  "extensions.autoUpdate": false,
+  "rust-analyzer.cargo.buildScripts.enable": false,
+  "rust-analyzer.procMacro.enable": false,
+  "remote.restoreForwardedPorts": false,
+  "remote.autoForwardPortsSource": "output",
+  "remote.SSH.defaultExtensions": [
+    "rust-lang.rust-analyzer",
+    "vadimcn.vscode-lldb",
+    "tamasfe.even-better-toml",
+    "esbenp.prettier-vscode",
+    "timonwong.shellcheck",
+    "yzhang.markdown-all-in-one"
+  ],
 }

@@ -16,7 +16,9 @@
 -- OmniWM's own hotkeys are off in configs/omniwm/settings.toml, so every key
 -- reaches this file.
 
-require("hs.ipc") -- lets the `hs` command run Lua in this config
+-- Disabled for supply-chain hardening (hs.ipc exposes Accessibility TCC over local IPC).
+-- Uncomment temporarily only when running test/live.lua.
+-- require("hs.ipc")
 
 local actions = require("actions")
 local bindings = require("bindings")

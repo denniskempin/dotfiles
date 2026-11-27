@@ -15,4 +15,7 @@ if [[ "$-" =~ i && -x "${WHICH_FISH}" && ! "${SHELL}" -ef "${WHICH_FISH}" ]]; th
   exec env SHELL="${WHICH_FISH}" "${WHICH_FISH}" -i
 fi
 
-. "$HOME/.cargo/env"
+# Append cargo bin if present so it cannot shadow system or Nix tools.
+if [[ -d "$HOME/.cargo/bin" && ":$PATH:" != *":$HOME/.cargo/bin:"* ]]; then
+  export PATH="$PATH:$HOME/.cargo/bin"
+fi

@@ -1,6 +1,12 @@
 # Only keys that were actually set on this Mac on 6 Oct 2026.
 # Unset keys stay unset. 557 preference domains exist; this is the allowlist.
 {
+  networking.applicationFirewall = {
+    enable = true;
+    enableStealthMode = true;
+    blockAllIncoming = false;
+  };
+
   system.defaults = {
     NSGlobalDomain = {
       AppleInterfaceStyle = "Dark";

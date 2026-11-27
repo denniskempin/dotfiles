@@ -1,13 +1,10 @@
-# The following lines were added by Docker Desktop to add commands to your PATH.
-export PATH="$PATH:/Users/denniskempin/.docker/bin"
-# End of Docker Desktop section.
-
 set dotfiles_dir (realpath (dirname (realpath (status --current-filename)))/../..)
 
 # Nix and Homebrew paths are set earlier, in conf.d/00-paths.fish.
-fish_add_path -P ~/go/bin
-fish_add_path -P ~/.cargo/bin
-fish_add_path -P ~/.local/bin
+# Append user-writable bin dirs at the end so they cannot shadow system or Nix tools.
+fish_add_path -P -a -m ~/go/bin
+fish_add_path -P -a -m ~/.cargo/bin
+fish_add_path -P -a -m ~/.local/bin
 
 starship init fish | source
 
@@ -26,7 +23,9 @@ if command -v batcat &>/dev/null
 end
 
 # Universal key bindings (Same key bindings shared with other apps)
-fzf_configure_bindings --history=\e\cp --process=  # hyper-p: fuzzy search history
+if type -q fzf_configure_bindings
+    fzf_configure_bindings --history=\e\cp --process=  # hyper-p: fuzzy search history
+end
 bind \e\cf 'zi' # hypert-f: fuzzy search recent directories
 bind \ej 'prevd; commandline -f repaint' # alt-j: Hammerspoon sends it for Back in Ghostty
 bind \ek 'nextd; commandline -f repaint' # alt-k: Hammerspoon sends it for Forward in Ghostty
@@ -87,18 +86,5 @@ alias gat="git_amend_to"
 
 direnv hook fish | source
 
-# Added by Windsurf
-fish_add_path /Users/denniskempin/.codeium/windsurf/bin
-
 string match -q "$TERM_PROGRAM" "vscode"
 and . (code --locate-shell-integration-path fish)
- 
-
-# Added by LM Studio CLI (lms)
-set -gx PATH $PATH /Users/denniskempin/.lmstudio/bin
-# End of LM Studio CLI section
-
-
-# Added by OrbStack: command-line tools and integration
-# This won't be added again if you remove it.
-source ~/.orbstack/shell/init2.fish 2>/dev/null || :

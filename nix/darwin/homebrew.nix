@@ -13,18 +13,13 @@
     onActivation = {
       autoUpdate = false;
       upgrade = false;
-      # One switch only: drops 1password/tap, homebrew/services, and
-      # nikitabobko/tap. With "none" the aerospace cask also stays installed;
-      # uninstall it by hand before putting "check" back.
-      cleanup = "none";
+      cleanup = "check";
     };
 
-    # Shared CLI tools come from nixpkgs in nix/home/default.nix. These stay here:
-    # fish is the login shell, and nixpkgs dropped thefuck in May 2025.
-    # fisher manages itself as a fish plugin (configs/fish/fish_plugins).
+    # Shared CLI tools come from nixpkgs in nix/home/default.nix. fish stays
+    # here as the login shell.
     brews = [
       "fish"
-      "thefuck"
     ];
 
     casks = [
@@ -36,7 +31,6 @@
       "1password"
       "contexts"
       "cursor"
-      "docker-desktop"
       "google-chrome"
       "ghostty"
       "google-gemini"

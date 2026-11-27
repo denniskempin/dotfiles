@@ -43,16 +43,10 @@ in
   # Flakes only. Disabling this does not delete root's existing channels.
   nix.channel.enable = false;
 
-  # nix-darwin already adds cache.nixos.org. The devenv cache came from the
-  # Nov 2022 ~/.config/nix/nix.conf.
   nix.settings = {
     experimental-features = [
       "nix-command"
       "flakes"
-    ];
-    substituters = [ "https://devenv.cachix.org" ];
-    trusted-public-keys = [
-      "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
     ];
   };
 

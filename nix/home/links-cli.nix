@@ -21,7 +21,6 @@ in
   xdg.configFile = {
     "fish/conf.d/00-paths.fish".source = link "fish/conf.d/00-paths.fish";
     "fish/config.fish".source = link "fish/config.fish";
-    "fish/fish_plugins".source = link "fish/fish_plugins";
     "gh/config.yml".source = link "gh/config.yml";
     "helix".source = link "helix";
     "nvim".source = link "nvim";

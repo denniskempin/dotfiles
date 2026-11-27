@@ -1,0 +1,2 @@
+[whitelist]
+exact = [ "/Users/denniskempin/dotfiles/.envrc" ]

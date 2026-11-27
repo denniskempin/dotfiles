@@ -33,11 +33,12 @@ in
     "git/config".source = link "git/config";
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
+    "direnv/direnv.toml".source = link "direnv/direnv.toml";
     "ghostty".source = link "ghostty";
     "karabiner/karabiner.json".source = link "karabiner/karabiner.json";
     "omniwm/settings.toml".source = link "omniwm/settings.toml";
   };
 
-  # Left as machine state in ~/.config: raycast, and the unlinked configs
-  # git/ignore and thefuck.
+  # Left as machine state in ~/.config: raycast, jj, kache, herdr-app, and the
+  # unlinked git/ignore.
 }

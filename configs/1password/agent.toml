@@ -1,0 +1,6 @@
+# 1Password SSH Agent key allowlist (macOS host).
+[[ssh-keys]]
+vault = "Personal"
+
+[[ssh-keys]]
+vault = "Dev"

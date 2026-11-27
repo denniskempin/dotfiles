@@ -1,0 +1,18 @@
+Host dev-local
+  HostName dev-local.orb.local
+  User denniskempin
+  ForwardAgent no
+  ServerAliveInterval 15
+
+Host 192.168.0.238
+  HostName 192.168.0.238
+  User dennis
+  ForwardAgent no
+
+Host 192.168.0.283
+  HostName 192.168.0.283
+  ForwardAgent no
+
+Host *
+  ForwardAgent no
+  IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"

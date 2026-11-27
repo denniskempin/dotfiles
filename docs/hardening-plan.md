@@ -172,24 +172,21 @@ flowchart LR
 ### Layer 4: Unified Dev VM Infrastructure (`~/dotfiles` + OrbStack + Fly.io Sprites)
 
 #### A. Shared `~/dotfiles` VM Configuration
-- [ ] **Create `nix/home/dev-vm.nix`:**
-  - Import `./cli.nix`, `./linux.nix`, `./links-cli.nix`.
-  - Move Rust and dev packages (`rustup`, `cargo-deny`, `cargo-nextest`, `cargo-vet`, `sccache`, `trunk`) out of host `nix/home/default.nix` into `dev-vm.nix`, plus `tmux`, `mosh`, `podman` (or Docker CLI), and `direnv`.
-  - Generate a Linux-safe `~/.config/git/config` inside VMs (sharing `delta`/`merge`/`diff` settings, without macOS `/Applications/1Password.app/Contents/MacOS/op-ssh-sign`).
-  - Write a hardened `~/.npmrc` (`ignore-scripts=true`) inside VMs to block automatic `npm`/`pnpm` `postinstall` execution.
-- [ ] **Add dual-architecture VM targets in `flake.nix`:**
-  - Add `dev-vm-aarch64` (for OrbStack) and `dev-vm-x86_64` (for Fly.io Sprites) using `--impure` `$USER`/`$HOME` resolution (matching `mkDevcontainer`) so both `denniskempin` (OrbStack) and `sprite` (Fly.io Sprites) apply cleanly with single-user Nix.
-- [ ] **Create `vm/bootstrap.sh` (one idempotent provisioner for both VMs):**
-  - Installs single-user Nix (`--no-daemon`) if missing, trusting only `cache.nixos.org`.
-  - Clones `~/dotfiles` over **read-only HTTPS** (never SSH push URLs).
-  - Detects `$(uname -m)` and runs `nix run home-manager -- switch --impure -b backup --flake ~/dotfiles#dev-vm-${arch}`.
-- [ ] **Create `scripts/vm-seed.sh <dev-local|dev-remote>` (host-side 1-command secret seeder):**
-  - Uses `op read` (behind Touch ID) strictly against the `Dev-Sandboxed` vault.
-  - Injects a **separate, per-VM fine-grained GitHub PAT** (scoped *only* to active work/project repos and **explicitly excluding `dotfiles`**) or generates an isolated VM-local `ed25519` deploy key inside the VM.
-  - Optionally seeds the read-only `Dev-Sandboxed` 1Password Service Account token and clones repos listed in `vm/repos.txt`.
-- [ ] **Add a unified `dev` Fish wrapper in `configs/fish/config.fish`:**
-  - `dev local` -> connects into `dev-local` `tmux` session (`ssh -t dev-local "tmux new-session -A -s main"`).
-  - `dev remote` -> connects into Fly.io Sprite `dev-remote` `tmux` session (`sprite console -s dev-remote` or SSH over `sprite proxy`).
+- [x] **Create `nix/home/dev-vm.nix`:**
+  - Imports `./cli.nix`, `./linux.nix`, `./links-cli.nix`.
+  - Moved Rust and dev packages (`rustup`, `cargo-deny`, `cargo-nextest`, `cargo-vet`, `kache`, `sccache`, `trunk`) out of host `nix/home/default.nix` into `dev-vm.nix`, plus `_1password-cli`, `docker-client`, `mosh`, `nodejs_22`, `openssh`, `python3`, and `tmux`.
+  - Linked Linux-safe `configs/git/config-vm` -> `~/.config/git/config` inside VMs (sharing `delta`/`merge`/`diff` settings, without macOS `op-ssh-sign`, and including `~/.config/git/config.local`).
+  - Configured `~/.config/tmux/tmux.conf` (OSC 52 clipboard + `fish` default shell) and `~/.npmrc` (`ignore-scripts=true`).
+- [x] **Add dual-architecture VM targets in `flake.nix`:**
+  - Added `mkDevVm` (`dev-vm-aarch64` for OrbStack and `dev-vm-x86_64` for Fly.io Sprites) using `--impure` `$USER`/`$HOME` resolution.
+- [x] **Create `vm/bootstrap.sh` (one idempotent provisioner for both VMs):**
+  - Installs base apt packages (`curl`, `git`, `xz-utils`), clones `~/dotfiles` over **read-only HTTPS**, installs single-user Nix (`--no-daemon`) trusting only `cache.nixos.org`, applies `dev-vm-${arch}`, and installs the `stable` Rust toolchain.
+- [x] **Create `scripts/vm-seed.sh <dev-local|dev-remote>` (host-side 1-command secret seeder):**
+  - Uses `op read` (behind Touch ID) strictly against the `Dev` vault.
+  - Injects a **separate, per-VM fine-grained GitHub PAT** over stdin (scoped *only* to active project repos and **excluding `dotfiles`**), generates a VM-local `ed25519` commit-signing key, optionally seeds the read-only `Dev` Service Account token, and optionally clones `vm/repos.txt` (`--clone-repos`).
+- [x] **Add a unified `dev` Fish wrapper in `configs/fish/config.fish`:**
+  - `dev local` attaches to `dev-local` `tmux` over SSH (`ForwardAgent no`).
+  - `dev remote` attaches to Fly.io Sprite `dev-remote` `tmux` via `sprite exec --tty` (or `ssh dev-remote`).
 
 #### B. Local Persistent VM — OrbStack (`--isolated`)
 - [ ] **Swap `docker-desktop` for `orbstack` in `nix/darwin/homebrew.nix`** and rebuild (`darwin-rebuild switch`).
@@ -202,20 +199,15 @@ flowchart LR
 - [ ] **Bootstrap & seed `dev-local`:**
   ```bash
   orb -m dev-local bash < ~/dotfiles/vm/bootstrap.sh
-  ./scripts/vm-seed.sh dev-local
+  ./scripts/vm-seed.sh dev-local --clone-repos
   ```
 - [ ] **Configure explicit non-forwarding SSH entry in `~/.ssh/config`:**
-  ```sshconfig
-  Host dev-local
-      HostName dev-local.orb.local
-      User denniskempin
-      ForwardAgent no
-      ServerAliveInterval 15
-  ```
+  *(Already added in `configs/ssh/config` during Phase 2: `Host dev-local` -> `dev-local.orb.local`, `ForwardAgent no`.)*
   *(Use `dev-local` in VS Code `Remote-SSH` or Zed's SSH remote dialog—VS Code's `remote.SSH.defaultExtensions` installs extensions automatically inside `dev-local`, and Zed downloads its remote server inside `dev-local`.)*
 - [ ] **Evacuate host dev state into `dev-local`:**
-  - Re-clone active repos from `~/workspace` cleanly inside `dev-local` (do **not** copy existing `target/` or `node_modules/` directories from host).
-  - Once verified, delete host `~/workspace`, `~/.cargo`, `~/go`, `~/.npm`, `~/.codeium`, unmanaged binaries in `~/.local/bin` (`claude`, `node`, `fig`, `lvim`, etc.), and unload/delete `~/Library/LaunchAgents/ninja.kunobi.kache.plist`.
+  - **CAUTION:** `~/workspace` currently holds personal/non-code directories (**`Wedding Photos`**, **`archive`**, **`pkm`**) and hardware **`keyboards`** KiCad libraries used by host KiCad. Move `Wedding Photos`, `archive`, `pkm`, and KiCad libraries out to `~/Pictures` / `~/Documents` first—**never blindly `rm -rf ~/workspace`!**
+  - Re-clone active software repos cleanly inside `dev-local` (do **not** copy existing `target/` or `node_modules/` directories from host).
+  - Once verified, delete only the evacuated software repos plus host `~/.cargo`, `~/go`, `~/.npm`, `~/.codeium`, unmanaged binaries in `~/.local/bin` (`claude`, `fig`, `lvim`, etc.), and unload/delete `~/Library/LaunchAgents/ninja.kunobi.kache.plist`.
 
 #### C. Remote Workstation & Ephemeral Burners — Fly.io Sprites (`sprites.dev`)
 - [ ] **Install & authenticate the `sprite` CLI on macOS:**

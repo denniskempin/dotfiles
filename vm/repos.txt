@@ -1,0 +1,7 @@
+# Active repositories cloned by `scripts/vm-seed.sh <target> --clone-repos`.
+# Format: <https-git-url> <relative-path-under-~/workspace>
+https://github.com/denniskempin/sres.git emu/sres
+https://github.com/denniskempin/res.git emu/res
+https://github.com/denniskempin/chip8emu.git emu/chip8emu
+https://github.com/denniskempin/dubu36.git keyboards/dubu36
+https://github.com/denniskempin/zmk-config.git keyboards/zmk-config

@@ -86,5 +86,28 @@ alias gat="git_amend_to"
 
 direnv hook fish | source
 
+if test -r ~/.config/dev-vm/env.fish
+    source ~/.config/dev-vm/env.fish
+end
+
+function dev --description "Attach to local (OrbStack) or remote (Fly.io Sprite) dev VM" --argument target
+    if test -z "$target"
+        set target local
+    end
+    switch "$target"
+        case local dev-local
+            ssh -t dev-local '~/.nix-profile/bin/tmux new-session -A -s main || tmux new-session -A -s main'
+        case remote dev-remote
+            if command -v sprite &>/dev/null
+                sprite exec --tty -s dev-remote -- bash -lc '~/.nix-profile/bin/tmux new-session -A -s main || tmux new-session -A -s main'
+            else
+                ssh -t dev-remote '~/.nix-profile/bin/tmux new-session -A -s main || tmux new-session -A -s main'
+            end
+        case '*'
+            echo "Usage: dev [local|remote]" >&2
+            return 1
+    end
+end
+
 string match -q "$TERM_PROGRAM" "vscode"
 and . (code --locate-shell-integration-path fish)

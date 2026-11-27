@@ -82,6 +82,21 @@
           homeDirectory = if envHome != "" then envHome else "/home/vscode";
           modules = [ ./nix/home/devcontainer.nix ];
         };
+
+      # Isolated dev VM configuration (OrbStack aarch64 and Fly.io Sprites x86_64).
+      # Pass --impure so $USER and $HOME resolve to the guest user (e.g. denniskempin or sprite).
+      mkDevVm =
+        system:
+        let
+          envUser = builtins.getEnv "USER";
+          envHome = builtins.getEnv "HOME";
+          username = if envUser != "" then envUser else "denniskempin";
+        in
+        mkHome {
+          inherit system username;
+          homeDirectory = if envHome != "" then envHome else "/home/${username}";
+          modules = [ ./nix/home/dev-vm.nix ];
+        };
     in
     {
       darwinConfigurations = {
@@ -97,6 +112,8 @@
         };
         "devcontainer-x86_64" = mkDevcontainer "x86_64-linux";
         "devcontainer-aarch64" = mkDevcontainer "aarch64-linux";
+        "dev-vm-x86_64" = mkDevVm "x86_64-linux";
+        "dev-vm-aarch64" = mkDevVm "aarch64-linux";
       };
 
       formatter = nixpkgs.lib.genAttrs [ "aarch64-darwin" "x86_64-linux" "aarch64-linux" ] (

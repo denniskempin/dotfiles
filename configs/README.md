@@ -16,6 +16,7 @@ linked, not the directory.
 | `gh/config.yml` | `~/.config/gh/config.yml`, file only. `hosts.yml` stays local | all |
 | `ghostty/` | `~/.config/ghostty` | macOS |
 | `git/config` | `~/.config/git/config`. Remove any `~/.gitconfig` | all |
+| `git/config-vm` | `~/.config/git/config` inside dev VMs (links `config.local` override) | Linux VMs |
 | `hammerspoon/` | `~/.hammerspoon`. See `hammerspoon/AGENTS.md` for tests | macOS |
 | `helix/` | `~/.config/helix` | all |
 | `karabiner/karabiner.json` | `~/.config/karabiner/karabiner.json`, file only | macOS |
